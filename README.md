@@ -1,40 +1,54 @@
 # Private Kit: San Marino
 
-This is forked version of official private-kit repository which is intended to be customized, deployed to production and tested in San Marino Republic.
+This is forked version of official private-kit repository which is intended to be customized, deployed to production and tested in San Marino Republic. The app should allow a user to:
+
+1. Donate her data to public domain after verification from doctor (COVID19 positive test)
+1. Check her app to see if the user contacted someone who donated data in the past (done in private on personal device).
+1. Once person suspect that she is ill app can be used to signal this to authorities and get attention.
 
 ## Project Setup
 
 1. Integrate mobile applications with Firebase backend and Cloud Storage
-   [x] - private-kit-sm Firebase project setup
-   [x] - iOs app connected to Firebase
-   [x] - Android app connected to Firebase
-   [x] - Implement Export to Cloud Storage (private domain)
-   [ ] - Move public dataset to Cloud Storage (public domain)
+
+- [x] - Setup private-kit-sm Firebase project
+- [x] - iOs app connected to Firebase
+- [x] - Android app connected to Firebase
+- [x] - Implement Export to Cloud Storage (private domain)
+- [ ] - Move public dataset to Cloud Storage (public domain)
 
 1. Setup CI\CD pipeline and publish apps to app stores
-   [] - Deploy app to Google Play Store (Private Kit: San Marino)
-   [] - Deploy app to Apple Store (Private Kit: San Marino)
-   [] - Github Actions workflow for CI\CD for Android app
-   [] - Github Actions workflow for CI\CD for iOs app
+
+- [ ] - Deploy app to Google Play Store (Private Kit: San Marino)
+- [ ] - Deploy app to Apple Store (Private Kit: San Marino)
+- [ ] - Github Actions workflow for CD for Android app
+- [ ] - Github Actions workflow for CD for iOs app
 
 1. Updates to frontend application and UX design
-   [ ] - Discuss idea of responsible signaling (the idea is to let people signal that they suspect infection and mark themselves for authorities and neighbours?)
-   [ ] - Elaborated user story (including government part)
-   [ ] - Review import feature for iOs and Android devices
-   [ ] - Implement UI required to get user consent and export data
+
+- [ ] - Discuss idea of responsible signaling (the idea is to let people signal that they suspect infection and mark themselves for authorities and neighbours?)
+- [ ] - Elaborated user story (including government part)
+- [ ] - Review import feature for iOs and Android devices
+- [ ] - Implement UI required to get user consent and export data
 
 ## Project Take-off
 
 1. Backend logic (on Google Cloud Platform)
-   [ ] - Review public dataset update logic and aggregation process
-   [ ] - Setup cloud infrastructure to trigger update (python scripts probably?) to public dataset
-   [ ] - Push-notification for mobile apps (daily updates on new cases)
-   [ ] - Review cryptography used and infered privacy guarantees
-   [ ] - Review security and access rights, GDPR complience check
+
+- [ ] - Review public dataset update logic and aggregation process
+- [ ] - Setup cloud infrastructure to trigger update (python scripts probably?) to public dataset
+- [ ] - Push-notification for mobile apps (daily updates on new cases)
+- [ ] - Review cryptography used and infered privacy guarantees
+- [ ] - Review security and access rights, GDPR complience check
+
 1. UX design and frontend app
-   [ ] - Develop wireframes in Figma and finalize UX/UI
-   [ ] - Implement and test offline usage scenario
-   [ ] - Implement missing screens and UI elements
+
+- [ ] - Develop wireframes in Figma and finalize UX/UI
+- [ ] - Implement and test offline usage scenarios
+- [ ] - Implement missing screens and UI elements
+
+## Integration with Nuland ecosystem
+
+We think we can integrate this technology into our social network app, this will allow us to directly incetivise people and reward them for being responsible self-isolators as well as for donating their data to public domain.
 
 # Original Initiative: Private Kit
 
