@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import storage from '@react-native-firebase/storage';
 import RNFetchBlob from 'rn-fetch-blob';
 import RNFS from 'react-native-fs';
 import Share from 'react-native-share';
@@ -56,6 +57,24 @@ function ExportScreen({ shareButtonDisabled }) {
 
   function backToMain() {
     navigate('LocationTrackingScreen', {});
+  }
+
+  async function onUpload() {
+    try {
+      let locationData = await new LocationData().getLocationData();
+      let nowUTC = new Date().toISOString();
+      let unixtimeUTC = Date.parse(nowUTC);
+
+      var jsonData = JSON.stringify(locationData);
+      const filename = unixtimeUTC + '.json';
+      const storageRef = storage().ref();
+      storageRef
+        .child(`jsons/${filename}`)
+        .putString(jsonData)
+        .then(console.log);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   async function onShare() {
@@ -135,6 +154,21 @@ function ExportScreen({ shareButtonDisabled }) {
         <Text style={styles.sectionDescription}>
           {languages.t('label.export_para_2')}
         </Text>
+        <TouchableOpacity
+          disabled={buttonDisabled}
+          onPress={onUpload}
+          style={[
+            styles.buttonTouchable,
+            buttonDisabled && styles.buttonDisabled,
+          ]}>
+          <Text
+            style={[
+              styles.buttonText,
+              buttonDisabled && styles.buttonDisabled,
+            ]}>
+            {'Upload to storage'}
+          </Text>
+        </TouchableOpacity>
         <TouchableOpacity
           disabled={buttonDisabled}
           onPress={onShare}

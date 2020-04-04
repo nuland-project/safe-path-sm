@@ -39,7 +39,10 @@ target 'PrivateKit' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-
+  pod 'Firebase/Core'
+  pod 'Firebase/Analytics'
+  pod 'GoogleAppMeasurement'
+  pod 'Firebase/Storage'
 
   # React Native Maps dependencies
   rn_maps_path = '../node_modules/react-native-maps'

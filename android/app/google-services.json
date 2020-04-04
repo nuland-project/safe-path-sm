@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "648858722371",
+    "firebase_url": "https://private-kit-sm.firebaseio.com",
+    "project_id": "private-kit-sm",
+    "storage_bucket": "private-kit-sm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:648858722371:android:0960b00ba7c09fccd734f6",
+        "android_client_info": {
+          "package_name": "edu.mit.privatekit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "648858722371-rh6up5rs4au1tqpdpqhavg784q8i39if.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAF0JW5_jWofbT2LLkAi8eQ4DLuGQBJkjE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "648858722371-rh6up5rs4au1tqpdpqhavg784q8i39if.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
