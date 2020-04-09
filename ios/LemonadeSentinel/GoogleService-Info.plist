@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>648858722371-sj6h2cggvvt2jup04cf0fm4nt9qd644a.apps.googleusercontent.com</string>
+	<string>648858722371-3s88mrmrre5s7qlm2iq66d2c5ksp8q81.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.648858722371-sj6h2cggvvt2jup04cf0fm4nt9qd644a</string>
+	<string>com.googleusercontent.apps.648858722371-3s88mrmrre5s7qlm2iq66d2c5ksp8q81</string>
 	<key>API_KEY</key>
 	<string>AIzaSyAQlLAnFh0vWyzHdEphCgtvyCeLfHOL2bc</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>edu.mit.privatekit</string>
+	<string>io.nuland.lemonade</string>
 	<key>PROJECT_ID</key>
 	<string>private-kit-sm</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:648858722371:ios:e1070de194907b2fd734f6</string>
+	<string>1:648858722371:ios:4513a37b8b544908d734f6</string>
 	<key>DATABASE_URL</key>
 	<string>https://private-kit-sm.firebaseio.com</string>
 </dict>

@@ -14,11 +14,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface PrivateKitTests : XCTestCase
+@interface LemonadeSentinelTests : XCTestCase
 
 @end
 
-@implementation PrivateKitTests
+@implementation LemonadeSentinelTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL(^)(UIView *view))test
 {

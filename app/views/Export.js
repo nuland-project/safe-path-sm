@@ -83,8 +83,8 @@ function ExportScreen({ shareButtonDisabled }) {
       let nowUTC = new Date().toISOString();
       let unixtimeUTC = Date.parse(nowUTC);
 
-      var options = {};
-      var jsonData = JSON.stringify(locationData);
+      let options = {};
+      let jsonData = JSON.stringify(locationData);
       const title = 'PrivateKit.json';
       const filename = unixtimeUTC + '.json';
       const message = 'Here is my location log from Private Kit.';
@@ -155,7 +155,7 @@ function ExportScreen({ shareButtonDisabled }) {
           {languages.t('label.export_para_2')}
         </Text>
         <TouchableOpacity
-          disabled={buttonDisabled}
+          // disabled={buttonDisabled}
           onPress={onUpload}
           style={[
             styles.buttonTouchable,
