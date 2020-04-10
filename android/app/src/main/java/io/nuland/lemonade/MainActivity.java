@@ -1,4 +1,4 @@
-package edu.mit.privatekit;
+package io.nuland.lemonade;
 
 import com.facebook.react.ReactActivity;
 

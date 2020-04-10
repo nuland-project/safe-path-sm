@@ -129,7 +129,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "edu.mit.privatekit"
+        applicationId "io.nuland.lemonade"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         multiDexEnabled true
