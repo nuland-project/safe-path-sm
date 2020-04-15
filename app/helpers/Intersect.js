@@ -4,15 +4,16 @@
  * v1 - Unencrypted, simpleminded (minimal optimization).
  */
 
+import storage from '@react-native-firebase/storage';
 import PushNotification from 'react-native-push-notification';
 
 import { isPlatformiOS } from './../Util';
 import {
-  LOCATION_DATA,
-  CROSSED_PATHS,
-  AUTHORITY_SOURCE_SETTINGS,
   AUTHORITY_NEWS,
+  AUTHORITY_SOURCE_SETTINGS,
+  CROSSED_PATHS,
   LAST_CHECKED,
+  LOCATION_DATA,
 } from '../constants/storage';
 import { GetStoreData, SetStoreData } from '../helpers/General';
 import languages from '../locales/languages';
@@ -238,6 +239,9 @@ export function checkIntersect() {
           fetch(authority.url)
             .then(response => response.json())
             .then(responseJson => {
+              const storageRef = storage().ref('public/infected.json');
+
+              storageRef.getDownloadURL().then(console.log);
               // Example response =
               // { "authority_name":  "Steve's Fake Testing Organization",
               //   "publish_date_utc": "1584924583",

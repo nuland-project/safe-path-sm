@@ -43,7 +43,7 @@ const Onboarding = props => {
             props.navigation.replace('Onboarding4');
           }}
           buttonColor={Colors.WHITE}
-          bgColor={Colors.VIOLET_BUTTON}
+          bgColor={'grey'}
         />
       </View>
     </View>
