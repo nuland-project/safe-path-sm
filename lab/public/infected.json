@@ -1,0 +1,8 @@
+{
+  "authority_name": "San Marino COVID19 HA",
+  "publish_date_utc": "1584924583",
+  "info_website": "https://lemonade.one",
+  "concern_points": [
+    { "latitude": 55.6186276, "longitude": 37.4912651, "time": 1586520278053 }
+  ]
+}
