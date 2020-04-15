@@ -72,7 +72,6 @@ const Header = styled.View`
 const Title = styled.Text`
   align-self: center;
   color: ${Colors.WHITE};
-  font-family: IBMPlexSans-Medium;
   font-size: 26px;
   position: absolute;
   text-align: center;

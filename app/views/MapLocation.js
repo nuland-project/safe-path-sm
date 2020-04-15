@@ -1,4 +1,4 @@
-import Geolocation from '@react-native-community/geolocation';
+import { Geolocation } from '@react-native-community/geolocation';
 import React, { Component } from 'react';
 import { StatusBar, StyleSheet, Text, View } from 'react-native';
 import MapView, { Circle, PROVIDER_GOOGLE, Polyline } from 'react-native-maps';
