@@ -1,10 +1,12 @@
 {
-  "name": "privatekit",
+  "name": "lemonade",
   "version": "0.5.11",
   "private": true,
   "scripts": {
+    "start": "react-native start",
+    "android": "react-native run-android",
     "install:pod": "cd ios && pod install",
-    "postinstall": "patch-package",
+    "postinstall": "patch-package && npx jetify",
     "postversion": "react-native-version",
     "format:all": "prettier --write ./app/**/*.js",
     "test": "jest test"
@@ -75,6 +77,7 @@
     "eslint": "^6.8.0",
     "husky": "^4.2.3",
     "jest": "^25.1.0",
+    "jetifier": "^1.6.5",
     "lint-staged": "^10.0.9",
     "metro-react-native-babel-preset": "^0.58.0",
     "prettier": "1.19.1",
