@@ -4,7 +4,6 @@
  * v1 - Unencrypted, simpleminded (minimal optimization).
  */
 
-import storage from '@react-native-firebase/storage';
 import PushNotification from 'react-native-push-notification';
 
 import { isPlatformiOS } from './../Util';
@@ -227,7 +226,7 @@ export function checkIntersect() {
         console.log('No authorities', authority_list);
         return;
       }
-
+      console.log(authority_list);
       let name_news = [];
       SetStoreData(AUTHORITY_NEWS, name_news);
 
@@ -239,9 +238,6 @@ export function checkIntersect() {
           fetch(authority.url)
             .then(response => response.json())
             .then(responseJson => {
-              const storageRef = storage().ref('public/infected.json');
-
-              storageRef.getDownloadURL().then(console.log);
               // Example response =
               // { "authority_name":  "Steve's Fake Testing Organization",
               //   "publish_date_utc": "1584924583",

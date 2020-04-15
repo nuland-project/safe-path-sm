@@ -1,3 +1,4 @@
+import storage from '@react-native-firebase/storage';
 import Yaml from 'js-yaml';
 import React, { Component } from 'react';
 import {
@@ -28,12 +29,12 @@ import closeIcon from './../assets/images/closeIcon.png';
 import saveIcon from './../assets/images/saveIcon.png';
 import NavigationBarWrapper from '../components/NavigationBarWrapper';
 import { AUTHORITIES_LIST_URL } from '../constants/authorities';
-import { AUTHORITY_SOURCE_SETTINGS } from '../constants/storage';
-import { checkIntersect } from '../helpers/Intersect';
 import colors from '../constants/colors';
 import Colors from '../constants/colors';
 import fontFamily from '../constants/fonts';
+import { AUTHORITY_SOURCE_SETTINGS } from '../constants/storage';
 import { GetStoreData, SetStoreData } from '../helpers/General';
+import { checkIntersect } from '../helpers/Intersect';
 import languages from '../locales/languages';
 
 const { SlideInMenu } = renderers;
@@ -64,6 +65,7 @@ class ChooseProviderScreen extends Component {
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
     this.fetchAuthoritiesList();
+    const storageRef = storage().ref('public/infected.json');
 
     // Update user settings state from async storage
     GetStoreData(AUTHORITY_SOURCE_SETTINGS, false).then(result => {
@@ -74,6 +76,18 @@ class ChooseProviderScreen extends Component {
           selectedAuthorities: result,
         });
       } else {
+        storageRef.getDownloadURL().then(url => {
+          console.log(url);
+          SetStoreData(AUTHORITY_SOURCE_SETTINGS, [
+            {
+              key: 'San Marino COVID19 HA',
+              url,
+            },
+          ]).then(() => {
+            // Force updates immediately.
+            checkIntersect();
+          });
+        });
         console.log('No stored authority settings.');
       }
     });
@@ -135,6 +149,7 @@ class ChooseProviderScreen extends Component {
         },
         () => {
           // Add current settings state to async storage.
+          console.log(this.state.selectedAuthorities);
           SetStoreData(
             AUTHORITY_SOURCE_SETTINGS,
             this.state.selectedAuthorities,
