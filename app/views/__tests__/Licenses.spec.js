@@ -1,10 +1,11 @@
 import 'react-native';
 import React from 'react';
-import {render} from '@testing-library/react-native';
+import renderer from 'react-test-renderer';
 import Licenses from '../Licenses';
 
 it('renders correctly', () => {
-  const {asJSON} = render(<Licenses />);
-
-  expect(asJSON()).toMatchSnapshot();
+  const tree = renderer
+    .create(<Licenses />)
+    .toJSON();
+  expect(tree).toMatchSnapshot();
 });

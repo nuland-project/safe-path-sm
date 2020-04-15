@@ -1,8 +1,7 @@
 /**
  * Checks the download folder, unzips and imports all data from Google TakeOut
  */
-import { subscribe, unzip } from 'react-native-zip-archive';
-
+import { unzip, subscribe } from 'react-native-zip-archive';
 import { MergeJSONWithLocalData } from '../helpers/GoogleData';
 
 // require the module

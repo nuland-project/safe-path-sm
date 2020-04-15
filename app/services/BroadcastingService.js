@@ -1,12 +1,11 @@
-import { Alert } from 'react-native';
-import { NativeEventEmitter, NativeModules } from 'react-native';
-import BackgroundTimer from 'react-native-background-timer';
-import AndroidBLEAdvertiserModule from 'react-native-ble-advertiser';
-import UUIDGenerator from 'react-native-uuid-generator';
-
-import { CONTACT_DATA, MY_UUIDs } from '../constants/storage';
 import { GetStoreData, SetStoreData } from '../helpers/General';
-import { isPlatformAndroid, nowStr } from '../Util';
+import { Alert, Platform } from 'react-native';
+import BackgroundTimer from 'react-native-background-timer';
+import UUIDGenerator from 'react-native-uuid-generator';
+import Moment from 'moment';
+
+import AndroidBLEAdvertiserModule from 'react-native-ble-advertiser';
+import { NativeEventEmitter, NativeModules } from 'react-native';
 
 var currentUUID = null;
 var onDeviceFound = null;
@@ -19,6 +18,10 @@ const c1_HOUR = 1000 * 60 * 60;
 
 const MANUFACTURER_ID = 0xff;
 const MANUFACTURER_DATA = [12, 23, 56];
+
+function nowStr() {
+  return Moment(new Date()).format('H:mm');
+}
 
 /*
  * Check if the contact is new in the last 5 mins.
@@ -54,7 +57,7 @@ function saveContact(contact) {
   // Persist this contact data in our local storage of time/uuid values
   //console.log('[Bluetooth]', nowStr(), currentUUID, 'New Device Found', contact['uuid']);
   if (isNewContact(contact)) {
-    GetStoreData(CONTACT_DATA, false).then(contactArray => {
+    GetStoreData('CONTACT_DATA', false).then(contactArray => {
       if (!contactArray) {
         contactArray = [];
       }
@@ -80,7 +83,7 @@ function saveContact(contact) {
         curated.length,
       );
 
-      SetStoreData(CONTACT_DATA, curated);
+      SetStoreData('CONTACT_DATA', curated);
     });
   }
 }
@@ -88,7 +91,7 @@ function saveContact(contact) {
 function saveMyUUID(me) {
   // Persist this contact data in our local storage of time/lat/lon values
 
-  GetStoreData(MY_UUIDs, false).then(myUUIDArray => {
+  GetStoreData('MY_UUIDs', false).then(myUUIDArray => {
     if (!myUUIDArray) {
       myUUIDArray = [];
     }
@@ -115,12 +118,12 @@ function saveMyUUID(me) {
     );
     curated.push(uuid_time);
 
-    SetStoreData(MY_UUIDs, curated);
+    SetStoreData('MY_UUIDs', curated);
   });
 }
 
 function loadLastUUIDAndBroadcast() {
-  GetStoreData(MY_UUIDs, false).then(myUUIDArray => {
+  GetStoreData('MY_UUIDs', false).then(myUUIDArray => {
     if (!myUUIDArray) {
       console.log(
         '[Bluetooth]',
@@ -240,7 +243,7 @@ export default class BroadcastingServices {
     setTimeout(
       () =>
         Alert.alert(
-          'COVID Safe Paths requires bluetooth to be enabled',
+          'Private Kit requires bluetooth to be enabled',
           'Would you like to enable Bluetooth?',
           [
             {
@@ -261,7 +264,7 @@ export default class BroadcastingServices {
 
   static start() {
     // Do not run on iOS for now.
-    if (isPlatformAndroid()) {
+    if (Platform.OS === 'android') {
       const eventEmitter = new NativeEventEmitter(
         NativeModules.AndroidBLEAdvertiserModule,
       );
@@ -302,7 +305,7 @@ export default class BroadcastingServices {
   }
 
   static stop() {
-    if (isPlatformAndroid()) {
+    if (Platform.OS === 'android') {
       if (onBTStatusChange) {
         onBTStatusChange.remove();
         onBTStatusChange = null;

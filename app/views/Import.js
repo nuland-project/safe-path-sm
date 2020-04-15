@@ -1,23 +1,23 @@
 import React, { Component } from 'react';
 import {
-  ActivityIndicator,
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
   BackHandler,
   Dimensions,
-  StyleSheet,
-  Text,
-  View,
+  ActivityIndicator,
 } from 'react-native';
-import WebView from 'react-native-webview';
 
-import languages from './../locales/languages';
-import NavigationBarWrapper from '../components/NavigationBarWrapper';
 import colors from '../constants/colors';
-import fontFamily from '../constants/fonts';
+import WebView from 'react-native-webview';
+import backArrow from './../assets/images/backArrow.png';
 import { SearchAndImport } from '../helpers/GoogleTakeOutAutoImport';
-
+import languages from './../locales/languages';
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
-
 class ImportScreen extends Component {
   constructor(props) {
     super(props);
@@ -27,11 +27,11 @@ class ImportScreen extends Component {
   }
 
   backToMain() {
-    this.props.navigation.goBack();
+    this.props.navigation.navigate('LocationTrackingScreen', {});
   }
 
   handleBackPress = () => {
-    this.props.navigation.goBack();
+    this.props.navigation.navigate('LocationTrackingScreen', {});
     return true;
   };
 
@@ -48,11 +48,19 @@ class ImportScreen extends Component {
   }
 
   render() {
-    let counter = 0;
     return (
-      <NavigationBarWrapper
-        title={languages.t('label.import_title')}
-        onBackPress={this.backToMain.bind(this)}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.headerContainer}>
+          <TouchableOpacity
+            style={styles.backArrowTouchable}
+            onPress={() => this.backToMain()}>
+            <Image style={styles.backArrow} source={backArrow} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>
+            {languages.t('label.import_title')}
+          </Text>
+        </View>
+
         <View style={styles.main}>
           <View style={styles.subHeaderTitle}>
             <Text style={styles.sectionDescription}>
@@ -69,25 +77,6 @@ class ImportScreen extends Component {
                   'https://takeout.google.com/settings/takeout/custom/location_history',
               }}
               onLoad={() => this.hideSpinner()}
-              // Reload once on error to workaround chromium regression for Android
-              // Chromiumn Bug :: https://bugs.chromium.org/p/chromium/issues/detail?id=1023678
-              ref={ref => {
-                this.webView = ref;
-              }}
-              onError={() => {
-                console.log(counter);
-                if (counter === 0) {
-                  this.webView.reload();
-                }
-                counter++;
-              }}
-              renderError={errorName => {
-                if (counter >= 1) {
-                  <View style={styles.sectionDescription}>
-                    <Text>Error Occurred while importing file {errorName}</Text>
-                  </View>;
-                }
-              }}
               style={{ marginTop: 15 }}
             />
             {this.state.visible && (
@@ -102,7 +91,7 @@ class ImportScreen extends Component {
             )}
           </View>
         </View>
-      </NavigationBarWrapper>
+      </SafeAreaView>
     );
   }
 }
@@ -134,12 +123,34 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     width: '100%',
   },
+
+  headerContainer: {
+    flexDirection: 'row',
+    height: 60,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(189, 195, 199,0.6)',
+    alignItems: 'center',
+  },
+  backArrowTouchable: {
+    width: 60,
+    height: 60,
+    paddingTop: 21,
+    paddingLeft: 20,
+  },
+  backArrow: {
+    height: 18,
+    width: 18.48,
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontFamily: 'OpenSans-Bold',
+  },
   sectionDescription: {
     fontSize: 16,
     lineHeight: 24,
     textAlignVertical: 'center',
     marginTop: 12,
-    fontFamily: fontFamily.primaryRegular,
+    fontFamily: 'OpenSans-Regular',
   },
 });
 export default ImportScreen;

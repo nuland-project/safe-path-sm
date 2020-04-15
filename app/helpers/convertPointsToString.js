@@ -1,5 +1,4 @@
 import pluralize from 'pluralize';
-
 import languages from './../locales/languages';
 
 export function timeSincePoint(point) {
