@@ -238,6 +238,7 @@ export function checkIntersect() {
           fetch(authority.url)
             .then(response => response.json())
             .then(responseJson => {
+              console.log(responseJson);
               // Example response =
               // { "authority_name":  "Steve's Fake Testing Organization",
               //   "publish_date_utc": "1584924583",

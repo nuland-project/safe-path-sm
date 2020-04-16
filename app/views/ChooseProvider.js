@@ -65,7 +65,6 @@ class ChooseProviderScreen extends Component {
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
     this.fetchAuthoritiesList();
-    const storageRef = storage().ref('public/infected.json');
 
     // Update user settings state from async storage
     GetStoreData(AUTHORITY_SOURCE_SETTINGS, false).then(result => {
@@ -76,18 +75,6 @@ class ChooseProviderScreen extends Component {
           selectedAuthorities: result,
         });
       } else {
-        storageRef.getDownloadURL().then(url => {
-          console.log(url);
-          SetStoreData(AUTHORITY_SOURCE_SETTINGS, [
-            {
-              key: 'San Marino COVID19 HA',
-              url,
-            },
-          ]).then(() => {
-            // Force updates immediately.
-            checkIntersect();
-          });
-        });
         console.log('No stored authority settings.');
       }
     });
@@ -355,14 +342,14 @@ class ChooseProviderScreen extends Component {
               : this.state.authoritiesList.map(item => {
                   let name = Object.keys(item)[0];
                   let key = this.state.authoritiesList.indexOf(item);
-
+                  console.log(item);
                   return (
                     <MenuOption
                       key={key}
                       onSelect={() => {
+                        console.log('here');
                         this.addAuthorityToState(name);
-                      }}
-                      disabled={this.state.authoritiesList.length === 1}>
+                      }}>
                       <Text style={styles.menuOptionText}>{name}</Text>
                     </MenuOption>
                   );
