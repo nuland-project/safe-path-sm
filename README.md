@@ -1,10 +1,23 @@
-# Private Kit: San Marino
+# Safe Path: Lemonade San Marino
 
-This is forked version of official private-kit repository which is intended to be customized, deployed to production and tested in San Marino Republic. The app should allow a user to:
+This is forked version of official private-kit repository which is intended to be customized, deployed to production and tested in San Marino Republic.
 
-1. Donate her data to public domain after verification from doctor (COVID19 positive test)
-1. Check her app to see if the user contacted someone who donated data in the past (done in private on personal device).
-1. Once person suspect that she is ill app can be used to signal this to authorities and get attention.
+We want to follow guidelines and approach lined out in [EU document (v.1.0)](https://ec.europa.eu/health/sites/health/files/ehealth/docs/covid-19_apps_en.pdf). In essence it states that the technology has to be used to effectively coordinate efforts in our fight against viral threat, but we have to be very carefull designing it as we can sacrifice too much of our freedom without need to do so. It explains the essential requirements for national
+apps, namely that they be:
+
+- voluntary;
+- approved by the national health authority;
+- privacy-preserving - personal data is securely encrypted; and
+- dismantled as soon as no longer needed.
+
+The added value of these apps is that they can record contacts that a person may not notice or remember.
+
+These requirements on how to record contacts and notify individuals are anchored in
+accepted epidemiological guidance, and reflect best practice on cybersecurity, and
+accessibility. They cover how to prevent the appearance of potentially harmful
+unapproved apps, success criteria and collectively monitoring the effectiveness of the
+apps, and the outline of a communications strategy to engage with stakeholders and
+the people affected by these initiatives.
 
 ## Project Setup
 
@@ -14,37 +27,50 @@ This is forked version of official private-kit repository which is intended to b
 - [x] - iOs app connected to Firebase
 - [x] - Android app connected to Firebase
 - [x] - Implement Export to Cloud Storage (private domain)
-- [ ] - Move public dataset to Cloud Storage (public domain)
+- [x] - Move public dataset to Cloud Storage (public domain)
+- [x] - Review public dataset update logic and aggregation process
+- [x] - Review cryptography used and infered privacy guarantees
 
 1. Setup CI\CD pipeline and publish apps to app stores
 
-- [ ] - Deploy app to Google Play Store (Private Kit: San Marino)
+- [x] - Deploy app to Google Play Store (Private Kit: San Marino)
 - [ ] - Deploy app to Apple Store (Private Kit: San Marino)
-- [ ] - Github Actions workflow for CD for Android app
+- [x] - Github Actions workflow for CD for Android app
 - [ ] - Github Actions workflow for CD for iOs app
 
 1. Updates to frontend application and UX design
 
-- [ ] - Discuss idea of responsible signaling (the idea is to let people signal that they suspect infection and mark themselves for authorities and neighbours?)
+- [x] - Discuss idea of responsible signaling (the idea is to let people signal that they suspect infection and mark themselves for authorities and neighbours?)
 - [ ] - Elaborated user story (including government part)
 - [ ] - Review import feature for iOs and Android devices
+- [x] - Develop wireframes in Figma for UX/UI designs
 - [ ] - Implement UI required to get user consent and export data
 
-## Project Take-off
+## Initial phase (2-4 weeks)
 
-1. Backend logic (on Google Cloud Platform)
+### Privacy track
 
-- [ ] - Review public dataset update logic and aggregation process
-- [ ] - Setup cloud infrastructure to trigger update (python scripts probably?) to public dataset
-- [ ] - Push-notification for mobile apps (daily updates on new cases)
-- [ ] - Review cryptography used and infered privacy guarantees
+- [ ] - Implement keys management and on-device encryption ( PKI infrastructure )
+- [ ] - Implement geolocation snapshot collection logic ( geohashes + e2e-encryption )
+- [ ] - Granular control over spatial resolution (using HD-keys for disclosing parts of the geohash prefix)
+- [ ] - Research on [fully homomorphic encryption](https://homomorphicencryption.org/introduction/) (FHE) schemes applicable to spatial matching, benchmarking open source libraries (e.g. )
+- [ ] - Privacy preserving matching implementation using selected FHE scheme and bloom filters (instead of disclosing infected person tracks to general public)
+
+### SM Health Authority (HA) track
+
+- [ ] - Manual collection of data of most recently infected persons with Safe Places web app
+- [ ] - Scoping of health authority point of view and administrative webapp requirements (e.g. heatmap, social distancing score)
+- [ ] - Cloud infrastructure setup and blockchain for data collection and management
+- [ ] - Develop API compatible with Safe Path and Safe Places
+- [ ] - Push-notification and UX for mobile apps (daily updates on new cases)
 - [ ] - Review security and access rights, GDPR complience check
 
-1. UX design and frontend app
+### Social & joint effort track
 
-- [ ] - Develop wireframes in Figma and finalize UX/UI
-- [ ] - Implement and test offline usage scenarios
-- [ ] - Implement missing screens and UI elements
+- [ ] - Web site + call center for voluntiers and citizens (lemonade.one)
+- [ ] - Chatbot for prescreening (feeds data into HA backend)
+- [ ] - Community management and support through whatsup and social media
+- [ ] - Interoperability research for HAs and apps being deployed in the world (next update from EU on the 8th of April)
 
 ## Integration with Nuland ecosystem
 
