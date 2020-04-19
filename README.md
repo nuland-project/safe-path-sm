@@ -1,8 +1,8 @@
 # Safe Path: Lemonade San Marino
 
-This is forked version of official private-kit repository which is intended to be customized, deployed to production and tested in San Marino Republic.
+This is forked version of official [covid-safe-path repository](https://github.com/tripleblindmarket/covid-safe-paths) and is intended to be customized, deployed to production and tested in San Marino Republic. We also encourage everyone to follow [their](http://privatekit.mit.edu/) workstream for the general coordination and support from communtiy dedicated to building next level privacy respectful tech and intergrating it worldwide for the benefit of humanity.
 
-We want to follow guidelines and approach lined out in [EU document (v.1.0)](https://ec.europa.eu/health/sites/health/files/ehealth/docs/covid-19_apps_en.pdf). In essence it states that the technology has to be used to effectively coordinate efforts in our fight against viral threat, but we have to be very carefull designing it as we can sacrifice too much of our freedom without need to do so. It explains the essential requirements for national
+Designing this software we want to follow guidelines and approach lined out in [EU document (v.1.0)](https://ec.europa.eu/health/sites/health/files/ehealth/docs/covid-19_apps_en.pdf). In essence it states that the technology has to be used to effectively coordinate efforts in our fight against viral threat, but we have to be very carefull designing it as we can sacrifice too much of our freedom without need to do so. It explains the essential requirements for national
 apps, namely that they be:
 
 - voluntary;
@@ -90,6 +90,9 @@ We think we can integrate this technology into our social network app, this will
 
 # Original Initiative: Private Kit
 
+WhatsApp: https://chat.whatsapp.com/HXonYGVeAwQIKxO0HYlxYL
+Slack: https://safepathsprivatekit.slack.com/
+
 Help us stop COVID-19.
 
 We’re building the next generation of secure location logging to preserve privacy and #flattenthecurve
@@ -111,56 +114,3 @@ Private Kit’s trail generator logs your device’s location once every five mi
 **WhitePaper:** [Apps Gone Rogue: Maintaining Personal Privacy in an Epidemic](https://drive.google.com/file/d/1nwOR4drE3YdkCkyy_HBd6giQPPhLEkRc/view?usp=sharing)
 
 **Downloads:** [Google Play](https://play.google.com/store/apps/details?id=edu.mit.privatekit) | [Apple Store](https://apps.apple.com/us/app/private-kit-prototype/id1501903733)
-
-# Development Overview
-
-This is a React Native app version 61.5
-
-## Architecture
-
-Please refer to `docs/Private Kit Diagram.png` for a basic overview on the sequencing of generalized events and services that are utilized by Private Kit.
-
-## Developer Setup
-
-Refer to and run the dev_setup.sh (Linux/MacOS) or dev_setup.bat (Windows) for needed tools.
-
-### iOS Configuration - First Time Setup
-
-1. Move to `ios` directory and run `pod install`
-2. If you have any trouble with packages not round, try `react-native link` from project directory.
-3. Look at running commands below.
-
-### Google Maps API Key
-
-You will need to generate a Google API key in order for the mapping features to work correctly. Refer to this guide [guide](https://developers.google.com/maps/documentation/ios-sdk/get-api-key) in order to create the API key.
-
-Once created you will need to add it to two different places in the project. One for Android and one for iOS.
-
-- Android - open `android/app/src/main/AndroidManifest.xml`and search for `com.google.android.geo.API_KEY`. Add your key to the `android:value` property.
-- iOS - open `ios/PrivateKit/AppDelegate.m` and search for `GMSServices provideAPIKey` and replace line with `[GMSServices provideAPIKey:@"YOUR_API_KEY"];`
-
-## Running
-
-Install modules:
-`npm install` or `yarn install` (note `yarn` does a better job at installing dependencies on macOS)
-
-To run, do:
-
-```
-npx react-native run-android
-```
-
-or
-
-```
-npx react-native run-ios --simulator="iPhone 8 Plus"
-```
-
-NOTE: In some cases, the abovementioned procedure leads to the error 'Failed to load bundle - Could not connect to development server'. In these cases, kill all other react-native processes and try it again.
-
-## Contributing
-
-Read the [contribution guidelines](CONTRIBUTING.md).
-
-WhatsApp: https://chat.whatsapp.com/HXonYGVeAwQIKxO0HYlxYL
-Slack: https://safepathsprivatekit.slack.com/
