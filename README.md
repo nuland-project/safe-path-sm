@@ -1,6 +1,6 @@
 # Safe Path: Lemonade San Marino
 
-This is forked version of official [covid-safe-path repository](https://github.com/tripleblindmarket/covid-safe-paths) and is intended to be customized, deployed to production and tested in San Marino Republic. We also encourage everyone to follow [their](http://privatekit.mit.edu/) workstream for the general coordination and support from communtiy dedicated to building next level privacy respectful tech and intergrating it worldwide for the benefit of humanity.
+This is forked version of official [covid-safe-path repository](https://github.com/tripleblindmarket/covid-safe-paths) and is intended to be customized, deployed to production and tested in San Marino Republic. We also encourage everyone to follow [their](http://privatekit.mit.edu/) workstream for the general coordination and support from communtiy dedicated to building next level privacy respectful tech and intergrating it worldwide for the benefit of humanity. We even have an [YouTube channel](https://www.youtube.com/channel/UCtHuIdXULeIfbDrGF6c9P2g).
 
 Designing this software we want to follow guidelines and approach lined out in [EU document (v.1.0)](https://ec.europa.eu/health/sites/health/files/ehealth/docs/covid-19_apps_en.pdf). In essence it states that the technology has to be used to effectively coordinate efforts in our fight against viral threat, but we have to be very carefull designing it as we can sacrifice too much of our freedom without need to do so. It explains the essential requirements for national
 apps, namely that they be:
@@ -12,12 +12,21 @@ apps, namely that they be:
 
 The added value of these apps is that they can record contacts that a person may not notice or remember.
 
-These requirements on how to record contacts and notify individuals are anchored in
-accepted epidemiological guidance, and reflect best practice on cybersecurity, and
-accessibility. They cover how to prevent the appearance of potentially harmful
-unapproved apps, success criteria and collectively monitoring the effectiveness of the
-apps, and the outline of a communications strategy to engage with stakeholders and
-the people affected by these initiatives.
+These requirements on how to record contacts and notify individuals are anchored in accepted epidemiological guidance, and reflect best practice on cybersecurity, and accessibility. They cover how to prevent the appearance of potentially harmful unapproved apps, success criteria and collectively monitoring the effectiveness of the apps, and the outline of a communications strategy to engage with stakeholders and the people affected by these initiatives.
+
+## Design Rationale
+
+We have to follow holistic approach to the healthcare system design, because the system of that size and importance requires public trust to opearate efficiently. And public trust can be gained only if one is able to convince authorities and society that there is no hiddent conflict of interest which will definetly ruin the trust at scale. Hence it has to be opensource solution, with a great support from community and built with security-first mindset. Below is one possible approach for such a system and relevant tech considerations based on advances in applied cryptography and distributed systems fields.
+
+- The system will never have unencrypted access to the data they are storing and computing on. This is possible through homomorphic encryption technology, that allows computations to be performed directly on encrypted data. Data privacy relies on state-of-the-art cryptography (mathematics) and all information release will be controlled by the customer. More info on this topic can be found for example in [SEAL library documentation](https://github.com/Microsoft/SEAL#core-concepts).
+
+  N.B.: Homomorphic encryption cannot be used to enable data scientist to circumvent GDPR. For example, there is no way for a cloud service to use homomorphic encryption to draw insights from encrypted customer data. Instead, results of encrypted computations remain encrypted and can only be decrypted by the owner of the data, e.g., a cloud service customer.
+
+- To comply with GDPR policies (which we approve and find ethical) the best thing we can do is to encrypt everything by default, and then provide user with clear options how and which data he wants to disclose with the system and ask for hers explicit consent. The default operation mode should be anonymous and strongly encrypted (so we can statisfy dismantleability), but then we are free to provide user with granularity of control and incentives to share pieces of data consentually.
+
+- Also we want to design the system which takes into consideration the possibility of surveliance state coming in control, luckily we have a solution described nicely by creators of a [GUN project](https://gun.eco/docs/Privacy-What-You-Need-To-Know) which is also good from environmental point of view. Fault-tolerance and PKI also comes along with the deployment of blockchain and [self-sovereign identity](https://www.w3.org/TR/vc-use-cases/) layers of [decentralized web](https://gun.eco/docs/dWeb-The-Decentralized-Web).
+
+- The other issue is abuse of the system by dishonest users, and it can be addressed with the use of public reputation system assisted by privacy preserving AI, p2p verification and real-time monitoring. Also introduction of economic incentives allows us initiate interactive verification games in order to invlove community into counter-cheating activities.
 
 ## Project Setup
 
@@ -47,18 +56,6 @@ the people affected by these initiatives.
 - [ ] - Implement UI required to get user consent and export data
 
 ## Initial phase (2-4 weeks)
-
-We have to follow holistic approach to the healthcare system design, because the system of that size and importance requires public trust to opearate efficiently. And public trust can be gained only if one is able to convince authorities and society that there is no hiddent conflict of interest which will definetly ruin the trust at scale. Hence it has to be opensource solution, with a great support from community and built with security-first mindset. Below is one possible approach for such a system and relevant tech considerations based on advances in applied cryptography and distributed systems fields.
-
-- The system will never have unencrypted access to the data they are storing and computing on. This is possible through homomorphic encryption technology, that allows computations to be performed directly on encrypted data. Data privacy relies on state-of-the-art cryptography (mathematics) and all information release will be controlled by the customer. More info on this topic can be found for example in [SEAL library documentation](https://github.com/Microsoft/SEAL#core-concepts).
-
-  N.B.: Homomorphic encryption cannot be used to enable data scientist to circumvent GDPR. For example, there is no way for a cloud service to use homomorphic encryption to draw insights from encrypted customer data. Instead, results of encrypted computations remain encrypted and can only be decrypted by the owner of the data, e.g., a cloud service customer.
-
-- To comply with GDPR policies (which we approve and find ethical) the best thing we can do is to encrypt everything by default, and then provide user with clear options how and which data he wants to disclose with the system and ask for hers explicit consent. The default operation mode should be anonymous and strongly encrypted (so we can statisfy dismantleability), but then we are free to provide user with granularity of control and incentives to share pieces of data consentually.
-
-- Also we want to design the system which takes into consideration the possibility of surveliance state coming in control, luckily we have a solution described nicely by creators of a [GUN project](https://gun.eco/docs/Privacy-What-You-Need-To-Know) which is also good from environmental point of view. Fault-tolerance and PKI also comes along with the deployment of blockchain and [self-sovereign identity](https://www.w3.org/TR/vc-use-cases/) layers of [decentralized web](https://gun.eco/docs/dWeb-The-Decentralized-Web).
-
-- The other issue is abuse of the system by dishonest users, and it can be addressed with the use of public reputation system assisted by privacy preserving AI, p2p verification and real-time monitoring. Also introduction of economic incentives allows us initiate interactive verification games in order to invlove community into counter-cheating activities.
 
 ### Privacy track
 
