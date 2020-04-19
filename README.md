@@ -58,6 +58,8 @@ We have to follow holistic approach to the healthcare system design, because the
 
 - Also we want to design the system which takes into consideration the possibility of surveliance state coming in control, luckily we have a solution described nicely by creators of a [GUN project](https://gun.eco/docs/Privacy-What-You-Need-To-Know) which is also good from environmental point of view. Fault-tolerance and PKI also comes along with the deployment of blockchain and [self-sovereign identity](https://www.w3.org/TR/vc-use-cases/) layers of [decentralized web](https://gun.eco/docs/dWeb-The-Decentralized-Web).
 
+- The other issue is abuse of the system by dishonest users, and it can be addressed with the use of public reputation system assisted by privacy preserving AI, p2p verification and real-time monitoring. Also introduction of economic incentives allows us initiate interactive verification games in order to invlove community into counter-cheating activities.
+
 ### Privacy track
 
 - [ ] - Implement keys management and on-device encryption ( PKI infrastructure )
