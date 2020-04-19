@@ -48,6 +48,16 @@ the people affected by these initiatives.
 
 ## Initial phase (2-4 weeks)
 
+We have to follow holistic approach to the healthcare system design, because the system of that size and importance requires public trust to opearate efficiently. And public trust can be gained only if one is able to convince authorities and society that there is no hiddent conflict of interest which will definetly ruin the trust at scale. Hence it has to be opensource solution, with a great support from community and built with security-first mindset. Below is one possible approach for such a system and relevant tech considerations based on advances in applied cryptography and distributed systems fields.
+
+- The system will never have unencrypted access to the data they are storing and computing on. This is possible through homomorphic encryption technology, that allows computations to be performed directly on encrypted data. Data privacy relies on state-of-the-art cryptography (mathematics) and all information release will be controlled by the customer. More info on this topic can be found for example in [SEAL library documentation](https://github.com/Microsoft/SEAL#core-concepts).
+
+  N.B.: Homomorphic encryption cannot be used to enable data scientist to circumvent GDPR. For example, there is no way for a cloud service to use homomorphic encryption to draw insights from encrypted customer data. Instead, results of encrypted computations remain encrypted and can only be decrypted by the owner of the data, e.g., a cloud service customer.
+
+- To comply with GDPR policies (which we approve and find ethical) the best thing we can do is to encrypt everything by default, and then provide user with clear options how and which data he wants to disclose with the system and ask for hers explicit consent. The default operation mode should be anonymous and strongly encrypted (so we can statisfy dismantleability), but then we are free to provide user with granularity of control and incentives to share pieces of data consentually.
+
+- Also we want to design the system which takes into consideration the possibility of surveliance state coming in control, luckily we have a solution described nicely by creators of a [GUN project](https://gun.eco/docs/Privacy-What-You-Need-To-Know) which is also good from environmental point of view. Fault-tolerance and PKI also comes along with the deployment of blockchain and [self-sovereign identity](https://www.w3.org/TR/vc-use-cases/) layers of [decentralized web](https://gun.eco/docs/dWeb-The-Decentralized-Web).
+
 ### Privacy track
 
 - [ ] - Implement keys management and on-device encryption ( PKI infrastructure )
