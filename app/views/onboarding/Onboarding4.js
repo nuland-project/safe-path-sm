@@ -10,6 +10,7 @@ import {
 
 import BackgroundImage from './../../assets/images/launchScreen1.png';
 import ButtonWrapper from '../../components/ButtonWrapper';
+import { Typography } from '../../components/Typography';
 import Colors from '../../constants/colors';
 import fontFamily from '../../constants/fonts';
 import languages from '../../locales/languages';
@@ -29,12 +30,12 @@ const Onboarding = props => {
         style={styles.backgroundImage}
       />
       <View style={styles.contentContainer}>
-        <Text style={styles.headerText}>
+        <Typography style={styles.headerText}>
           {languages.t('label.launch_screen4_header')}
-        </Text>
-        <Text style={styles.subheaderText}>
+        </Typography>
+        <Typography style={styles.subheaderText}>
           {languages.t('label.launch_screen4_subheader')}
-        </Text>
+        </Typography>
       </View>
       <View style={styles.footerContainer}>
         <ButtonWrapper

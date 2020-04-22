@@ -34,20 +34,23 @@ import StateNoContact from './../assets/svgs/stateNoContact';
 import StateUnknown from './../assets/svgs/stateUnknown';
 import { isPlatformAndroid, isPlatformiOS } from './../Util';
 import ButtonWrapper from '../components/ButtonWrapper';
+import { Typography } from '../components/Typography';
 import Colors from '../constants/colors';
 import fontFamily from '../constants/fonts';
-import { PARTICIPATE } from '../constants/storage';
+import { CROSSED_PATHS, DEBUG_MODE, PARTICIPATE } from '../constants/storage';
 import { GetStoreData, SetStoreData } from '../helpers/General';
 import { checkIntersect } from '../helpers/Intersect';
 import languages from '../locales/languages';
-//import BroadcastingServices from '../services/BroadcastingService';
 import BackgroundTaskServices from '../services/BackgroundTaskService';
 import LocationServices from '../services/LocationService';
+
+const MAYO_COVID_URL = 'https://www.mayoclinic.org/coronavirus-covid-19';
 
 const StateEnum = {
   UNKNOWN: 0,
   AT_RISK: 1,
   NO_CONTACT: 2,
+  SETTING_OFF: 3,
 };
 
 const StateIcon = ({ status, size }) => {
@@ -62,13 +65,15 @@ const StateIcon = ({ status, size }) => {
     case StateEnum.NO_CONTACT:
       icon = StateNoContact;
       break;
+    case StateEnum.SETTING_OFF:
+      icon = StateUnknown;
+      break;
   }
   return (
     <SvgXml xml={icon} width={size ? size : 80} height={size ? size : 80} />
   );
 };
 
-// const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 class LocationTracking extends Component {
@@ -107,47 +112,73 @@ class LocationTracking extends Component {
     } else {
       locationPermission = PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION;
     }
-    // let locationDisabled = true;
-    check(locationPermission)
-      .then(result => {
-        switch (result) {
-          case RESULTS.GRANTED:
-            LocationServices.start();
-            this.checkIfUserAtRisk();
-            return;
-          case RESULTS.UNAVAILABLE:
-          case RESULTS.BLOCKED:
-            console.log('NO LOCATION');
-            LocationServices.stop();
-            this.setState({ currentState: StateEnum.UNKNOWN });
-        }
-      })
-      .catch(error => {
-        console.log('error checking location: ' + error);
-      });
+
+    // If user has location enabled & permissions, start logging
+    GetStoreData(PARTICIPATE, false).then(isParticipating => {
+      if (isParticipating) {
+        check(locationPermission)
+          .then(result => {
+            switch (result) {
+              case RESULTS.GRANTED:
+                LocationServices.start();
+                this.checkIfUserAtRisk();
+                return;
+              case RESULTS.UNAVAILABLE:
+              case RESULTS.BLOCKED:
+                console.log('NO LOCATION');
+                LocationServices.stop();
+                this.setState({ currentState: StateEnum.UNKNOWN });
+            }
+          })
+          .catch(error => {
+            console.log('error checking location: ' + error);
+          });
+      } else {
+        this.setState({ currentState: StateEnum.SETTING_OFF });
+        LocationServices.stop();
+      }
+    });
   }
 
   checkIfUserAtRisk() {
     BackgroundTaskServices.start();
-    // already set on 12h timer, but run when this screen opens too
-    checkIntersect();
 
-    GetStoreData('CROSSED_PATHS').then(dayBin => {
-      dayBin = JSON.parse(dayBin);
-      if (dayBin !== null && dayBin.reduce((a, b) => a + b, 0) > 0) {
-        console.log('Found crossed paths');
-        this.setState({ currentState: StateEnum.AT_RISK });
-      } else {
-        console.log("Can't find crossed paths");
-        this.setState({ currentState: StateEnum.NO_CONTACT });
+    GetStoreData(DEBUG_MODE).then(dbgMode => {
+      if (dbgMode != 'true') {
+        // already set on 12h timer, but run when this screen opens too
+        checkIntersect();
+      }
+
+      GetStoreData(CROSSED_PATHS).then(dayBin => {
+        dayBin = JSON.parse(dayBin);
+        if (dayBin !== null && dayBin.reduce((a, b) => a + b, 0) > 0) {
+          console.log('Found crossed paths');
+          this.setState({ currentState: StateEnum.AT_RISK });
+        } else {
+          console.log("Can't find crossed paths");
+          this.setState({ currentState: StateEnum.NO_CONTACT });
+        }
+      });
+    });
+
+    // If the user has location tracking disabled, set enum to match
+    GetStoreData(PARTICIPATE, false).then(isParticipating => {
+      if (isParticipating === false) {
+        this.setState({
+          currentState: StateEnum.SETTING_OFF,
+        });
       }
     });
   }
 
   componentDidMount() {
-    AppState.addEventListener('change', this._handleAppStateChange);
+    AppState.addEventListener('change', this.handleAppStateChange);
     BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
-    GetStoreData(PARTICIPATE)
+    // refresh state if settings have changed
+    this.unsubscribe = this.props.navigation.addListener('focus', () => {
+      this.checkIfUserAtRisk();
+    });
+    GetStoreData(PARTICIPATE, false)
       .then(isParticipating => {
         if (isParticipating === 'true') {
           this.setState({
@@ -157,6 +188,7 @@ class LocationTracking extends Component {
         } else {
           this.setState({
             isLogging: false,
+            currentState: StateEnum.SETTING_OFF,
           });
         }
       })
@@ -174,19 +206,19 @@ class LocationTracking extends Component {
   }
 
   componentWillUnmount() {
-    AppState.removeEventListener('change', this._handleAppStateChange);
+    AppState.removeEventListener('change', this.handleAppStateChange);
     clearInterval(this.state.timer_intersect);
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
+    this.unsubscribe();
   }
 
   // need to check state again if new foreground event
   // e.g. if user changed location permission
-  _handleAppStateChange = nextAppState => {
+  handleAppStateChange = nextAppState => {
     if (
       this.state.appState.match(/inactive|background/) &&
       nextAppState === 'active'
     ) {
-      console.log('checkIfLocationDisabled');
       this.checkCurrentState();
     }
     this.setState({ appState: nextAppState });
@@ -203,10 +235,6 @@ class LocationTracking extends Component {
 
   import() {
     this.props.navigation.navigate('ImportScreen', {});
-  }
-
-  overlap() {
-    this.props.navigation.navigate('OverlapScreen', {});
   }
 
   willParticipate = () => {
@@ -273,22 +301,8 @@ class LocationTracking extends Component {
         style={styles.settingsContainer}
         onPress={() => {
           this.props.navigation.navigate('SettingsScreen');
-          // THIS IS FOR TESTING - DELETE LATER
-          // switch (this.state.currentState) {
-          //   case StateEnum.NO_CONTACT:
-          //     this.setState({ isLogging: '', currentState: StateEnum.AT_RISK });
-          //     break;
-          //   case StateEnum.AT_RISK:
-          //     this.setState({ isLogging: '', currentState: StateEnum.UNKNOWN });
-          //     break;
-          //   case StateEnum.UNKNOWN:
-          //     this.setState({
-          //       isLogging: '',
-          //       currentState: StateEnum.NO_CONTACT,
-          //     });
-          //     break;
-          // }
         }}>
+        {/* Is there is a reason there's this imageless image tag here? Can we delete it? */}
         <Image resizeMode={'contain'} />
         <SvgXml
           style={styles.stateIcon}
@@ -328,20 +342,26 @@ class LocationTracking extends Component {
     switch (this.state.currentState) {
       case StateEnum.NO_CONTACT:
         return (
-          <Text style={styles.mainTextBelow}>
+          <Typography style={styles.mainTextBelow}>
             {languages.t('label.home_no_contact_header')}
-          </Text>
+          </Typography>
         );
       case StateEnum.AT_RISK:
         return (
-          <Text style={styles.mainTextAbove}>
+          <Typography style={styles.mainTextAbove}>
             {languages.t('label.home_at_risk_header')}
-          </Text>
+          </Typography>
         );
       case StateEnum.UNKNOWN:
         return (
-          <Text style={styles.mainTextBelow}>
+          <Typography style={styles.mainTextBelow}>
             {languages.t('label.home_unknown_header')}
+          </Typography>
+        );
+      case StateEnum.SETTING_OFF:
+        return (
+          <Text style={styles.mainTextBelow}>
+            {languages.t('label.home_setting_off_header')}
           </Text>
         );
     }
@@ -355,6 +375,8 @@ class LocationTracking extends Component {
         return languages.t('label.home_at_risk_subtext');
       case StateEnum.UNKNOWN:
         return languages.t('label.home_unknown_subtext');
+      case StateEnum.SETTING_OFF:
+        return languages.t('label.home_setting_off_subtext');
     }
   }
   getSubSubText() {
@@ -365,6 +387,8 @@ class LocationTracking extends Component {
         return languages.t('label.home_at_risk_subsubtext');
       case StateEnum.UNKNOWN:
         return null;
+      case StateEnum.SETTING_OFF:
+        return null;
     }
   }
 
@@ -372,11 +396,6 @@ class LocationTracking extends Component {
     let buttonLabel;
     let buttonFunction;
     if (this.state.currentState === StateEnum.NO_CONTACT) {
-      // TMP HACK FOR MI
-      // buttonLabel = 'label.home_MASSIVE_HACK';
-      // buttonFunction = () => {
-      //   this.props.navigation.navigate('MapLocation');
-      // };
       return;
     } else if (this.state.currentState === StateEnum.AT_RISK) {
       buttonLabel = languages.t('label.see_exposure_history');
@@ -387,6 +406,11 @@ class LocationTracking extends Component {
       buttonLabel = languages.t('label.home_enable_location');
       buttonFunction = () => {
         openSettings();
+      };
+    } else if (this.state.currentState === StateEnum.SETTING_OFF) {
+      buttonLabel = languages.t('label.home_enable_location');
+      buttonFunction = () => {
+        this.settings();
       };
     }
     return (
@@ -404,7 +428,7 @@ class LocationTracking extends Component {
   }
 
   getMayoInfoPressed() {
-    Linking.openURL(languages.t('label.home_mayo_link_URL'));
+    Linking.openURL(MAYO_COVID_URL);
   }
 
   render() {
@@ -415,7 +439,7 @@ class LocationTracking extends Component {
         <StatusBar
           barStyle='light-content'
           backgroundColor='transparent'
-          translucent={true}
+          translucent
         />
         {this.getPulseIfNeeded()}
 
@@ -423,12 +447,16 @@ class LocationTracking extends Component {
           <View style={styles.contentAbovePulse}>
             {this.state.currentState === StateEnum.AT_RISK &&
               this.getMainText()}
-            <Text style={styles.subsubheaderText}>{this.getSubSubText()}</Text>
+            <Typography style={styles.subsubheaderText}>
+              {this.getSubSubText()}
+            </Typography>
           </View>
           <View style={styles.contentBelowPulse}>
             {this.state.currentState !== StateEnum.AT_RISK &&
               this.getMainText()}
-            <Text style={styles.subheaderText}>{this.getSubText()}</Text>
+            <Typography style={styles.subheaderText}>
+              {this.getSubText()}
+            </Typography>
             {this.getCTAIfNeeded()}
           </View>
         </View>
@@ -438,20 +466,16 @@ class LocationTracking extends Component {
             onPress={this.getMayoInfoPressed.bind(this)}
             style={styles.mayoInfoRow}>
             <View style={styles.mayoInfoContainer}>
-              <Text
+              <Typography
                 style={styles.mainMayoHeader}
-                onPress={() =>
-                  Linking.openURL(languages.t('label.home_mayo_link_URL'))
-                }>
+                onPress={() => Linking.openURL(MAYO_COVID_URL)}>
                 {languages.t('label.home_mayo_link_heading')}
-              </Text>
-              <Text
+              </Typography>
+              <Typography
                 style={styles.mainMayoSubtext}
-                onPress={() =>
-                  Linking.openURL(languages.t('label.home_mayo_link_URL'))
-                }>
+                onPress={() => Linking.openURL(MAYO_COVID_URL)}>
                 {languages.t('label.home_mayo_link_label')}
-              </Text>
+              </Typography>
             </View>
             <View style={styles.arrowContainer}>
               <Image source={foreArrow} style={this.arrow} />
@@ -575,6 +599,7 @@ const styles = StyleSheet.create({
   arrowContainer: {
     alignSelf: 'center',
     paddingRight: 20,
+    paddingLeft: 20,
   },
 });
 

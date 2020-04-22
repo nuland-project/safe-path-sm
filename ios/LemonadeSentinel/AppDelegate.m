@@ -12,15 +12,13 @@
 #import <React/RCTRootView.h>
 #import <RNCPushNotificationIOS.h>
 #import <UserNotifications/UserNotifications.h>
-#import <GoogleMaps/GoogleMaps.h>
-#import <Firebase.h>
+#import <react-native-splash-screen/RNSplashScreen.h>
+#import <TSBackgroundFetch/TSBackgroundFetch.h>
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  [FIRApp configure];
-  [GMSServices provideAPIKey:@"AIzaSyB0-TLHy-0Nmed6rYG1IkvwqVtjAKHV9lk"];
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"PrivateKit"
@@ -33,9 +31,13 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
-  
+
   UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
   center.delegate = self;
+
+  [RNSplashScreen showSplash:@"LaunchScreen" inRootView:rootView];
+  // [REQUIRED] Register BackgroundFetch
+    [[TSBackgroundFetch sharedInstance] didFinishLaunching];
   return YES;
 }
 
@@ -78,8 +80,8 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 - (void)applicationWillTerminate:(UIApplication *)application {
   UILocalNotification *notification = [[UILocalNotification alloc] init];
   notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:0];
-  notification.alertTitle = @"Private Kit Was Closed";
-  notification.alertBody = @"Private Kit requires to be running.";
+  notification.alertTitle = NSLocalizedString(@"ios.app_closed_alert_title", @"Title of notification when app is closed");
+  notification.alertBody = NSLocalizedString(@"ios.app_closed_alert_text", @"Body text of notification when app is closed");
   notification.timeZone = [NSTimeZone defaultTimeZone];
   notification.soundName = UILocalNotificationDefaultSoundName;
   notification.applicationIconBadgeNumber = 0;

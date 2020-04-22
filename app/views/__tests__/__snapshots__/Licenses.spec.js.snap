@@ -114,8 +114,14 @@ exports[`renders correctly 1`] = `
       <Text
         style={
           Object {
-            "fontSize": 20,
-            "fontWeight": "200",
+            "alignSelf": "center",
+            "color": "#FFF",
+            "fontFamily": "IBMPlexSans-Medium",
+            "fontSize": 26,
+            "paddingHorizontal": 20,
+            "position": "absolute",
+            "textAlign": "center",
+            "width": "100%",
           }
         }
       >
@@ -132,11 +138,12 @@ exports[`renders correctly 1`] = `
         }
       }
     >
-      <Text
-        style={
-          Object {
-            "fontSize": 20,
-            "fontWeight": "800",
+      <View>
+        <View
+          style={
+            Object {
+              "flex": 4,
+            }
           }
         }
       >
@@ -171,13 +178,29 @@ exports[`renders correctly 1`] = `
           }
         }
       >
-        Screen Resolution: 
-      </Text>
-      <Text
+        <Text
+          style={
+            Object {
+              "color": "#E5E4E6",
+              "fontFamily": "IBMPlexSans-Bold",
+              "fontSize": 20,
+              "fontWeight": "normal",
+              "lineHeight": 24,
+              "textAlign": "left",
+              "writingDirection": "ltr",
+            }
+          }
+          use="body1"
+        >
+          Terms of use
+        </Text>
+      </View>
+      <View
         style={
           Object {
-            "fontSize": 20,
-            "fontWeight": "200",
+            "alignSelf": "center",
+            "paddingLeft": 20,
+            "paddingRight": 20,
           }
         }
       >

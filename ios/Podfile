@@ -1,8 +1,10 @@
 platform :ios, '9.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-target 'LemonadeSentinel' do
-  # Pods for Lemonade
+target 'COVIDSafePaths' do
+  # Pods for COVIDSafePaths
+  project 'COVIDSafePaths.xcodeproj'
+
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -40,26 +42,10 @@ target 'LemonadeSentinel' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  pod 'Firebase/Core'
-  pod 'Firebase/Analytics'
-  pod 'GoogleAppMeasurement'
-  pod 'Firebase/Storage'
-
-  # React Native Maps dependencies
-  pod 'react-native-geolocation', path: '../node_modules/@react-native-community/geolocation'
-  
-  rn_maps_path = '../node_modules/react-native-maps'
-  pod 'react-native-google-maps', :path => rn_maps_path
-  pod 'GoogleMaps'
-  pod 'Google-Maps-iOS-Utils'
-  
-  pod 'RNSVG', :path => '../node_modules/react-native-svg'
-
-  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
-
   pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
 
-  target 'LemonadeSentinelTests' do
+
+  target 'COVIDSafePathsTests' do
     inherit! :search_paths
     # Pods for testing
   end

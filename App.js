@@ -6,15 +6,23 @@
  * @flow
  */
 
-import React from 'react';
-import { StatusBar } from 'react-native';
+import React, { useEffect } from 'react';
 import { MenuProvider } from 'react-native-popup-menu';
+import SplashScreen from 'react-native-splash-screen';
+
+import { Theme } from './app/constants/themes';
 import Entry from './app/Entry';
 
-const App: () => React$Node = () => {
+const App = () => {
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
+
   return (
     <MenuProvider>
-      <Entry />
+      <Theme use='default'>
+        <Entry />
+      </Theme>
     </MenuProvider>
   );
 };

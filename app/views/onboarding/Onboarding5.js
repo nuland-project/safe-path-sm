@@ -23,6 +23,7 @@ import IconDenied from '../../assets/svgs/permissionDenied';
 import IconGranted from '../../assets/svgs/permissionGranted';
 import IconUnknown from '../../assets/svgs/permissionUnknown';
 import ButtonWrapper from '../../components/ButtonWrapper';
+import { Typography } from '../../components/Typography';
 import Colors from '../../constants/colors';
 import fontFamily from '../../constants/fonts';
 import { PARTICIPATE } from '../../constants/storage';
@@ -52,7 +53,7 @@ const PermissionDescription = ({ title, status, ...props }) => {
   }
   return (
     <View style={styles.permissionContainer}>
-      <Text style={styles.permissionTitle}>{title}</Text>
+      <Typography style={styles.permissionTitle}>{title}</Typography>
       <SvgXml style={styles.permissionIcon} xml={icon} width={30} height={30} />
     </View>
   );
@@ -175,6 +176,7 @@ class Onboarding extends Component {
       this.requestNotification();
     } else {
       SetStoreData(PARTICIPATE, 'true'); // replaces "start" button
+      SetStoreData('ONBOARDING_DONE', true);
       this.props.navigation.replace('LocationTrackingScreen');
     }
   }
@@ -191,9 +193,15 @@ class Onboarding extends Component {
 
   getTitleTextView() {
     if (!this.isLocationChecked() || !this.isNotificationChecked()) {
-      return <Text style={styles.headerText}>{this.getTitleText()}</Text>;
+      return (
+        <Typography style={styles.headerText}>{this.getTitleText()}</Typography>
+      );
     } else {
-      return <Text style={styles.bigHeaderText}>{this.getTitleText()}</Text>;
+      return (
+        <Typography style={styles.bigHeaderText}>
+          {this.getTitleText()}
+        </Typography>
+      );
     }
   }
 
@@ -257,7 +265,9 @@ class Onboarding extends Component {
         <View style={styles.mainContainer}>
           <View style={styles.contentContainer}>
             {this.getTitleTextView()}
-            <Text style={styles.subheaderText}>{this.getSubtitleText()}</Text>
+            <Typography style={styles.subheaderText}>
+              {this.getSubtitleText()}
+            </Typography>
             <View style={styles.statusContainer}>
               {this.getLocationPermission()}
               {this.getNotificationsPermissionIfIOS()}
