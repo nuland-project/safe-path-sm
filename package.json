@@ -8,7 +8,7 @@
     "run-ios": "react-native run-ios",
     "preinstall": "node -e \"if(process.env.npm_execpath.indexOf('yarn') === -1) throw new Error('You must use Yarn to install, not NPM')\"",
     "install:pod": "cd ios && bundle install && bundle exec pod install",
-    "postinstall": "patch-package; npx react-native-jetifier",
+    "postinstall": "patch-package && npx react-native-jetifier",
     "postversion": "react-native-version",
     "format:all": "prettier --write ./app/**/*.js",
     "detox-setup": "detox clean-framework-cache && detox build-framework-cache",

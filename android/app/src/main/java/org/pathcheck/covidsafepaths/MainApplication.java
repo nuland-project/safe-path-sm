@@ -1,4 +1,4 @@
-package io.nuland.lemonade;
+package org.pathcheck.covidsafepaths;
 
 import android.app.Application;
 import android.content.Context;
