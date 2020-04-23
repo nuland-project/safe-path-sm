@@ -45,6 +45,7 @@ import BackgroundTaskServices from '../services/BackgroundTaskService';
 import LocationServices from '../services/LocationService';
 
 const MAYO_COVID_URL = 'https://www.mayoclinic.org/coronavirus-covid-19';
+const PROJECT_LEMONADE_URL = 'https://www.lemonade.one';
 
 const StateEnum = {
   UNKNOWN: 0,
@@ -229,13 +230,13 @@ class LocationTracking extends Component {
     return true;
   };
 
-  export() {
-    this.props.navigation.navigate('ExportScreen', {});
-  }
+  // export() {
+  //   this.props.navigation.navigate('ExportScreen', {});
+  // }
 
-  import() {
-    this.props.navigation.navigate('ImportScreen', {});
-  }
+  // import() {
+  //   this.props.navigation.navigate('ImportScreen', {});
+  // }
 
   willParticipate = () => {
     SetStoreData(PARTICIPATE, 'true').then(() => {
@@ -263,30 +264,30 @@ class LocationTracking extends Component {
     });
   };
 
-  news() {
-    this.props.navigation.navigate('NewsScreen', {});
-  }
+  // news() {
+  //   this.props.navigation.navigate('NewsScreen', {});
+  // }
 
-  licenses() {
-    this.props.navigation.navigate('LicensesScreen', {});
-  }
+  // licenses() {
+  //   this.props.navigation.navigate('LicensesScreen', {});
+  // }
 
   settings() {
     this.props.navigation.navigate('SettingsScreen', {});
   }
 
-  notifications() {
-    this.props.navigation.navigate('NotificationScreen', {});
-  }
+  // notifications() {
+  //   this.props.navigation.navigate('NotificationScreen', {});
+  // }
 
-  setOptOut = () => {
-    LocationServices.stop(this.props.navigation);
-    // Turn of bluetooth for v1
-    //BroadcastingServices.stop(this.props.navigation);
-    this.setState({
-      isLogging: false,
-    });
-  };
+  // setOptOut = () => {
+  //   LocationServices.stop(this.props.navigation);
+  //   // Turn of bluetooth for v1
+  //   //BroadcastingServices.stop(this.props.navigation);
+  //   this.setState({
+  //     isLogging: false,
+  //   });
+  // };
 
   getBackground() {
     if (this.state.currentState === StateEnum.AT_RISK) {
@@ -428,7 +429,7 @@ class LocationTracking extends Component {
   }
 
   getMayoInfoPressed() {
-    Linking.openURL(MAYO_COVID_URL);
+    Linking.openURL(PROJECT_LEMONADE_URL);
   }
 
   render() {
@@ -468,13 +469,8 @@ class LocationTracking extends Component {
             <View style={styles.mayoInfoContainer}>
               <Typography
                 style={styles.mainMayoHeader}
-                onPress={() => Linking.openURL(MAYO_COVID_URL)}>
-                {languages.t('label.home_mayo_link_heading')}
-              </Typography>
-              <Typography
-                style={styles.mainMayoSubtext}
-                onPress={() => Linking.openURL(MAYO_COVID_URL)}>
-                {languages.t('label.home_mayo_link_label')}
+                onPress={() => Linking.openURL(PROJECT_LEMONADE_URL)}>
+                {languages.t('label.home_go_to_lemonade_project')}
               </Typography>
             </View>
             <View style={styles.arrowContainer}>
