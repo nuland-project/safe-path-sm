@@ -428,7 +428,7 @@ class LocationTracking extends Component {
     );
   }
 
-  getMayoInfoPressed() {
+  getMoreInformationPressed() {
     Linking.openURL(PROJECT_LEMONADE_URL);
   }
 
@@ -464,7 +464,7 @@ class LocationTracking extends Component {
 
         <View>
           <TouchableOpacity
-            onPress={this.getMayoInfoPressed.bind(this)}
+            onPress={this.getMoreInformationPressed.bind(this)}
             style={styles.mayoInfoRow}>
             <View style={styles.mayoInfoContainer}>
               <Typography
@@ -472,9 +472,6 @@ class LocationTracking extends Component {
                 onPress={() => Linking.openURL(PROJECT_LEMONADE_URL)}>
                 {languages.t('label.home_go_to_lemonade_project')}
               </Typography>
-            </View>
-            <View style={styles.arrowContainer}>
-              <Image source={foreArrow} style={this.arrow} />
             </View>
           </TouchableOpacity>
         </View>
@@ -572,12 +569,9 @@ const styles = StyleSheet.create({
   },
   mayoInfoRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   mayoInfoContainer: {
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignContent: 'flex-end',
     padding: 20,
   },
   mainMayoHeader: {
@@ -585,17 +579,9 @@ const styles = StyleSheet.create({
     color: Colors.MISCHKA,
     fontSize: 18,
     fontFamily: fontFamily.primaryBold,
-  },
-  mainMayoSubtext: {
-    textAlign: 'left',
-    color: Colors.MISCHKA,
-    fontSize: 18,
-    fontFamily: fontFamily.primaryRegular,
-  },
-  arrowContainer: {
-    alignSelf: 'center',
-    paddingRight: 20,
-    paddingLeft: 20,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    padding: 10,
+    borderRadius: 5,
   },
 });
 
