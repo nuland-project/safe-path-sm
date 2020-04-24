@@ -104,7 +104,7 @@ export const SettingsScreen = ({ navigation }) => {
           </NativePicker>
         </Section>
 
-        <Section>
+        {/* <Section>
           <Item
             label={t('label.choose_provider_title')}
             description={t('label.choose_provider_subtitle')}
@@ -126,13 +126,13 @@ export const SettingsScreen = ({ navigation }) => {
             onPress={() => navigation.navigate('ExportScreen')}
             last
           />
-        </Section>
+        </Section> */}
 
         <Section>
           <GoogleMapsImport navigation={navigation} />
         </Section>
 
-        <Section last>
+        {/* <Section last>
           <Item
             label={t('label.about_title')}
             onPress={() => navigation.navigate('AboutScreen')}
@@ -142,7 +142,7 @@ export const SettingsScreen = ({ navigation }) => {
             onPress={() => navigation.navigate('LicensesScreen')}
             last
           />
-        </Section>
+        </Section> */}
       </ScrollView>
     </NavigationBarWrapper>
   );
