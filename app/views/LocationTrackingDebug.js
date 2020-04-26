@@ -55,6 +55,9 @@ const StateEnum = {
   COVID_POSITIVE: 4,
 };
 
+// Change state here
+const InitialState = StateEnum.COVID_POSITIVE;
+
 const StateIcon = ({ status, size }) => {
   let icon;
   switch (status) {
@@ -95,10 +98,10 @@ class LocationTracking extends Component {
       appState: AppState.currentState,
       timer_intersect: null,
       isLogging: '',
-      currentState: StateEnum.NO_CONTACT,
+      currentState: InitialState,
     };
     try {
-      this.checkCurrentState();
+      //this.checkCurrentState();
     } catch (e) {
       // statements
       console.log(e);
@@ -137,14 +140,14 @@ class LocationTracking extends Component {
               case RESULTS.BLOCKED:
                 console.log('NO LOCATION');
                 LocationServices.stop();
-                this.setState({ currentState: StateEnum.UNKNOWN });
+              //this.setState({ currentState: StateEnum.UNKNOWN });
             }
           })
           .catch(error => {
             console.log('error checking location: ' + error);
           });
       } else {
-        this.setState({ currentState: StateEnum.SETTING_OFF });
+        //this.setState({ currentState: StateEnum.SETTING_OFF });
         LocationServices.stop();
       }
     });
@@ -174,9 +177,9 @@ class LocationTracking extends Component {
     // If the user has location tracking disabled, set enum to match
     GetStoreData(PARTICIPATE, false).then(isParticipating => {
       if (isParticipating === false) {
-        this.setState({
-          currentState: StateEnum.SETTING_OFF,
-        });
+        // this.setState({
+        //   currentState: StateEnum.SETTING_OFF,
+        // });
       }
     });
   }
@@ -196,10 +199,10 @@ class LocationTracking extends Component {
           });
           this.willParticipate();
         } else {
-          this.setState({
-            isLogging: false,
-            currentState: StateEnum.SETTING_OFF,
-          });
+          // this.setState({
+          //   isLogging: false,
+          //   currentState: StateEnum.SETTING_OFF,
+          // });
         }
       })
       .catch(error => console.log(error));
@@ -395,7 +398,6 @@ class LocationTracking extends Component {
         return languages.t('label.home_setting_off_subtext');
     }
   }
-
   getSubSubText() {
     switch (this.state.currentState) {
       case StateEnum.NO_CONTACT:
