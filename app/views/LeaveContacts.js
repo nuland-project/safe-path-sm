@@ -1,3 +1,4 @@
+import firestore from '@react-native-firebase/firestore';
 /* eslint-disable react-native/no-raw-text */
 import React, { Component } from 'react';
 import {
@@ -36,6 +37,10 @@ class LeaveContacts extends Component {
   handleInput = (name, value) => this.setState({ [name]: value });
 
   componentDidMount() {
+    const userDocument = firestore()
+      .collection('test')
+      .get();
+    console.log(userDocument);
     BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
   }
 
