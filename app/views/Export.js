@@ -1,3 +1,4 @@
+import storage from '@react-native-firebase/storage';
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -45,65 +46,84 @@ export const ExportScreen = ({ navigation }) => {
     navigation.goBack();
   }
 
-  async function onShare() {
+  // async function onShare() {
+  //   try {
+  //     let locationData = await new LocationData().getLocationData();
+  //     let nowUTC = new Date().toISOString();
+  //     let unixtimeUTC = Date.parse(nowUTC);
+
+  //     let options = {};
+  //     let jsonData = JSON.stringify(locationData);
+  //     const title = 'COVIDSafePaths.json';
+  //     const filename = unixtimeUTC + '.json';
+  //     const message = 'Here is my location log from COVID Safe Paths.';
+  //     if (isPlatformiOS()) {
+  //       const url = RNFS.DocumentDirectoryPath + '/' + filename;
+  //       await RNFS.writeFile(url, jsonData, 'utf8')
+  //         .then(() => {
+  //           options = {
+  //             activityItemSources: [
+  //               {
+  //                 placeholderItem: { type: 'url', content: url },
+  //                 item: {
+  //                   default: { type: 'url', content: url },
+  //                 },
+  //                 subject: {
+  //                   default: title,
+  //                 },
+  //                 linkMetadata: { originalUrl: url, url, title },
+  //               },
+  //             ],
+  //           };
+  //         })
+  //         .catch(err => {
+  //           console.log(err.message);
+  //         });
+  //     } else {
+  //       jsonData = 'data:application/json;base64,' + base64.encode(jsonData);
+  //       options = {
+  //         title,
+  //         subject: title,
+  //         url: jsonData,
+  //         message: message,
+  //         filename: filename,
+  //       };
+  //     }
+  //     await Share.open(options)
+  //       .then(res => {
+  //         console.log(res);
+  //       })
+  //       .catch(err => {
+  //         console.log(err);
+  //         console.log(err.message, err.code);
+  //       });
+  //     if (isPlatformiOS()) {
+  //       // eslint-disable-next-line no-undef
+  //       await RNFS.unlink(url);
+  //     }
+  //   } catch (error) {
+  //     console.log(error.message);
+  //   }
+  // }
+
+  // Try to save location data in cloud storage
+  saveInCloudStorage = async () => {
     try {
       let locationData = await new LocationData().getLocationData();
       let nowUTC = new Date().toISOString();
       let unixtimeUTC = Date.parse(nowUTC);
 
-      let options = {};
       let jsonData = JSON.stringify(locationData);
-      const title = 'COVIDSafePaths.json';
       const filename = unixtimeUTC + '.json';
-      const message = 'Here is my location log from COVID Safe Paths.';
-      if (isPlatformiOS()) {
-        const url = RNFS.DocumentDirectoryPath + '/' + filename;
-        await RNFS.writeFile(url, jsonData, 'utf8')
-          .then(() => {
-            options = {
-              activityItemSources: [
-                {
-                  placeholderItem: { type: 'url', content: url },
-                  item: {
-                    default: { type: 'url', content: url },
-                  },
-                  subject: {
-                    default: title,
-                  },
-                  linkMetadata: { originalUrl: url, url, title },
-                },
-              ],
-            };
-          })
-          .catch(err => {
-            console.log(err.message);
-          });
-      } else {
-        jsonData = 'data:application/json;base64,' + base64.encode(jsonData);
-        options = {
-          title,
-          subject: title,
-          url: jsonData,
-          message: message,
-          filename: filename,
-        };
-      }
-      await Share.open(options)
-        .then(res => {
-          console.log(res);
-        })
-        .catch(err => {
-          console.log(err);
-          console.log(err.message, err.code);
-        });
-      if (isPlatformiOS()) {
-        // eslint-disable-next-line no-undef
-        await RNFS.unlink(url);
-      }
+      const storageRef = storage().ref();
+      let res = await storageRef
+        .child(`tracks/${filename}`)
+        .putString(jsonData);
+      console.log(res);
     } catch (error) {
       console.log(error.message);
     }
-  }
+  };
 
   return (
     <>
@@ -139,7 +159,9 @@ export const ExportScreen = ({ navigation }) => {
                 {t('label.export_para_2')}
               </Typography>
 
-              <TouchableOpacity style={styles.exportButton} onPress={onShare}>
+              <TouchableOpacity
+                style={styles.exportButton}
+                onPress={this.saveInCloudStorage}>
                 <Typography style={styles.exportButtonText}>
                   {t('label.share_location_data')}
                 </Typography>

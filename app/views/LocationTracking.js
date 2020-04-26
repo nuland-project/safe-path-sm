@@ -56,7 +56,7 @@ const StateEnum = {
 };
 
 // Change state here
-const InitialState = StateEnum.AT_RISK;
+const InitialState = StateEnum.COVID_POSITIVE;
 
 const StateIcon = ({ status, size }) => {
   let icon;
@@ -107,11 +107,6 @@ class LocationTracking extends Component {
       console.log(e);
     }
   }
-
-  // TO DO: send data to ...
-  donateData = () => {
-    console.log('DONATE DATA');
-  };
 
   /*  Check current state
         1) determine if user has correct location permissions
@@ -424,7 +419,7 @@ class LocationTracking extends Component {
       };
     } else if (this.state.currentState === StateEnum.COVID_POSITIVE) {
       buttonLabel = languages.t('label.donate_data');
-      buttonFunction = this.donateData;
+      buttonFunction = () => this.props.navigation.navigate('ExportScreen');
     } else if (this.state.currentState === StateEnum.UNKNOWN) {
       buttonLabel = languages.t('label.home_enable_location');
       buttonFunction = () => {
