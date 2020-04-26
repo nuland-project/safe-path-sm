@@ -1,4 +1,4 @@
-package org.pathcheck.covidsafepaths;
+package org.nuland.lemonade;
 
 import com.wix.detox.Detox;
 

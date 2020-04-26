@@ -1,4 +1,4 @@
-package org.pathcheck.covidsafepaths;
+package io.nuland.lemonade;
 
 import android.os.Bundle;
 import com.facebook.react.ReactActivity;
@@ -6,6 +6,8 @@ import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
 import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
 import org.devio.rn.splashscreen.SplashScreen;
+
+import io.nuland.lemonade.R;
 
 public class MainActivity extends ReactActivity {
 
@@ -21,7 +23,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "COVIDSafePaths";
+    return "LemonadeSentinel";
   }
 
   @Override
