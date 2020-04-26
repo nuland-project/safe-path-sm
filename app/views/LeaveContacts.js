@@ -34,13 +34,7 @@ class LeaveContacts extends Component {
     return true;
   };
 
-  handleInput = (name, value) => this.setState({ [name]: value });
-
   componentDidMount() {
-    const userDocument = firestore()
-      .collection('test')
-      .get();
-    console.log(userDocument);
     BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
   }
 
@@ -48,11 +42,16 @@ class LeaveContacts extends Component {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
   }
 
-  sendData = () => {
-    const { name, phone } = this.state;
-    const data = { name, phone, status: 'suspected' };
-    const collection = firestore.collection('test');
-    collection.doc(name).set(data);
+  sendData = async () => {
+    try {
+      const { name, phone } = this.state;
+      const newPatient = { name, phone, status: 'suspected' };
+      await firestore()
+        .collection('patients')
+        .add(newPatient);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   render() {
@@ -71,14 +70,14 @@ class LeaveContacts extends Component {
             placeholder={languages.t('label.phone')}
             keyboardType={'number-pad'}
             value={phone}
-            onChange={v => this.handleInput('phone', v)}
+            onChangeText={v => this.setState({ phone: v })}
           />
           <View style={styles.spacer} />
           <TextInput
             style={styles.input}
             placeholder={languages.t('label.name')}
             value={name}
-            onChange={v => this.handleInput('name', v)}
+            onChangeText={v => this.setState({ name: v })}
           />
 
           {/* SEND DATA BUTTON */}
