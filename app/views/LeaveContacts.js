@@ -49,7 +49,10 @@ class LeaveContacts extends Component {
   }
 
   sendData = () => {
-    console.log(this.state);
+    const { name, phone } = this.state;
+    const data = { name, phone, status: 'suspected' };
+    const collection = firestore.collection('test');
+    collection.doc(name).set(data);
   };
 
   render() {
