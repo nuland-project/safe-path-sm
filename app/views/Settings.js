@@ -9,6 +9,7 @@ import xmarkIcon from '../assets/svgs/xmarkIcon';
 import { Divider } from '../components/Divider';
 import NativePicker from '../components/NativePicker';
 import NavigationBarWrapper from '../components/NavigationBarWrapper';
+import { Typography } from '../components/Typography';
 import Colors from '../constants/colors';
 import { PARTICIPATE } from '../constants/storage';
 import { GetStoreData, SetStoreData } from '../helpers/General';
@@ -19,6 +20,7 @@ import {
   supportedDeviceLanguageOrEnglish,
 } from '../locales/languages';
 import LocationServices from '../services/LocationService';
+import CovidStatePicker from './CovidStatePicker';
 import { GoogleMapsImport } from './Settings/GoogleMapsImport';
 import { SettingsItem as Item } from './Settings/SettingsItem';
 
@@ -102,6 +104,14 @@ export const SettingsScreen = ({ navigation }) => {
               />
             )}
           </NativePicker>
+        </Section>
+
+        <Section>
+          <View style={{ marginTop: 15 }}>
+            <Typography use='body1'>{'Choose your status: '}</Typography>
+          </View>
+
+          <CovidStatePicker />
         </Section>
 
         {/* <Section>
