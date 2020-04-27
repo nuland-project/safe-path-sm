@@ -31,13 +31,19 @@ import SettingsGear from './../assets/svgs/settingsGear';
 import StateNoContact from './../assets/svgs/stateNoContact';
 import StateUnknown from './../assets/svgs/stateUnknown';
 import { isPlatformAndroid, isPlatformiOS } from './../Util';
+import RefreshIcon from '../assets/svgs/refresh';
 import stateAtCovidPositive from '../assets/svgs/stateAtCovidPositive';
 import StateAtRisk from '../assets/svgs/stateAtRisk';
 import ButtonWrapper from '../components/ButtonWrapper';
 import { Typography } from '../components/Typography';
 import Colors from '../constants/colors';
 import fontFamily from '../constants/fonts';
-import { CROSSED_PATHS, DEBUG_MODE, PARTICIPATE } from '../constants/storage';
+import {
+  COVID_STATUS,
+  CROSSED_PATHS,
+  DEBUG_MODE,
+  PARTICIPATE,
+} from '../constants/storage';
 import { GetStoreData, SetStoreData } from '../helpers/General';
 import { checkIntersect } from '../helpers/Intersect';
 import languages from '../locales/languages';
@@ -48,15 +54,12 @@ import LocationServices from '../services/LocationService';
 const PROJECT_LEMONADE_URL = 'https://www.lemonade.one';
 
 const StateEnum = {
-  UNKNOWN: 0,
-  AT_RISK: 1,
-  NO_CONTACT: 2,
-  SETTING_OFF: 3,
-  COVID_POSITIVE: 4,
+  UNKNOWN: '0',
+  AT_RISK: '1',
+  NO_CONTACT: '2',
+  SETTING_OFF: '3',
+  COVID_POSITIVE: '4',
 };
-
-// Change state here
-const InitialState = StateEnum.COVID_POSITIVE;
 
 const StateIcon = ({ status, size }) => {
   let icon;
@@ -98,15 +101,66 @@ class LocationTracking extends Component {
       appState: AppState.currentState,
       timer_intersect: null,
       isLogging: '',
-      currentState: InitialState,
+      currentState: StateEnum.NO_CONTACT,
     };
+  }
+
+  updateStatus = async () => {
     try {
-      //this.checkCurrentState();
+      // At first check last saved status
+      const status = await GetStoreData(COVID_STATUS, true);
+      if (status !== null) this.setState({ currentState: status });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  componentDidMount = () => {
+    this.updateStatus();
+    // Check current state
+    try {
+      this.checkCurrentState();
     } catch (e) {
       // statements
       console.log(e);
     }
-  }
+
+    AppState.addEventListener('change', this.handleAppStateChange);
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+    // refresh state if settings have changed
+    this.unsubscribe = this.props.navigation.addListener('focus', () => {
+      this.checkIfUserAtRisk();
+    });
+    GetStoreData(PARTICIPATE, false)
+      .then(isParticipating => {
+        if (isParticipating === 'true') {
+          this.setState({
+            isLogging: true,
+          });
+          this.willParticipate();
+        } else {
+          this.setState({ isLogging: false });
+          //this.tryToChangeStatus(StateEnum.SETTING_OFF);
+        }
+      })
+      .catch(error => console.log(error));
+  };
+
+  tryToChangeStatus = newStatus => {
+    const { currentState } = this.state;
+
+    // Don't change status (in component state) if it equals AT_RISK or COVID_POSITIVE
+    if (
+      currentState == StateEnum.AT_RISK ||
+      currentState == StateEnum.COVID_POSITIVE
+    ) {
+      return;
+    }
+
+    // Save global and local state
+    SetStoreData(COVID_STATUS, newStatus);
+    this.setState({ currentState: newStatus });
+  };
 
   /*  Check current state
         1) determine if user has correct location permissions
@@ -135,14 +189,14 @@ class LocationTracking extends Component {
               case RESULTS.BLOCKED:
                 console.log('NO LOCATION');
                 LocationServices.stop();
-              //this.setState({ currentState: StateEnum.UNKNOWN });
+              //this.tryToChangeStatus(StateEnum.UNKNOWN);
             }
           })
           .catch(error => {
             console.log('error checking location: ' + error);
           });
       } else {
-        //this.setState({ currentState: StateEnum.SETTING_OFF });
+        //this.tryToChangeStatus(StateEnum.SETTING_OFF);
         LocationServices.stop();
       }
     });
@@ -161,10 +215,10 @@ class LocationTracking extends Component {
         dayBin = JSON.parse(dayBin);
         if (dayBin !== null && dayBin.reduce((a, b) => a + b, 0) > 0) {
           console.log('Found crossed paths');
-          this.setState({ currentState: StateEnum.AT_RISK });
+          this.tryToChangeStatus(StateEnum.AT_RISK);
         } else {
           console.log("Can't find crossed paths");
-          this.setState({ currentState: StateEnum.NO_CONTACT });
+          //this.tryToChangeStatus(StateEnum.NO_CONTACT);
         }
       });
     });
@@ -172,35 +226,9 @@ class LocationTracking extends Component {
     // If the user has location tracking disabled, set enum to match
     GetStoreData(PARTICIPATE, false).then(isParticipating => {
       if (isParticipating === false) {
-        // this.setState({
-        //   currentState: StateEnum.SETTING_OFF,
-        // });
+        //this.tryToChangeStatus(StateEnum.SETTING_OFF);
       }
     });
-  }
-
-  componentDidMount() {
-    AppState.addEventListener('change', this.handleAppStateChange);
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
-    // refresh state if settings have changed
-    this.unsubscribe = this.props.navigation.addListener('focus', () => {
-      this.checkIfUserAtRisk();
-    });
-    GetStoreData(PARTICIPATE, false)
-      .then(isParticipating => {
-        if (isParticipating === 'true') {
-          this.setState({
-            isLogging: true,
-          });
-          this.willParticipate();
-        } else {
-          // this.setState({
-          //   isLogging: false,
-          //   currentState: StateEnum.SETTING_OFF,
-          // });
-        }
-      })
-      .catch(error => console.log(error));
   }
 
   findNewAuthorities() {
@@ -479,7 +507,11 @@ class LocationTracking extends Component {
           </View>
         </View>
 
-        <View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+          }}>
           <TouchableOpacity
             onPress={this.getMoreInformationPressed.bind(this)}
             style={styles.mayoInfoRow}>
@@ -490,6 +522,11 @@ class LocationTracking extends Component {
                 {languages.t('label.home_go_to_lemonade_project')}
               </Typography>
             </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={this.updateStatus}
+            style={styles.refreshContainer}>
+            <SvgXml fill={'#FFFFFF'} xml={RefreshIcon} width={32} height={32} />
           </TouchableOpacity>
         </View>
         {this.getSettings()}
@@ -585,6 +622,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   mayoInfoRow: {
+    width: '80%',
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -599,6 +637,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.4)',
     padding: 10,
     borderRadius: 5,
+  },
+  refreshContainer: {
+    height: 50,
+    width: 50,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    borderRadius: 5,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
