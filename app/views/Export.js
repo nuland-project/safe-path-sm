@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
+  Alert,
   BackHandler,
   SafeAreaView,
   ScrollView,
@@ -119,7 +120,11 @@ export const ExportScreen = ({ navigation }) => {
       let res = await storageRef
         .child(`tracks/${filename}`)
         .putString(jsonData);
-      console.log(res);
+      if (res) {
+        Alert.alert('Data was sent', 'Success', [
+          { text: 'OK', onPress: () => console.log('OK Pressed') },
+        ]);
+      }
     } catch (error) {
       console.log(error.message);
     }

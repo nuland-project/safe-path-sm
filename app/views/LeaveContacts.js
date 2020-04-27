@@ -2,6 +2,7 @@ import firestore from '@react-native-firebase/firestore';
 /* eslint-disable react-native/no-raw-text */
 import React, { Component } from 'react';
 import {
+  Alert,
   BackHandler,
   ScrollView,
   StyleSheet,
@@ -46,9 +47,14 @@ class LeaveContacts extends Component {
     try {
       const { name, phone } = this.state;
       const newPatient = { name, phone, status: 'suspected' };
-      await firestore()
+      const res = await firestore()
         .collection('patients')
         .add(newPatient);
+      if (res) {
+        Alert.alert('Data was sent', 'Success', [
+          { text: 'OK', onPress: () => console.log('OK Pressed') },
+        ]);
+      }
     } catch (err) {
       console.log(err);
     }
