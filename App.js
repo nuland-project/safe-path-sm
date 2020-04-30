@@ -20,11 +20,6 @@ const App = () => {
     VersionCheckService.start();
   }, []);
 
-const App = () => {
-  useEffect(() => {
-    SplashScreen.hide();
-  }, []);
-
   return (
     <MenuProvider>
       <Theme use='default'>
