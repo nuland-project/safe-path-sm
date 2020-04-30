@@ -1,5 +1,8 @@
+#!/bin/bash
+set -e # exit immediately on errors
+
 function show_help() {
-    echo "
+  echo "
 Usage: dev_setup.sh [options]
    Configures a Linux or MacOS machine for working with the code in this repo.
 Options:
@@ -8,34 +11,35 @@ Options:
 "
 }
 
-for var in "$@" ; do
-    if [[ $var == '-h' || $var == '--help' || $var == '-?' ]] ; then
-        show_help
-        exit 0
-    elif [[ $var == '-ni' ]] ; then
-        non_interactive="Y"
-    else
-        echo "Unknown option: $var"
-        show_help
-        exit 1
-    fi
+for var in "$@"; do
+  if [[ $var == '-h' || $var == '--help' || $var == '-?' ]]; then
+    show_help
+    exit 0
+  elif [[ $var == '-ni' ]]; then
+    non_interactive="Y"
+  else
+    echo "Unknown option: $var"
+    show_help
+    exit 1
+  fi
 done
 
-
 function found_exe() {
-    hash "$1" 2>/dev/null
+  hash "$1" 2>/dev/null
 }
 
-if found_exe tput ; then
+if [[ "$CI" != "true" ]]; then
+  if found_exe tput; then
     if [[ $(tput colors) != "-1" ]]; then
-        # Get some colors we can use to spice up messages!
-        GREEN=$(tput setaf 2)
-        BLUE=$(tput setaf 4)
-        CYAN=$(tput setaf 6)
-        YELLOW=$(tput setaf 3)
-        RESET=$(tput sgr0)
-        HIGHLIGHT=$YELLOW
+      # Get some colors we can use to spice up messages!
+      GREEN=$(tput setaf 2)
+      BLUE=$(tput setaf 4)
+      CYAN=$(tput setaf 6)
+      YELLOW=$(tput setaf 3)
+      RESET=$(tput sgr0)
+      HIGHLIGHT=$YELLOW
     fi
+  fi
 fi
 
 function get_YN() {  # helper function for interactive questions
@@ -112,26 +116,24 @@ if ! found_exe nodejs ; then
     fi
 fi
 
-
 # Need JDK (v8 or newer)
 # TODO: Check java version (java -version)
-if ! found_exe java ; then
-    echo "${BLUE}Installing AdoptOpenJDK...${RESET}"
+if ! found_exe java; then
+  echo "${BLUE}Installing AdoptOpenJDK...${RESET}"
 
-    # Add GPG key
-    wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | sudo apt-key add -
-    sudo add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/
+  # Add GPG key
+  wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | sudo apt-key add -
+  sudo add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/
 
-    # Import repo
-    sudo apt-get install -y software-properties-common
-    sudo add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/
-    sudo apt-get update
+  # Import repo
+  sudo apt-get install -y software-properties-common
+  sudo add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/
+  sudo apt-get update
 
-    # Install
-    sudo apt-get -y install adoptopenjdk-8-hotspot
-    echo "${GREEN}AdoptOpenJDK installed!${RESET}"
+  # Install
+  sudo apt-get -y install adoptopenjdk-8-hotspot
+  echo "${GREEN}AdoptOpenJDK installed!${RESET}"
 fi
-
 
 # Need Android Studio (interactive for now)
 if ! found_exe android-studio ; then
@@ -184,6 +186,20 @@ if ! found_exe android-studio ; then
     fi
 fi
 
+# Install ruby bundler and cocoapods for iOS only, because they're only necessary for iOS development
+# Mac OS comes with ruby out of the box.
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  if ! gem list '^bundler$' -i --version 2.1.4; then
+    echo "${BLUE}Installing Ruby bundler for Cocoapod management...${RESET}"
+    sudo gem install bundler
+    echo "${GREEN}Bundler is installed!${RESET}"
+  fi
+
+  cd ios
+  bundle config path vendor/bundle
+  bundle install && bundle exec pod install --repo-update
+  cd ..
+fi
 
 # Need Watchman v4.9+ (watchman --version)
 if [[ "$OSTYPE" == "darwin"* ]] ; then
@@ -201,14 +217,21 @@ if [[ "$OSTYPE" == "darwin"* ]] ; then
     fi
 fi
 
-
-if ! found_exe react-native ; then
-    echo "${BLUE}Installing React Native tool...${RESET}"
-    sudo npm install -g react-native-cli
-    npm install
-    echo "${GREEN}React Native tools installed!${RESET}"
+if ! found_exe yarn; then
+  echo "${BLUE}Installing Yarn package manager${RESET}"
+  brew install yarn
+  yarn
+  echo "${GREEN}Yarn installed!${RESET}"
 fi
 
+if ! found_exe react-native; then
+  echo "${BLUE}Installing React Native tool...${RESET}"
+  yarn global add react-native-cli
+  yarn
+  echo "${GREEN}React Native tools installed!${RESET}"
+fi
+
+git config commit.template ./.gitmessage
 
 echo "${GREEN}You are now ready to go!${RESET}"
 echo
