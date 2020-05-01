@@ -46,7 +46,7 @@ jobs:
       - name: Decode keystore
         env:
           KEYSTORE: ${{ secrets.KEYSTORE }}
-        run: echo $KEYSTORE | base64 --decode > app/upload.jks
+        run: echo $KEYSTORE > app/upload.jks
 
       - name: Publish APK
         run: ./gradlew publishStagingRelease

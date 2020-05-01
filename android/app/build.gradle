@@ -210,7 +210,7 @@ static def getDeploymentTrack() {
     def track = 'internal'
     if (branch.equals("release")) {
         track = "alpha"
-    } else if (branch.equals("staging")) {
+    } else if (branch.equals("dev")) {
         track = "internal"
     }
     println("DEPLOYMENT TRACK: " + track)
