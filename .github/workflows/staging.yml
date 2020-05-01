@@ -38,18 +38,14 @@ jobs:
       - name: Bundle JS
         run: npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/ --verbose
 
-      - name: Decode service account key
-        env:
-          SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT_CREDS }}
-        run: echo $SERVICE_ACCOUNT > android/app/service-account-key.json
-
-      - name: Decode keystore
-        env:
-          KEYSTORE: ${{ secrets.KEYSTORE }}
-        run: echo $KEYSTORE > android/app/upload.jks
-
       - name: Publish APK
-        run: android/gradlew publishReleaseApk
+        env:
+          SERVICE_ACCOUNT_CREDS: ${{ secrets.SERVICE_ACCOUNT }}
+          KEYSTORE: ${{ secrets.KEY_JKS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        run: export $KEYSTORE | base64 -d > ./app/upload.jks && export $SERVICE_ACCOUNT_CREDS | base64 -d > ./app/service-account-key.json && ./gradlew publishReleaseApk --no-daemon
+        working-directory: ./android
 
   # build-ios:
   #   runs-on: macOS-latest

@@ -1,5 +1,8 @@
-apply plugin: "com.android.application"
-apply plugin: 'com.google.gms.google-services'
+plugins {
+    id("com.android.application")
+    id("com.github.triplet.play") version "2.7.5"
+    id('com.google.gms.google-services')
+}
 
 import com.android.build.OutputFile
 
@@ -199,12 +202,12 @@ android {
 
 play {
     track = getDeploymentTrack()
-    serviceAccountCredentials = file(System.getenv("SERVICE_ACCOUNT_CREDS"))
+    serviceAccountEmail = 'private-kit-sm@appspot.gserviceaccount.com'
+    serviceAccountCredentials = file(System.getenv("SERVICE_ACCOUNT_CREDS") ?: 'not-found')
     defaultToAppBundles = true
     resolutionStrategy = "ignore"
 }
 
-/ The deployment track is based on the branch.
 static def getDeploymentTrack() {
     def branch = gitBranch()
     def track = 'internal'
@@ -256,8 +259,10 @@ if (propFile.canRead()) {
     }
 } else {
     println 'signing.properties not found'
+
     if (System.getenv("KEYSTORE") != null) {
         println 'using KEYSTORE'
+        println System.getenv("SERVICE_ACCOUNT_CREDS") != null
         android.signingConfigs.release.storeFile = file(System.getenv("KEYSTORE"))
         android.signingConfigs.release.storePassword = System.getenv("KEYSTORE_PASSWORD")
         android.signingConfigs.release.keyAlias = System.getenv("KEY_ALIAS")
@@ -270,7 +275,7 @@ if (propFile.canRead()) {
 dependencies {
     implementation project(':react-native-reanimated')
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation "com.facebook.react:react-native:+"
     implementation "androidx.annotation:annotation:1.1.0"
     implementation "com.google.firebase:firebase-core:17.4.0"
     implementation "com.google.firebase:firebase-analytics:17.4.0"
@@ -278,15 +283,15 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:21.4.3'
     implementation 'com.google.firebase:firebase-messaging:20.1.6'
 
-
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
         debugImplementation files(hermesPath + "hermes-debug.aar")
         releaseImplementation files(hermesPath + "hermes-release.aar")
+        stagingImplementation files(hermesPath + "hermes-release.aar")
     } else {
         implementation jscFlavor
     }
-    androidTestImplementation('com.wix:detox:+')  // detox: e2e testing
+    androidTestImplementation('com.wix:detox:+')
 }
 
  // Just to fix the app start crash error
