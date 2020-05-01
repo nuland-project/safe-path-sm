@@ -41,15 +41,15 @@ jobs:
       - name: Decode service account key
         env:
           SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT_CREDS }}
-        run: echo $SERVICE_ACCOUNT > app/service-account-key.json
+        run: echo $SERVICE_ACCOUNT > android/app/service-account-key.json
 
       - name: Decode keystore
         env:
           KEYSTORE: ${{ secrets.KEYSTORE }}
-        run: echo $KEYSTORE > app/upload.jks
+        run: echo $KEYSTORE > android/app/upload.jks
 
       - name: Publish APK
-        run: ./gradlew publishReleaseApk
+        run: android/gradlew publishStagingRelease
 
   # build-ios:
   #   runs-on: macOS-latest
