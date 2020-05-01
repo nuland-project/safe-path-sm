@@ -49,7 +49,7 @@ jobs:
         run: echo $KEYSTORE > android/app/upload.jks
 
       - name: Publish APK
-        run: android/gradlew publishStagingRelease
+        run: android/gradlew publishReleaseApk
 
   # build-ios:
   #   runs-on: macOS-latest
