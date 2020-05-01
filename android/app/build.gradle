@@ -131,6 +131,7 @@ android {
     defaultConfig {
         applicationId "io.nuland.lemonade"
         minSdkVersion rootProject.ext.minSdkVersion
+        ndkVersion "21.0.6113669"
         targetSdkVersion rootProject.ext.targetSdkVersion
         multiDexEnabled true
 
