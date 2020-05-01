@@ -38,15 +38,18 @@ jobs:
       - name: Bundle JS
         run: npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/ --verbose
 
-      - name: Build APK (gradle)
-        run: ./gradlew assembleDebug --no-daemon
-        working-directory: ./android
+      - name: Decode service account key
+        env:
+          SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT_CREDS }}
+        run: echo $SERVICE_ACCOUNT > app/service-account-key.json
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v1
-        with:
-          name: Debug APK
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+      - name: Decode keystore
+        env:
+          KEYSTORE: ${{ secrets.KEYSTORE }}
+        run: echo $KEYSTORE | base64 --decode > app/upload.jks
+
+      - name: Publish APK
+        run: ./gradlew publishStagingRelease
 
   # build-ios:
   #   runs-on: macOS-latest
