@@ -1,6 +1,6 @@
 plugins {
     id("com.android.application")
-    id("com.github.triplet.play") version "2.7.5"
+    id("com.github.triplet.play")
     id('com.google.gms.google-services')
 }
 
@@ -82,6 +82,8 @@ import com.android.build.OutputFile
 project.ext.react = [
     entryFile: "index.js",
     enableHermes: false,  // clean and rebuild if changing
+    bundleInRelease: true,
+    bundleInDebug: true
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -141,12 +143,13 @@ android {
         testBuildType System.getProperty('testBuildType', 'debug')
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 
-        versionCode 27
+        versionCode  getBuildVersion() as int
         versionName "0.9.6"
         manifestPlaceholders = [
-            versionCode: 27,
+            versionCode: getBuildVersion() as int,
             versionName: "0.9.6"
         ]
+        ndkVersion "21.0.6113669"
         ndk {
             abiFilters 'armeabi-v7a','arm64-v8a','x86','x86_64'
         }
@@ -202,8 +205,7 @@ android {
 
 play {
     track = getDeploymentTrack()
-    serviceAccountEmail = 'private-kit-sm@appspot.gserviceaccount.com'
-    serviceAccountCredentials = file(System.getenv("SERVICE_ACCOUNT_CREDS") ?: 'not-found')
+    serviceAccountCredentials = file('private-kit-sm-503f859360c2.json')
     defaultToAppBundles = true
     resolutionStrategy = "ignore"
 }
@@ -213,7 +215,7 @@ static def getDeploymentTrack() {
     def track = 'internal'
     if (branch.equals("release")) {
         track = "alpha"
-    } else if (branch.equals("dev")) {
+    } else if (branch.equals("staging")) {
         track = "internal"
     }
     println("DEPLOYMENT TRACK: " + track)
@@ -231,8 +233,8 @@ static def gitBranch() {
 }
 
 static def getBuildVersion() {
-    def version = 26
-    def buildNumber = System.getenv("CIRCLE_BUILD_NUM")
+    def version = 27
+    def buildNumber = System.getenv("GITHUB_RUN_ID")
     if (buildNumber != null) {
         version += buildNumber
     }
@@ -262,8 +264,7 @@ if (propFile.canRead()) {
 
     if (System.getenv("KEYSTORE") != null) {
         println 'using KEYSTORE'
-        println System.getenv("SERVICE_ACCOUNT_CREDS") != null
-        android.signingConfigs.release.storeFile = file(System.getenv("KEYSTORE"))
+        android.signingConfigs.release.storeFile = file('upload-keystore.jks')
         android.signingConfigs.release.storePassword = System.getenv("KEYSTORE_PASSWORD")
         android.signingConfigs.release.keyAlias = System.getenv("KEY_ALIAS")
         android.signingConfigs.release.keyPassword = System.getenv("KEY_PASSWORD")

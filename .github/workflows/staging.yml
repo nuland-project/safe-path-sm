@@ -3,10 +3,12 @@ name: Build Staging
 on:
   push:
     branches:
-      - dev
+      - staging
+      - release
   pull_request:
     branches:
-      - dev
+      - staging
+      - release
 
 jobs:
   build-android:
@@ -38,13 +40,18 @@ jobs:
       - name: Bundle JS
         run: npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/ --verbose
 
+      - name: Decrypt keystore and Google Credential
+        run: sh ./scripts/android-gpg-decrypt.sh
+        env:
+          ENCRYPT_PASSWORD: ${{ secrets.GPG_ENCRYPT_PASSWORD }}
+
       - name: Publish APK
         env:
-          SERVICE_ACCOUNT_CREDS: ${{ secrets.SERVICE_ACCOUNT }}
-          KEYSTORE: ${{ secrets.KEY_JKS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEYSTORE: ${{ secrets.KEYSTORE }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-        run: export $KEYSTORE | base64 -d > ./app/upload.jks && export $SERVICE_ACCOUNT_CREDS | base64 -d > ./app/service-account-key.json && ./gradlew publishReleaseApk --no-daemon
+        run: ./gradlew publishReleaseApk -x bundleReleaseJsAndAssets
         working-directory: ./android
 
   # build-ios:
