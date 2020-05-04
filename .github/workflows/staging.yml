@@ -1,4 +1,4 @@
-name: Build Staging
+name: Build & Publish Application
 
 on:
   push:
