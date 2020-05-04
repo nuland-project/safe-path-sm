@@ -234,7 +234,7 @@ static def gitBranch() {
 
 static def getBuildVersion() {
     def version = 27
-    def buildNumber = System.getenv("GITHUB_RUN_ID")
+    def buildNumber = System.getenv("GITHUB_RUN_NUMBER")
     if (buildNumber != null) {
         version += buildNumber
     }
