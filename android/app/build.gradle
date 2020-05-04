@@ -1,5 +1,8 @@
-apply plugin: "com.android.application"
-apply plugin: 'com.google.gms.google-services'
+plugins {
+    id("com.android.application")
+    id("com.github.triplet.play")
+    id('com.google.gms.google-services')
+}
 
 import com.android.build.OutputFile
 
@@ -79,6 +82,8 @@ import com.android.build.OutputFile
 project.ext.react = [
     entryFile: "index.js",
     enableHermes: false,  // clean and rebuild if changing
+    bundleInRelease: true,
+    bundleInDebug: true
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -138,8 +143,16 @@ android {
         testBuildType System.getProperty('testBuildType', 'debug')
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 
-        versionCode 23
-        versionName "0.9.5"
+        versionCode  getBuildVersion() as int
+        versionName "0.9.6"
+        manifestPlaceholders = [
+            versionCode: getBuildVersion() as int,
+            versionName: "0.9.6"
+        ]
+        ndkVersion "21.0.6113669"
+        ndk {
+            abiFilters 'armeabi-v7a','arm64-v8a','x86','x86_64'
+        }
     }
     splits {
         abi {
@@ -157,15 +170,7 @@ android {
             keyPassword 'android'
         }
         release {
-            if (project.hasProperty('PRIVATEKIT_RELEASE_STORE_FILE')) {
-                project.logger.lifecycle('Signing app with ' + PRIVATEKIT_RELEASE_STORE_FILE)
-                storeFile file(PRIVATEKIT_RELEASE_STORE_FILE)
-                storePassword PRIVATEKIT_RELEASE_STORE_PASSWORD
-                keyAlias PRIVATEKIT_RELEASE_KEY_ALIAS
-                keyPassword PRIVATEKIT_RELEASE_KEY_PASSWORD
-            } else {
-                project.logger.lifecycle('Could not find release key')
-            }
+            release
         }
 
     }
@@ -179,6 +184,7 @@ android {
             // signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release
@@ -197,10 +203,80 @@ android {
     }
 }
 
+play {
+    track = getDeploymentTrack()
+    serviceAccountCredentials = file('private-kit-sm-503f859360c2.json')
+    defaultToAppBundles = true
+    resolutionStrategy = "ignore"
+}
+
+static def getDeploymentTrack() {
+    def branch = gitBranch()
+    def track = 'internal'
+    if (branch.equals("release")) {
+        track = "alpha"
+    } else if (branch.equals("staging")) {
+        track = "internal"
+    }
+    println("DEPLOYMENT TRACK: " + track)
+    return track
+}
+
+static def gitBranch() {
+    def branch = ""
+    def proc = "git rev-parse --abbrev-ref HEAD".execute()
+    proc.in.eachLine { line -> branch = line }
+    proc.err.eachLine { line -> println line }
+    proc.waitFor()
+    println("BRANCH: " + branch)
+    branch
+}
+
+static def getBuildVersion() {
+    def version = 27
+    def buildNumber = System.getenv("GITHUB_RUN_ID")
+    if (buildNumber != null) {
+        version += buildNumber
+    }
+    println("VersionCode: " + version)
+    return version
+}
+
+def Properties props = new Properties()
+def propFile = file(new File('signing.properties'))
+if (propFile.canRead()) {
+    props.load(new FileInputStream(propFile))
+    if (props != null &&
+            props.containsKey('STORE_FILE') &&
+            props.containsKey('STORE_PASSWORD') &&
+            props.containsKey('KEY_ALIAS') &&
+            props.containsKey('KEY_PASSWORD')) {
+        android.signingConfigs.release.storeFile = file(props['STORE_FILE'])
+        android.signingConfigs.release.storePassword = props['STORE_PASSWORD']
+        android.signingConfigs.release.keyAlias = props['KEY_ALIAS']
+        android.signingConfigs.release.keyPassword = props['KEY_PASSWORD']
+    } else {
+        println 'signing.properties found but some entries are missing'
+        android.buildTypes.release.signingConfig = null
+    }
+} else {
+    println 'signing.properties not found'
+
+    if (System.getenv("KEYSTORE") != null) {
+        println 'using KEYSTORE'
+        android.signingConfigs.release.storeFile = file('upload-keystore.jks')
+        android.signingConfigs.release.storePassword = System.getenv("KEYSTORE_PASSWORD")
+        android.signingConfigs.release.keyAlias = System.getenv("KEY_ALIAS")
+        android.signingConfigs.release.keyPassword = System.getenv("KEY_PASSWORD")
+    } else {
+        android.buildTypes.release.signingConfig = null
+    }
+}
+
 dependencies {
     implementation project(':react-native-reanimated')
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation "com.facebook.react:react-native:+"
     implementation "androidx.annotation:annotation:1.1.0"
     implementation "com.google.firebase:firebase-core:17.4.0"
     implementation "com.google.firebase:firebase-analytics:17.4.0"
@@ -212,10 +288,11 @@ dependencies {
         def hermesPath = "../../node_modules/hermes-engine/android/";
         debugImplementation files(hermesPath + "hermes-debug.aar")
         releaseImplementation files(hermesPath + "hermes-release.aar")
+        stagingImplementation files(hermesPath + "hermes-release.aar")
     } else {
         implementation jscFlavor
     }
-    androidTestImplementation('com.wix:detox:+')  // detox: e2e testing
+    androidTestImplementation('com.wix:detox:+')
 }
 
  // Just to fix the app start crash error

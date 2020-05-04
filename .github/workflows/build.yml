@@ -3,13 +3,11 @@ name: Build
 on:
   push:
     branches:
-      - develop
-      - release-candidate
+      - release
       - master
   pull_request:
     branches:
-      - develop
-      - release-candidate
+      - release
       - master
 
 jobs:

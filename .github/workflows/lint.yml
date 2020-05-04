@@ -3,8 +3,8 @@ name: Lint
 on:
   pull_request:
     branches:
-      - develop
-      - release-candidate
+      - staging
+      - release
       - master
 
 jobs:
