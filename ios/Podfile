@@ -1,9 +1,9 @@
 platform :ios, '9.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-target 'COVIDSafePaths' do
+target 'LemonadeSentinel' do
   # Pods for COVIDSafePaths
-  project 'COVIDSafePaths.xcodeproj'
+  project 'LemonadeSentinel.xcodeproj'
 
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
@@ -45,7 +45,7 @@ target 'COVIDSafePaths' do
   pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
 
 
-  target 'COVIDSafePathsTests' do
+  target 'LemonadeSentinelTests' do
     inherit! :search_paths
     # Pods for testing
   end
