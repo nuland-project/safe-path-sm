@@ -43,6 +43,11 @@ target 'LemonadeSentinel' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
   pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+  
+  pod 'Firebase/Core'
+  pod 'Firebase/Analytics'
+  pod 'GoogleAppMeasurement'
+  pod 'Firebase/Storage'
 
 
   target 'LemonadeSentinelTests' do
