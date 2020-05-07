@@ -14,7 +14,7 @@ import languages from './../locales/languages';
 import { applicationActions } from '../actions';
 import Colors from '../constants/colors';
 import fontFamily from '../constants/fonts';
-import { COVID_STATUS } from '../constants/storage';
+import { USER_IS_VERIFIED, USER_PHONE } from '../constants/storage';
 import { SetStoreData } from '../helpers/General';
 
 const mapStateToProps = state => ({
@@ -44,6 +44,8 @@ class Verification extends React.Component {
             Alert.alert('Verification passed', 'Success', [{ text: 'OK' }]);
             this.props.dispatch(applicationActions.setPhone(phone));
             this.props.dispatch(applicationActions.setVerification(true));
+            SetStoreData(USER_PHONE, phone);
+            SetStoreData(USER_IS_VERIFIED, true);
           } else {
             // TO DO add localization
             Alert.alert('Oops', 'Verification failed', [{ text: 'OK' }]);
