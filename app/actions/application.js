@@ -1,22 +1,17 @@
 import * as ActionTypes from './types';
 
-// Actions concerning app navigation process 
+// Actions concerning app navigation process
 export const applicationActions = {
-  screenPush: (screen, params={}) => ({
-    type: ActionTypes.SCREEN_PUSH,
-    screen,
-    params
+  setVerification: isVerified => ({
+    type: ActionTypes.SET_VERIFICATION,
+    payload: isVerified,
   }),
-  screenPop: () => ({
-    type: ActionTypes.SCREEN_POP
+  setPhone: phone => ({
+    type: ActionTypes.SET_PHONE,
+    payload: phone,
   }),
-  screenPopPush: (screen, params={}) => ({
-    type: ActionTypes.SCREEN_POP_PUSH,
-    screen,
-    params
+  setStatus: status => ({
+    type: ActionTypes.SET_STATUS,
+    payload: status,
   }),
-  changeAppSection: (newSection) => ({
-    type: ActionTypes.CHANGE_APP_SECTION,
-    newSection
-  })
-}
+};

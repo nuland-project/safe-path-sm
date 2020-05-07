@@ -37,6 +37,7 @@ import StateAtRisk from '../assets/svgs/stateAtRisk';
 import ButtonWrapper from '../components/ButtonWrapper';
 import { Typography } from '../components/Typography';
 import Colors from '../constants/colors';
+import { StateEnum } from '../constants/enums';
 import fontFamily from '../constants/fonts';
 import {
   COVID_STATUS,
@@ -52,14 +53,6 @@ import LocationServices from '../services/LocationService';
 
 //const MAYO_COVID_URL = 'https://www.mayoclinic.org/coronavirus-covid-19';
 const PROJECT_LEMONADE_URL = 'https://www.lemonade.one';
-
-const StateEnum = {
-  UNKNOWN: '0',
-  AT_RISK: '1',
-  NO_CONTACT: '2',
-  SETTING_OFF: '3',
-  COVID_POSITIVE: '4',
-};
 
 const StateIcon = ({ status, size }) => {
   let icon;

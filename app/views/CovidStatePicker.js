@@ -2,17 +2,10 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import Colors from '../constants/colors';
+import { StateEnum } from '../constants/enums';
 import fontFamily from '../constants/fonts';
 import { COVID_STATUS } from '../constants/storage';
 import { SetStoreData } from '../helpers/General';
-
-const StateEnum = {
-  UNKNOWN: '0',
-  AT_RISK: '1',
-  NO_CONTACT: '2',
-  SETTING_OFF: '3',
-  COVID_POSITIVE: '4',
-};
 
 const statusSet = [
   { value: StateEnum.NO_CONTACT, label: 'No contacts' },
