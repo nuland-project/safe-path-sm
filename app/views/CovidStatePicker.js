@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { connect } from 'react-redux';
 
+import { applicationActions } from '../actions';
 import Colors from '../constants/colors';
 import { StateEnum } from '../constants/enums';
 import fontFamily from '../constants/fonts';
@@ -13,7 +15,7 @@ const statusSet = [
   { value: StateEnum.COVID_POSITIVE, label: 'COVID-19 positive' },
 ];
 
-export default class CovidStatePicker extends React.Component {
+class CovidStatePicker extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,7 +24,9 @@ export default class CovidStatePicker extends React.Component {
   }
 
   onPress = index => {
+    const { dispatch } = this.props;
     this.setState({ rowChoosen: index });
+    dispatch(applicationActions.setStatus(statusSet[index].value));
     SetStoreData(COVID_STATUS, statusSet[index].value);
   };
 
@@ -53,6 +57,8 @@ export default class CovidStatePicker extends React.Component {
     );
   }
 }
+
+export default connect(() => ({}))(CovidStatePicker);
 
 const styles = StyleSheet.create({
   container: {
