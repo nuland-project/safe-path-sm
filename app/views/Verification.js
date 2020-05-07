@@ -33,7 +33,9 @@ class Verification extends React.Component {
 
   verifyAccount = async () => {
     try {
-      const { phone, pin } = this.state;
+      const { pin } = this.state;
+      const phone =
+        this.props.phone !== '' ? this.props.phone : this.state.phone;
       const cldFn = functions().httpsCallable('validatePin');
       this.setState({ phone: '', pin: '' });
       cldFn({ phone, pin })
@@ -57,8 +59,11 @@ class Verification extends React.Component {
     }
   };
 
-  render() {
-    const { phone, pin } = this.state;
+  getVerificationBox = () => {
+    const { pin } = this.state;
+    const disablePhone = this.props.phone !== '';
+    const phone = disablePhone ? this.props.phone : this.state.phone;
+
     const sendBtnDisabled = phone === '' || pin.length !== 5;
     return (
       <View>
@@ -66,6 +71,7 @@ class Verification extends React.Component {
 
         {/* CONTACTS FORM */}
         <TextInput
+          editable={!disablePhone}
           style={styles.input}
           placeholder={languages.t('label.phone')}
           keyboardType={'number-pad'}
@@ -93,6 +99,21 @@ class Verification extends React.Component {
           <Text style={styles.textBtn}>{languages.t('label.send_data')}</Text>
         </TouchableOpacity>
       </View>
+    );
+  };
+
+  render() {
+    const { isVerified } = this.props;
+    return (
+      <>
+        {isVerified ? (
+          <Text style={styles.verificationDisclaymer}>
+            {'Verification completed '}
+          </Text>
+        ) : (
+          this.getVerificationBox()
+        )}
+      </>
     );
   }
 }
@@ -124,6 +145,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: fontFamily.primaryRegular,
     color: 'white',
+  },
+  verificationDisclaymer: {
+    color: '#29944e',
+    fontSize: 18,
+    fontFamily: fontFamily.primarySemiBold,
+    marginTop: 5,
+    marginBottom: 12,
   },
   spacer: {
     marginVertical: '2%',

@@ -61,7 +61,7 @@ class Entry extends Component {
     // Check verification and phone number
     try {
       GetStoreData(USER_IS_VERIFIED, true).then(isVerified => {
-        if (isVerified)
+        if (isVerified == 'true')
           this.props.dispatch(applicationActions.setVerification(true));
       });
     } catch (err) {
