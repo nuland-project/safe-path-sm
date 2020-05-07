@@ -23,6 +23,7 @@ import LocationServices from '../services/LocationService';
 import CovidStatePicker from './CovidStatePicker';
 import { GoogleMapsImport } from './Settings/GoogleMapsImport';
 import { SettingsItem as Item } from './Settings/SettingsItem';
+import Verification from './Verification';
 
 export const SettingsScreen = ({ navigation }) => {
   const { t } = useTranslation();
@@ -108,10 +109,20 @@ export const SettingsScreen = ({ navigation }) => {
 
         <Section>
           <View style={{ marginTop: 15 }}>
+            {/* // TO DO add localization */}
             <Typography use='body1'>{'Choose your status: '}</Typography>
           </View>
 
           <CovidStatePicker />
+        </Section>
+
+        <Section>
+          <View style={{ marginTop: 15 }}>
+            {/* // TO DO add localization */}
+            <Typography use='body1'>{'Verify your account: '}</Typography>
+          </View>
+
+          <Verification />
         </Section>
 
         {/* <Section>

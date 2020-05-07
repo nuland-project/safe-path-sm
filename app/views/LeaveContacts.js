@@ -1,4 +1,3 @@
-import firestore from '@react-native-firebase/firestore';
 import functions from '@react-native-firebase/functions';
 /* eslint-disable react-native/no-raw-text */
 import React, { Component } from 'react';
@@ -62,11 +61,13 @@ class LeaveContacts extends Component {
       cldFn({ name, surname, phone, status })
         .then(({ data }) => {
           if (data.status === 'denied') {
+            // TO DO add localization
             Alert.alert('Oops', 'User with this phone is already registered', [
               { text: 'OK' },
             ]);
             return;
           }
+          // TO DO add localization
           Alert.alert('Data was sent', 'Success', [{ text: 'OK' }]);
 
           // Update store if it's needed
