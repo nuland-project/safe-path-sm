@@ -1,4 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
+import functions from '@react-native-firebase/functions';
 /* eslint-disable react-native/no-raw-text */
 import React, { Component } from 'react';
 import {
@@ -11,11 +12,17 @@ import {
   View,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { connect } from 'react-redux';
 
 import fontFamily from './../constants/fonts';
 import languages from './../locales/languages';
+import { applicationActions } from '../actions';
 import NavigationBarWrapper from '../components/NavigationBarWrapper';
 import Colors from '../constants/colors';
+
+const mapStateToProps = state => ({
+  phone: state.application.phone,
+});
 
 class LeaveContacts extends Component {
   constructor(props) {
@@ -23,6 +30,7 @@ class LeaveContacts extends Component {
     this.state = {
       phone: '',
       name: '',
+      surname: '',
     };
   }
 
@@ -45,23 +53,37 @@ class LeaveContacts extends Component {
 
   sendData = async () => {
     try {
-      const { name, phone } = this.state;
-      const newPatient = { name, phone, status: 'suspected' };
-      const res = await firestore()
-        .collection('patients')
-        .add(newPatient);
-      if (res) {
-        Alert.alert('Data was sent', 'Success', [
-          { text: 'OK', onPress: () => console.log('OK Pressed') },
-        ]);
-      }
+      const { name, surname, phone } = this.state;
+      const status = 'suspected';
+      if (name === '' || phone === '') return;
+      const cldFn = functions().httpsCallable('addPatientToList');
+      this.setState({ phone: '', name: '', surname: '' });
+
+      cldFn({ name, surname, phone, status })
+        .then(({ data }) => {
+          if (data.status === 'denied') {
+            Alert.alert('Oops', 'User with this phone is already registered', [
+              { text: 'OK' },
+            ]);
+            return;
+          }
+          Alert.alert('Data was sent', 'Success', [{ text: 'OK' }]);
+
+          // Update store if it's needed
+          const oldPhone = this.props.phone;
+          if (phone !== oldPhone) {
+            this.props.dispatch(applicationActions.setPhone(phone));
+            this.props.dispatch(applicationActions.setVerification(false));
+          }
+        })
+        .catch(console.log);
     } catch (err) {
       console.log(err);
     }
   };
 
   render() {
-    const { phone, name } = this.state;
+    const { phone, name, surname } = this.state;
     return (
       <NavigationBarWrapper
         title={languages.t('label.leave_contacts_title')}
@@ -85,6 +107,13 @@ class LeaveContacts extends Component {
             value={name}
             onChangeText={v => this.setState({ name: v })}
           />
+          <View style={styles.spacer} />
+          <TextInput
+            style={styles.input}
+            placeholder={languages.t('label.surname')}
+            value={surname}
+            onChangeText={v => this.setState({ surname: v })}
+          />
 
           {/* SEND DATA BUTTON */}
           <TouchableOpacity style={styles.sendBtn} onPress={this.sendData}>
@@ -98,6 +127,8 @@ class LeaveContacts extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps)(LeaveContacts);
 
 const styles = StyleSheet.create({
   contentContainer: {
@@ -133,5 +164,3 @@ const styles = StyleSheet.create({
     marginVertical: '2%',
   },
 });
-
-export default LeaveContacts;
