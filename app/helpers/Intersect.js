@@ -16,7 +16,6 @@ import {
 } from '../constants/history';
 import {
   AUTHORITY_NEWS,
-  AUTHORITY_SOURCE_SETTINGS,
   CROSSED_PATHS,
   LAST_CHECKED,
   LOCATION_DATA,
@@ -24,6 +23,7 @@ import {
 import { DEBUG_MODE } from '../constants/storage';
 import { GetStoreData, SetStoreData } from '../helpers/General';
 import languages from '../locales/languages';
+import { HCAService } from '../services/HCAService';
 
 /**
  * Intersects the locationArray with the concernLocationArray, returning the results
@@ -42,6 +42,7 @@ export function intersectSetIntoBins(
   concernTimeWindowMS = 1000 * 60 * CONCERN_TIME_WINDOW_MINUTES,
   defaultExposurePeriodMS = DEFAULT_EXPOSURE_PERIOD_MINUTES * 60 * 1000,
 ) {
+  console.log(concernArray);
   // useful for time calcs
   dayjs.extend(duration);
 
@@ -278,42 +279,46 @@ async function asyncCheckIntersect() {
   let locationArray = normalizeAndSortLocations(await getSavedLocationArray());
 
   // get the health authorities
-  let authority_list = await GetStoreData(AUTHORITY_SOURCE_SETTINGS);
-
+  let authority_list = await HCAService.getAuthoritiesList();
   if (authority_list) {
     // Parse the registered health authorities
-    authority_list = JSON.parse(authority_list);
+    console.log();
+    // authority_list = JSON.parse(authority_list);
+    // console.log(authority_list);
 
-    for (const authority of authority_list) {
-      try {
-        let responseJson = await retrieveUrlAsJson(authority.url);
+    // for (const authority of authority_list) {
+    try {
+      let responseJson = await retrieveUrlAsJson(
+        authority_list[0]['San Marino COVID19 HA'][0].url,
+      );
+      console.log('responseJson');
+      console.log(responseJson);
+      // Update the news array with the info from the authority
+      // name_news.push({
+      //   name: responseJson.authority_name,
+      //   news_url: responseJson.info_website,
+      // });
 
-        // Update the news array with the info from the authority
-        name_news.push({
-          name: responseJson.authority_name,
-          news_url: responseJson.info_website,
-        });
+      // intersect the users location with the locations from the authority
+      let tempDayBin = intersectSetIntoBins(
+        locationArray,
+        normalizeAndSortLocations(responseJson.concern_points),
+      );
 
-        // intersect the users location with the locations from the authority
-        let tempDayBin = intersectSetIntoBins(
-          locationArray,
-          normalizeAndSortLocations(responseJson.concern_points),
-        );
-
-        // Update each day's bin with the result from the intersection.  To keep the
-        //  difference between no data (==-1) and exposure data (>=0), there
-        //  are a total of 3 cases to consider.
-        dayBins = dayBins.map((currentValue, i) => {
-          if (currentValue < 0) return tempDayBin[i];
-          if (tempDayBin[i] < 0) return currentValue;
-          return currentValue + tempDayBin[i];
-        });
-      } catch (error) {
-        // TODO: We silently fail.  Could be a JSON parsing issue, could be a network issue, etc.
-        //       Should do better than this.
-        console.log('[authority] fetch/parse error :', error);
-      }
+      // Update each day's bin with the result from the intersection.  To keep the
+      //  difference between no data (==-1) and exposure data (>=0), there
+      //  are a total of 3 cases to consider.
+      dayBins = dayBins.map((currentValue, i) => {
+        if (currentValue < 0) return tempDayBin[i];
+        if (tempDayBin[i] < 0) return currentValue;
+        return currentValue + tempDayBin[i];
+      });
+    } catch (error) {
+      // TODO: We silently fail.  Could be a JSON parsing issue, could be a network issue, etc.
+      //       Should do better than this.
+      console.log('[authority] fetch/parse error :', error);
     }
+    // }
   }
 
   // Store the news arary for the authorities found.

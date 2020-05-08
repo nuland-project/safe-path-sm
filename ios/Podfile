@@ -49,6 +49,14 @@ target 'LemonadeSentinel' do
   pod 'GoogleAppMeasurement'
   pod 'Firebase/Storage'
   pod 'Firebase/Functions'
+  
+  # React Native Maps dependencies
+  pod 'react-native-geolocation', path: '../node_modules/@react-native-community/geolocation'
+  
+  rn_maps_path = '../node_modules/react-native-maps'
+  pod 'react-native-google-maps', :path => rn_maps_path
+  pod 'GoogleMaps'
+  pod 'Google-Maps-iOS-Utils'
 
 
   target 'LemonadeSentinelTests' do
