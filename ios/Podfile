@@ -48,6 +48,7 @@ target 'LemonadeSentinel' do
   pod 'Firebase/Analytics'
   pod 'GoogleAppMeasurement'
   pod 'Firebase/Storage'
+  pod 'Firebase/Functions'
 
 
   target 'LemonadeSentinelTests' do
