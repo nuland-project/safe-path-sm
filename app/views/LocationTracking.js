@@ -3,6 +3,7 @@
 import BackgroundGeolocation from '@mauron85/react-native-background-geolocation';
 import React, { Component } from 'react';
 import {
+  Alert,
   AppState,
   BackHandler,
   Dimensions,
@@ -84,6 +85,7 @@ const height = Dimensions.get('window').height;
 
 const mapStateToProps = state => ({
   status: state.application.status,
+  isVerified: state.application.isVerified,
 });
 
 class LocationTracking extends Component {
@@ -424,7 +426,7 @@ class LocationTracking extends Component {
   getCTAIfNeeded() {
     let buttonLabel;
     let buttonFunction;
-    const { status } = this.props;
+    const { status, isVerified } = this.props;
     if (status === StateEnum.NO_CONTACT) {
       return;
     } else if (status === StateEnum.AT_RISK) {
@@ -434,7 +436,18 @@ class LocationTracking extends Component {
       };
     } else if (status === StateEnum.COVID_POSITIVE) {
       buttonLabel = languages.t('label.donate_data');
-      buttonFunction = () => this.props.navigation.navigate('ExportScreen');
+      buttonFunction = () => {
+        if (isVerified) {
+          this.props.navigation.navigate('ExportScreen');
+        } else {
+          // TO DO add localization
+          Alert.alert(
+            'Verification required',
+            'Go to settings to verify your account',
+            [{ text: 'OK' }],
+          );
+        }
+      };
     } else if (status === StateEnum.UNKNOWN) {
       buttonLabel = languages.t('label.home_enable_location');
       buttonFunction = () => {
