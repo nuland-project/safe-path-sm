@@ -4,7 +4,14 @@ import {
   createStackNavigator,
 } from '@react-navigation/stack';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
+import { applicationActions } from './actions';
+import {
+  COVID_STATUS,
+  USER_IS_VERIFIED,
+  USER_PHONE,
+} from './constants/storage';
 import { GetStoreData } from './helpers/General';
 import AboutScreen from './views/About';
 import ChooseProviderScreen from './views/ChooseProvider';
@@ -41,6 +48,32 @@ class Entry extends Component {
         });
       })
       .catch(error => console.log(error));
+
+    // Check desease status and set if it's known
+    try {
+      GetStoreData(COVID_STATUS, true).then(status => {
+        if (status !== null)
+          this.props.dispatch(applicationActions.setStatus(status));
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    // Check verification and phone number
+    try {
+      GetStoreData(USER_IS_VERIFIED, true).then(isVerified => {
+        if (isVerified == 'true')
+          this.props.dispatch(applicationActions.setVerification(true));
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    try {
+      GetStoreData(USER_PHONE, true).then(phone => {
+        if (phone) this.props.dispatch(applicationActions.setPhone(phone));
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   render() {
@@ -148,4 +181,4 @@ class Entry extends Component {
   }
 }
 
-export default Entry;
+export default connect(() => ({}))(Entry);

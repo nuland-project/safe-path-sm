@@ -3,6 +3,7 @@
 import BackgroundGeolocation from '@mauron85/react-native-background-geolocation';
 import React, { Component } from 'react';
 import {
+  Alert,
   AppState,
   BackHandler,
   Dimensions,
@@ -23,6 +24,7 @@ import {
 } from 'react-native-permissions';
 import Pulse from 'react-native-pulse';
 import { SvgXml } from 'react-native-svg';
+import { connect } from 'react-redux';
 
 import BackgroundImageAtRisk from './../assets/images/backgroundAtRisk.png';
 import exportImage from './../assets/images/export.png';
@@ -31,12 +33,14 @@ import SettingsGear from './../assets/svgs/settingsGear';
 import StateNoContact from './../assets/svgs/stateNoContact';
 import StateUnknown from './../assets/svgs/stateUnknown';
 import { isPlatformAndroid, isPlatformiOS } from './../Util';
+import { applicationActions } from '../actions';
 import RefreshIcon from '../assets/svgs/refresh';
 import stateAtCovidPositive from '../assets/svgs/stateAtCovidPositive';
 import StateAtRisk from '../assets/svgs/stateAtRisk';
 import ButtonWrapper from '../components/ButtonWrapper';
 import { Typography } from '../components/Typography';
 import Colors from '../constants/colors';
+import { StateEnum } from '../constants/enums';
 import fontFamily from '../constants/fonts';
 import {
   COVID_STATUS,
@@ -52,14 +56,6 @@ import LocationServices from '../services/LocationService';
 
 //const MAYO_COVID_URL = 'https://www.mayoclinic.org/coronavirus-covid-19';
 const PROJECT_LEMONADE_URL = 'https://www.lemonade.one';
-
-const StateEnum = {
-  UNKNOWN: '0',
-  AT_RISK: '1',
-  NO_CONTACT: '2',
-  SETTING_OFF: '3',
-  COVID_POSITIVE: '4',
-};
 
 const StateIcon = ({ status, size }) => {
   let icon;
@@ -87,6 +83,11 @@ const StateIcon = ({ status, size }) => {
 
 const height = Dimensions.get('window').height;
 
+const mapStateToProps = state => ({
+  status: state.application.status,
+  isVerified: state.application.isVerified,
+});
+
 class LocationTracking extends Component {
   constructor(props) {
     super(props);
@@ -101,22 +102,16 @@ class LocationTracking extends Component {
       appState: AppState.currentState,
       timer_intersect: null,
       isLogging: '',
-      currentState: StateEnum.NO_CONTACT,
     };
   }
 
-  updateStatus = async () => {
-    try {
-      // At first check last saved status
-      const status = await GetStoreData(COVID_STATUS, true);
-      if (status !== null) this.setState({ currentState: status });
-    } catch (err) {
-      console.log(err);
-    }
+  setStatus = status => {
+    const { dispatch } = this.props;
+    dispatch(applicationActions.setStatus(status));
+    SetStoreData(COVID_STATUS, status);
   };
 
   componentDidMount = () => {
-    this.updateStatus();
     // Check current state
     try {
       this.checkCurrentState();
@@ -147,19 +142,15 @@ class LocationTracking extends Component {
   };
 
   tryToChangeStatus = newStatus => {
-    const { currentState } = this.state;
+    const { status } = this.props;
 
     // Don't change status (in component state) if it equals AT_RISK or COVID_POSITIVE
-    if (
-      currentState == StateEnum.AT_RISK ||
-      currentState == StateEnum.COVID_POSITIVE
-    ) {
+    if (status == StateEnum.AT_RISK || status == StateEnum.COVID_POSITIVE) {
       return;
     }
 
     // Save global and local state
-    SetStoreData(COVID_STATUS, newStatus);
-    this.setState({ currentState: newStatus });
+    this.setStatus(newStatus);
   };
 
   /*  Check current state
@@ -325,11 +316,8 @@ class LocationTracking extends Component {
   // };
 
   getBackground() {
-    const { currentState } = this.state;
-    if (
-      currentState === StateEnum.AT_RISK ||
-      currentState === StateEnum.COVID_POSITIVE
-    ) {
+    const { status } = this.props;
+    if (status === StateEnum.AT_RISK || status === StateEnum.COVID_POSITIVE) {
       return BackgroundImageAtRisk;
     }
     return BackgroundImage;
@@ -355,7 +343,7 @@ class LocationTracking extends Component {
   }
 
   getPulseIfNeeded() {
-    if (this.state.currentState == StateEnum.NO_CONTACT) {
+    if (this.props.status == StateEnum.NO_CONTACT) {
       return (
         <View style={styles.pulseContainer}>
           <Pulse
@@ -366,20 +354,20 @@ class LocationTracking extends Component {
             speed={20}
             duration={2000}
           />
-          <StateIcon size={height} status={this.state.currentState} />
+          <StateIcon size={height} status={this.props.status} />
         </View>
       );
     }
     return (
       <View style={styles.pulseContainer}>
         <Text>Testdsfafasfsdafasfsadf</Text>
-        <StateIcon size={height} status={this.state.currentState} />
+        <StateIcon size={height} status={this.props.status} />
       </View>
     );
   }
 
   getMainText() {
-    switch (this.state.currentState) {
+    switch (this.props.status) {
       case StateEnum.NO_CONTACT:
         return (
           <Typography style={styles.mainTextBelow}>
@@ -409,7 +397,7 @@ class LocationTracking extends Component {
   }
 
   getSubText() {
-    switch (this.state.currentState) {
+    switch (this.props.status) {
       case StateEnum.NO_CONTACT:
         return languages.t('label.home_no_contact_subtext');
       case StateEnum.AT_RISK:
@@ -422,7 +410,7 @@ class LocationTracking extends Component {
     }
   }
   getSubSubText() {
-    switch (this.state.currentState) {
+    switch (this.props.status) {
       case StateEnum.NO_CONTACT:
         return null;
       case StateEnum.AT_RISK:
@@ -438,22 +426,34 @@ class LocationTracking extends Component {
   getCTAIfNeeded() {
     let buttonLabel;
     let buttonFunction;
-    if (this.state.currentState === StateEnum.NO_CONTACT) {
+    const { status, isVerified } = this.props;
+    if (status === StateEnum.NO_CONTACT) {
       return;
-    } else if (this.state.currentState === StateEnum.AT_RISK) {
+    } else if (status === StateEnum.AT_RISK) {
       buttonLabel = languages.t('label.leave_contact_details');
       buttonFunction = () => {
         this.props.navigation.navigate('LeaveContacts');
       };
-    } else if (this.state.currentState === StateEnum.COVID_POSITIVE) {
+    } else if (status === StateEnum.COVID_POSITIVE) {
       buttonLabel = languages.t('label.donate_data');
-      buttonFunction = () => this.props.navigation.navigate('ExportScreen');
-    } else if (this.state.currentState === StateEnum.UNKNOWN) {
+      buttonFunction = () => {
+        if (isVerified) {
+          this.props.navigation.navigate('ExportScreen');
+        } else {
+          // TO DO add localization
+          Alert.alert(
+            'Verification required',
+            'Go to settings to verify your account',
+            [{ text: 'OK' }],
+          );
+        }
+      };
+    } else if (status === StateEnum.UNKNOWN) {
       buttonLabel = languages.t('label.home_enable_location');
       buttonFunction = () => {
         openSettings();
       };
-    } else if (this.state.currentState === StateEnum.SETTING_OFF) {
+    } else if (status === StateEnum.SETTING_OFF) {
       buttonLabel = languages.t('label.home_enable_location');
       buttonFunction = () => {
         this.settings();
@@ -478,7 +478,7 @@ class LocationTracking extends Component {
   }
 
   render() {
-    const { currentState } = this.state;
+    const { status } = this.props;
     return (
       <ImageBackground
         source={this.getBackground()}
@@ -492,8 +492,8 @@ class LocationTracking extends Component {
 
         <View style={styles.mainContainer}>
           <View style={styles.contentAbovePulse}>
-            {(currentState === StateEnum.AT_RISK ||
-              currentState === StateEnum.COVID_POSITIVE) &&
+            {(status === StateEnum.AT_RISK ||
+              status === StateEnum.COVID_POSITIVE) &&
               this.getMainText()}
             <Typography style={styles.subsubheaderText}>
               {this.getSubSubText()}
@@ -523,9 +523,7 @@ class LocationTracking extends Component {
               </Typography>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={this.updateStatus}
-            style={styles.refreshContainer}>
+          <TouchableOpacity onPress={() => {}} style={styles.refreshContainer}>
             <SvgXml fill={'#FFFFFF'} xml={RefreshIcon} width={32} height={32} />
           </TouchableOpacity>
         </View>
@@ -649,4 +647,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LocationTracking;
+export default connect(mapStateToProps)(LocationTracking);
