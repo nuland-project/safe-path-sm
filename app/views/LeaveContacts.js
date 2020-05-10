@@ -1,3 +1,4 @@
+import firebase from '@react-native-firebase/app';
 import functions from '@react-native-firebase/functions';
 /* eslint-disable react-native/no-raw-text */
 import React, { Component } from 'react';
@@ -57,9 +58,17 @@ class LeaveContacts extends Component {
       const { name, surname, phone } = this.state;
       const status = 'suspected';
       if (name === '' || phone === '') return;
-      const cldFn = functions().httpsCallable('addPatientToList');
+
+      // Get cloud function
+      const cldFn = await firebase
+        .app()
+        .functions('europe-west1')
+        .httpsCallable('addPatientToList');
+
+      // Reset text inputs
       this.setState({ phone: '', name: '', surname: '' });
 
+      // Call cloud function
       cldFn({ name, surname, phone, status })
         .then(({ data }) => {
           if (data.status === 'denied') {

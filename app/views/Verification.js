@@ -1,3 +1,4 @@
+import firebase from '@react-native-firebase/app';
 import functions from '@react-native-firebase/functions';
 import React from 'react';
 import {
@@ -36,12 +37,21 @@ class Verification extends React.Component {
       const { pin } = this.state;
       const phone =
         this.props.phone !== '' ? this.props.phone : this.state.phone;
-      const cldFn = functions().httpsCallable('validatePin');
+
+      // Get cloud function
+      const cldFn = await firebase
+        .app()
+        .functions('europe-west1')
+        .httpsCallable('validatePin');
+
+      // Reset text inputs
       this.setState({ phone: '', pin: '' });
+
+      // Call cloud function
       cldFn({ phone, pin })
         .then(({ data }) => {
           console.log(data);
-          if (data.status === 'accept') {
+          if ('customToken' in data) {
             // TO DO add localization
             Alert.alert('Verification passed', 'Success', [{ text: 'OK' }]);
             this.props.dispatch(applicationActions.setPhone(phone));

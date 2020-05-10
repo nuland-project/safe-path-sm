@@ -58,3 +58,29 @@ export async function pickFile() {
     }
   }
 }
+
+/**
+ * Log all keys of AsyncStorage
+ */
+export async function logAsyncStorageKeys() {
+  await AsyncStorage.getAllKeys((err, keys) => {
+    console.log('AsyncStorage keys: ', keys);
+  });
+}
+
+/**
+ * Log all key-value pairs from AsyncStorage
+ */
+export async function logAsyncStorageValues() {
+  try {
+    let keys = await AsyncStorage.getAllKeys();
+    var length = keys.length;
+    console.log('AsyncStorage consists of:');
+    for (var i = 0; i < length; i++) {
+      let res = await GetStoreData(keys[i]);
+      console.log('Storage item: ', keys[i] + ': ' + res);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
