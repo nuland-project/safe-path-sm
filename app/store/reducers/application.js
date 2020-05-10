@@ -6,6 +6,7 @@ import createReducer from '../../utils/createReducer';
 const initialState = {
   phone: '',
   token: '',
+  uuid: '',
   status: StateEnum.NO_CONTACT,
 };
 
@@ -13,6 +14,12 @@ export const application = createReducer(initialState, {
   [ActionTypes.SET_TOKEN](state, action) {
     return Object.assign({}, state, {
       token: action.payload,
+    });
+  },
+
+  [ActionTypes.SET_UUID](state, action) {
+    return Object.assign({}, state, {
+      uuid: action.payload,
     });
   },
 

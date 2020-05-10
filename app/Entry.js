@@ -1,3 +1,5 @@
+import firebase from '@react-native-firebase/app';
+import auth from '@react-native-firebase/auth';
 import { NavigationContainer } from '@react-navigation/native';
 import {
   CardStyleInterpolators,
@@ -11,6 +13,7 @@ import {
   COVID_STATUS,
   USER_CUSTOM_TOKEN,
   USER_PHONE,
+  USER_UUID,
 } from './constants/storage';
 import { GetStoreData } from './helpers/General';
 import AboutScreen from './views/About';
@@ -39,7 +42,7 @@ class Entry extends Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount = async () => {
     GetStoreData('ONBOARDING_DONE')
       .then(onboardingDone => {
         console.log(onboardingDone);
@@ -58,14 +61,39 @@ class Entry extends Component {
     } catch (err) {
       console.log(err);
     }
-    // Check verification and phone number
+    // Check token and uuid
     try {
-      GetStoreData(USER_CUSTOM_TOKEN, true).then(token => {
-        if (token) this.props.dispatch(applicationActions.setToken(token));
+      GetStoreData(USER_CUSTOM_TOKEN, true).then(customToken => {
+        if (customToken) {
+          this.props.dispatch(applicationActions.setToken(customToken));
+
+          // Try to Authenticate the user with Firebase
+          firebase
+            .auth()
+            .signInWithCustomToken(customToken)
+            .then(res => {
+              console.log('Sign in successfull: ', res);
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        }
       });
     } catch (err) {
       console.log(err);
     }
+
+    try {
+      GetStoreData(USER_UUID, true).then(uuid => {
+        if (uuid) {
+          this.props.dispatch(applicationActions.setUuid(uuid));
+        }
+      });
+    } catch (err) {
+      console.log(err);
+    }
+
+    // Check phone number
     try {
       GetStoreData(USER_PHONE, true).then(phone => {
         if (phone) this.props.dispatch(applicationActions.setPhone(phone));
@@ -73,7 +101,7 @@ class Entry extends Component {
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   render() {
     return (

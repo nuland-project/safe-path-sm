@@ -6,6 +6,10 @@ export const applicationActions = {
     type: ActionTypes.SET_TOKEN,
     payload: token,
   }),
+  setUuid: uuid => ({
+    type: ActionTypes.SET_UUID,
+    payload: uuid,
+  }),
   setPhone: phone => ({
     type: ActionTypes.SET_PHONE,
     payload: phone,

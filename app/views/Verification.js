@@ -1,5 +1,5 @@
 import firebase from '@react-native-firebase/app';
-//import auth from '@react-native-firebase/auth';
+import auth from '@react-native-firebase/auth';
 import functions from '@react-native-firebase/functions';
 import React from 'react';
 import {
@@ -16,7 +16,7 @@ import languages from './../locales/languages';
 import { applicationActions } from '../actions';
 import Colors from '../constants/colors';
 import fontFamily from '../constants/fonts';
-import { USER_CUSTOM_TOKEN, USER_PHONE } from '../constants/storage';
+import { USER_CUSTOM_TOKEN, USER_PHONE, USER_UUID } from '../constants/storage';
 import { SetStoreData } from '../helpers/General';
 
 const mapStateToProps = state => ({
@@ -53,26 +53,28 @@ class Verification extends React.Component {
         .then(({ data }) => {
           console.log(data);
           if ('customToken' in data) {
-            const { customToken } = data;
+            const { customToken, uuid } = data;
             // TO DO add localization
             Alert.alert('Verification passed', 'Success', [{ text: 'OK' }]);
 
-            // Authorisation with custom token
-            // firebase
-            //   .auth()
-            //   .signInWithCustomToken(customToken)
-            //   .then(res => {
-            //     console.log('Sign in successfull: ', res);
-            //   })
-            //   .catch(error => {
-            //     console.log(error);
-            //   });
+            // Authenticate with Firebase
+            firebase
+              .auth()
+              .signInWithCustomToken(customToken)
+              .then(res => {
+                console.log('Sign in successfull: ', res);
+              })
+              .catch(error => {
+                console.log(error);
+              });
 
             // Set global state in redux and async storage
             this.props.dispatch(applicationActions.setPhone(phone));
             this.props.dispatch(applicationActions.setToken(customToken));
+            this.props.dispatch(applicationActions.setUuid(uuid));
             SetStoreData(USER_PHONE, phone);
             SetStoreData(USER_CUSTOM_TOKEN, customToken);
+            SetStoreData(USER_UUID, uuid);
           } else {
             // TO DO add localization
             Alert.alert('Oops', 'Verification failed', [{ text: 'OK' }]);

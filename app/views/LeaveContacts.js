@@ -19,7 +19,7 @@ import languages from './../locales/languages';
 import { applicationActions } from '../actions';
 import NavigationBarWrapper from '../components/NavigationBarWrapper';
 import Colors from '../constants/colors';
-import { USER_CUSTOM_TOKEN, USER_PHONE } from '../constants/storage';
+import { USER_CUSTOM_TOKEN, USER_PHONE, USER_UUID } from '../constants/storage';
 import { SetStoreData } from '../helpers/General';
 
 const mapStateToProps = state => ({
@@ -86,8 +86,10 @@ class LeaveContacts extends Component {
           if (phone !== oldPhone) {
             this.props.dispatch(applicationActions.setPhone(phone));
             this.props.dispatch(applicationActions.setToken(''));
+            this.props.dispatch(applicationActions.setUuid(''));
             SetStoreData(USER_PHONE, phone);
             SetStoreData(USER_CUSTOM_TOKEN, '');
+            SetStoreData(USER_UUID, '');
           }
         })
         .catch(console.log);
