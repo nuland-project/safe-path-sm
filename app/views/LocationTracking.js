@@ -85,7 +85,7 @@ const height = Dimensions.get('window').height;
 
 const mapStateToProps = state => ({
   status: state.application.status,
-  isVerified: state.application.isVerified,
+  isVerified: state.application.token !== '',
 });
 
 class LocationTracking extends Component {

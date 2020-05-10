@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { applicationActions } from './actions';
 import {
   COVID_STATUS,
-  USER_IS_VERIFIED,
+  USER_CUSTOM_TOKEN,
   USER_PHONE,
 } from './constants/storage';
 import { GetStoreData } from './helpers/General';
@@ -60,9 +60,8 @@ class Entry extends Component {
     }
     // Check verification and phone number
     try {
-      GetStoreData(USER_IS_VERIFIED, true).then(isVerified => {
-        if (isVerified == 'true')
-          this.props.dispatch(applicationActions.setVerification(true));
+      GetStoreData(USER_CUSTOM_TOKEN, true).then(token => {
+        if (token) this.props.dispatch(applicationActions.setToken(token));
       });
     } catch (err) {
       console.log(err);
