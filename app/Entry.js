@@ -17,6 +17,7 @@ import {
   USER_UUID,
 } from './constants/storage';
 import { GetStoreData } from './helpers/General';
+import { convertWebStatusIntoAppStatus } from './utils/general';
 import AboutScreen from './views/About';
 import ChooseProviderScreen from './views/ChooseProvider';
 import { ExportScreen } from './views/Export';
@@ -94,7 +95,9 @@ class Entry extends Component {
             .collection('patients')
             .doc(uuid)
             .onSnapshot(doc => {
-              console.log('Current data: ', doc.data());
+              let { status } = doc.data();
+              status = convertWebStatusIntoAppStatus(status);
+              this.props.dispatch(applicationActions.setStatus(status));
             });
         }
       });
