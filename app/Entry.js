@@ -1,5 +1,6 @@
 import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import { NavigationContainer } from '@react-navigation/native';
 import {
   CardStyleInterpolators,
@@ -87,6 +88,14 @@ class Entry extends Component {
       GetStoreData(USER_UUID, true).then(uuid => {
         if (uuid) {
           this.props.dispatch(applicationActions.setUuid(uuid));
+
+          // Check status from firestore and update it
+          firestore()
+            .collection('patients')
+            .doc(uuid)
+            .onSnapshot(doc => {
+              console.log('Current data: ', doc.data());
+            });
         }
       });
     } catch (err) {
