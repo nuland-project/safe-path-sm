@@ -107,13 +107,14 @@ export const SettingsScreen = ({ navigation }) => {
           </NativePicker>
         </Section>
 
-        <Section>
+        {/* // This block is used for development */}
+        {/* <Section>
           <View style={{ marginTop: 15 }}>
             <Typography use='body1'>{'Choose your status: '}</Typography>
           </View>
 
           <CovidStatePicker />
-        </Section>
+        </Section> */}
 
         <Section>
           <View style={{ marginTop: 15 }}>
