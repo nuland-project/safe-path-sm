@@ -24,6 +24,8 @@ import { isPlatformiOS } from './../Util';
 import { Typography } from '../components/Typography';
 import Colors from '../constants/colors';
 import fontFamily from '../constants/fonts';
+import { USER_UUID } from '../constants/storage';
+import { GetStoreData } from '../helpers/General';
 import { LocationData } from '../services/LocationService';
 
 const base64 = RNFetchBlob.base64;
@@ -115,15 +117,14 @@ export const ExportScreen = ({ navigation }) => {
       let unixtimeUTC = Date.parse(nowUTC);
 
       let jsonData = JSON.stringify(locationData);
-      const filename = unixtimeUTC + '.json';
+      const uuid = await GetStoreData(USER_UUID, true);
+      const filename = uuid + '#' + unixtimeUTC + '.json';
       const storageRef = storage().ref();
       let res = await storageRef
         .child(`tracks/${filename}`)
         .putString(jsonData);
       if (res) {
-        Alert.alert('Data was sent', 'Success', [
-          { text: 'OK', onPress: () => console.log('OK Pressed') },
-        ]);
+        Alert.alert('Data was sent', 'Success', [{ text: 'OK' }]);
       }
     } catch (error) {
       console.log(error.message);

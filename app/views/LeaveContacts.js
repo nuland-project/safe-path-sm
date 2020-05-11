@@ -1,3 +1,4 @@
+import firebase from '@react-native-firebase/app';
 import functions from '@react-native-firebase/functions';
 /* eslint-disable react-native/no-raw-text */
 import React, { Component } from 'react';
@@ -18,7 +19,7 @@ import languages from './../locales/languages';
 import { applicationActions } from '../actions';
 import NavigationBarWrapper from '../components/NavigationBarWrapper';
 import Colors from '../constants/colors';
-import { USER_IS_VERIFIED, USER_PHONE } from '../constants/storage';
+import { USER_CUSTOM_TOKEN, USER_PHONE, USER_UUID } from '../constants/storage';
 import { SetStoreData } from '../helpers/General';
 
 const mapStateToProps = state => ({
@@ -57,9 +58,17 @@ class LeaveContacts extends Component {
       const { name, surname, phone } = this.state;
       const status = 'suspected';
       if (name === '' || phone === '') return;
-      const cldFn = functions().httpsCallable('addPatientToList');
+
+      // Get cloud function
+      const cldFn = await firebase
+        .app()
+        .functions('europe-west1')
+        .httpsCallable('addPatientToList');
+
+      // Reset text inputs
       this.setState({ phone: '', name: '', surname: '' });
 
+      // Call cloud function
       cldFn({ name, surname, phone, status })
         .then(({ data }) => {
           if (data.status === 'denied') {
@@ -76,9 +85,11 @@ class LeaveContacts extends Component {
           const oldPhone = this.props.phone;
           if (phone !== oldPhone) {
             this.props.dispatch(applicationActions.setPhone(phone));
-            this.props.dispatch(applicationActions.setVerification(false));
+            this.props.dispatch(applicationActions.setToken(''));
+            this.props.dispatch(applicationActions.setUuid(''));
             SetStoreData(USER_PHONE, phone);
-            SetStoreData(USER_IS_VERIFIED, false);
+            SetStoreData(USER_CUSTOM_TOKEN, '');
+            SetStoreData(USER_UUID, '');
           }
         })
         .catch(console.log);

@@ -1,3 +1,6 @@
+import firebase from '@react-native-firebase/app';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import functions from '@react-native-firebase/functions';
 import React from 'react';
 import {
@@ -14,12 +17,13 @@ import languages from './../locales/languages';
 import { applicationActions } from '../actions';
 import Colors from '../constants/colors';
 import fontFamily from '../constants/fonts';
-import { USER_IS_VERIFIED, USER_PHONE } from '../constants/storage';
+import { USER_CUSTOM_TOKEN, USER_PHONE, USER_UUID } from '../constants/storage';
 import { SetStoreData } from '../helpers/General';
+import { convertWebStatusIntoAppStatus } from '../utils/general';
 
 const mapStateToProps = state => ({
   phone: state.application.phone,
-  isVerified: state.application.isVerified,
+  isVerified: state.application.token !== '',
 });
 
 class Verification extends React.Component {
@@ -36,18 +40,53 @@ class Verification extends React.Component {
       const { pin } = this.state;
       const phone =
         this.props.phone !== '' ? this.props.phone : this.state.phone;
-      const cldFn = functions().httpsCallable('validatePin');
+
+      // Get cloud function
+      const cldFn = await firebase
+        .app()
+        .functions('europe-west1')
+        .httpsCallable('validatePin');
+
+      // Reset text inputs
       this.setState({ phone: '', pin: '' });
+
+      // Call cloud function
       cldFn({ phone, pin })
         .then(({ data }) => {
           console.log(data);
-          if (data.status === 'accept') {
+          if ('customToken' in data) {
+            const { customToken, uuid } = data;
             // TO DO add localization
             Alert.alert('Verification passed', 'Success', [{ text: 'OK' }]);
+
+            // Set global state in redux and async storage
             this.props.dispatch(applicationActions.setPhone(phone));
-            this.props.dispatch(applicationActions.setVerification(true));
+            this.props.dispatch(applicationActions.setToken(customToken));
+            this.props.dispatch(applicationActions.setUuid(uuid));
             SetStoreData(USER_PHONE, phone);
-            SetStoreData(USER_IS_VERIFIED, true);
+            SetStoreData(USER_CUSTOM_TOKEN, customToken);
+            SetStoreData(USER_UUID, uuid);
+
+            // Subscribe on document changes
+            firestore()
+              .collection('patients')
+              .doc(uuid)
+              .onSnapshot(doc => {
+                let { status } = doc.data();
+                status = convertWebStatusIntoAppStatus(status);
+                this.props.dispatch(applicationActions.setStatus(status));
+              });
+
+            // Authenticate with Firebase
+            firebase
+              .auth()
+              .signInWithCustomToken(customToken)
+              .then(res => {
+                console.log('Sign in successfull: ', res);
+              })
+              .catch(error => {
+                console.log(error);
+              });
           } else {
             // TO DO add localization
             Alert.alert('Oops', 'Verification failed', [{ text: 'OK' }]);

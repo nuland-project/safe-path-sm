@@ -42,7 +42,7 @@ export function intersectSetIntoBins(
   concernTimeWindowMS = 1000 * 60 * CONCERN_TIME_WINDOW_MINUTES,
   defaultExposurePeriodMS = DEFAULT_EXPOSURE_PERIOD_MINUTES * 60 * 1000,
 ) {
-  console.log(concernArray);
+  //console.log('concernArray', concernArray);
   // useful for time calcs
   dayjs.extend(duration);
 
@@ -277,12 +277,12 @@ async function asyncCheckIntersect() {
 
   // get the saved set of locations for the user, normalize and sort
   let locationArray = normalizeAndSortLocations(await getSavedLocationArray());
+  //console.log({ locationArray });
 
   // get the health authorities
   let authority_list = await HCAService.getAuthoritiesList();
   if (authority_list) {
     // Parse the registered health authorities
-    console.log();
     // authority_list = JSON.parse(authority_list);
     // console.log(authority_list);
 

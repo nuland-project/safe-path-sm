@@ -1,3 +1,6 @@
+import firebase from '@react-native-firebase/app';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import { NavigationContainer } from '@react-navigation/native';
 import {
   CardStyleInterpolators,
@@ -9,10 +12,12 @@ import { connect } from 'react-redux';
 import { applicationActions } from './actions';
 import {
   COVID_STATUS,
-  USER_IS_VERIFIED,
+  USER_CUSTOM_TOKEN,
   USER_PHONE,
+  USER_UUID,
 } from './constants/storage';
 import { GetStoreData } from './helpers/General';
+import { convertWebStatusIntoAppStatus } from './utils/general';
 import AboutScreen from './views/About';
 import ChooseProviderScreen from './views/ChooseProvider';
 import { ExportScreen } from './views/Export';
@@ -39,7 +44,7 @@ class Entry extends Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount = async () => {
     GetStoreData('ONBOARDING_DONE')
       .then(onboardingDone => {
         console.log(onboardingDone);
@@ -58,15 +63,49 @@ class Entry extends Component {
     } catch (err) {
       console.log(err);
     }
-    // Check verification and phone number
+    // Check token and uuid
     try {
-      GetStoreData(USER_IS_VERIFIED, true).then(isVerified => {
-        if (isVerified == 'true')
-          this.props.dispatch(applicationActions.setVerification(true));
+      GetStoreData(USER_CUSTOM_TOKEN, true).then(customToken => {
+        if (customToken) {
+          this.props.dispatch(applicationActions.setToken(customToken));
+
+          // Try to Authenticate the user with Firebase
+          firebase
+            .auth()
+            .signInWithCustomToken(customToken)
+            .then(res => {
+              console.log('Sign in successfull: ', res);
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        }
       });
     } catch (err) {
       console.log(err);
     }
+
+    try {
+      GetStoreData(USER_UUID, true).then(uuid => {
+        if (uuid) {
+          this.props.dispatch(applicationActions.setUuid(uuid));
+
+          // Check status from firestore and subscribe on document changes
+          firestore()
+            .collection('patients')
+            .doc(uuid)
+            .onSnapshot(doc => {
+              let { status } = doc.data();
+              status = convertWebStatusIntoAppStatus(status);
+              this.props.dispatch(applicationActions.setStatus(status));
+            });
+        }
+      });
+    } catch (err) {
+      console.log(err);
+    }
+
+    // Check phone number
     try {
       GetStoreData(USER_PHONE, true).then(phone => {
         if (phone) this.props.dispatch(applicationActions.setPhone(phone));
@@ -74,7 +113,7 @@ class Entry extends Component {
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   render() {
     return (

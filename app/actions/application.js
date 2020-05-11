@@ -2,9 +2,13 @@ import * as ActionTypes from './types';
 
 // Actions concerning app navigation process
 export const applicationActions = {
-  setVerification: isVerified => ({
-    type: ActionTypes.SET_VERIFICATION,
-    payload: isVerified,
+  setToken: token => ({
+    type: ActionTypes.SET_TOKEN,
+    payload: token,
+  }),
+  setUuid: uuid => ({
+    type: ActionTypes.SET_UUID,
+    payload: uuid,
   }),
   setPhone: phone => ({
     type: ActionTypes.SET_PHONE,

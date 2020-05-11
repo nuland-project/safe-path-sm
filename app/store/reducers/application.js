@@ -5,14 +5,21 @@ import createReducer from '../../utils/createReducer';
 // Initial state
 const initialState = {
   phone: '',
-  isVerified: false,
+  token: '',
+  uuid: '',
   status: StateEnum.NO_CONTACT,
 };
 
 export const application = createReducer(initialState, {
-  [ActionTypes.SET_VERIFICATION](state, action) {
+  [ActionTypes.SET_TOKEN](state, action) {
     return Object.assign({}, state, {
-      isVerified: action.payload,
+      token: action.payload,
+    });
+  },
+
+  [ActionTypes.SET_UUID](state, action) {
+    return Object.assign({}, state, {
+      uuid: action.payload,
     });
   },
 

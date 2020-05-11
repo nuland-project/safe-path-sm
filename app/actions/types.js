@@ -1,6 +1,7 @@
 // COLLECT HERE ALL ACTION TYPES //
 
 // APPLICATION ACTIONS
-export const SET_VERIFICATION = 'SET_VERIFICATION';
+export const SET_TOKEN = 'SET_TOKEN';
+export const SET_UUID = 'SET_UUID';
 export const SET_PHONE = 'SET_PHONE';
 export const SET_STATUS = 'SET_STATUS';
