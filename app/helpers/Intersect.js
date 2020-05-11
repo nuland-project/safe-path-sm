@@ -42,8 +42,9 @@ export function intersectSetIntoBins(
   concernTimeWindowMS = 1000 * 60 * CONCERN_TIME_WINDOW_MINUTES,
   defaultExposurePeriodMS = DEFAULT_EXPOSURE_PERIOD_MINUTES * 60 * 1000,
 ) {
-  console.log('concernArray', concernArray);
-  console.log('localArray', localArray);
+  // console.log('concernArray', concernArray);
+  // console.log('localArray', localArray);
+
   // useful for time calcs
   dayjs.extend(duration);
 

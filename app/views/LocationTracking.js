@@ -145,7 +145,7 @@ class LocationTracking extends Component {
     const { status } = this.props;
 
     // Don't change status (in component state) if it equals AT_RISK or COVID_POSITIVE
-    if (status == StateEnum.COVID_POSITIVE) {
+    if (status === StateEnum.COVID_POSITIVE) {
       return;
     }
 
@@ -193,7 +193,7 @@ class LocationTracking extends Component {
     });
   }
 
-  checkIfUserAtRisk() {
+  checkIfUserAtRisk = () => {
     BackgroundTaskServices.start();
 
     GetStoreData(DEBUG_MODE).then(dbgMode => {
@@ -220,7 +220,7 @@ class LocationTracking extends Component {
         //this.tryToChangeStatus(StateEnum.SETTING_OFF);
       }
     });
-  }
+  };
 
   findNewAuthorities() {
     // TODO: This should pull down the Healtcare Authorities list (see Settings.js)
@@ -523,7 +523,9 @@ class LocationTracking extends Component {
               </Typography>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {}} style={styles.refreshContainer}>
+          <TouchableOpacity
+            onPress={this.checkIfUserAtRisk}
+            style={styles.refreshContainer}>
             <SvgXml fill={'#FFFFFF'} xml={RefreshIcon} width={32} height={32} />
           </TouchableOpacity>
         </View>
