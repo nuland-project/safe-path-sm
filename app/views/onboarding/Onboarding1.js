@@ -4,6 +4,7 @@ import {
   ImageBackground,
   StatusBar,
   StyleSheet,
+  Text,
   View,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
