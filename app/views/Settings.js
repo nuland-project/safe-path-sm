@@ -125,8 +125,8 @@ export const SettingsScreen = ({ navigation }) => {
           <Verification />
         </Section>
 
-        {/* <Section>
-          <Item
+        <Section>
+          {/* <Item
             label={t('label.choose_provider_title')}
             description={t('label.choose_provider_subtitle')}
             onPress={() => navigation.navigate('ChooseProviderScreen')}
@@ -135,19 +135,19 @@ export const SettingsScreen = ({ navigation }) => {
             label={t('label.news_title')}
             description={t('label.news_subtitle')}
             onPress={() => navigation.navigate('NewsScreen')}
-          />
+          /> */}
           <Item
             label={t('label.event_history_title')}
             description={t('label.event_history_subtitle')}
             onPress={() => navigation.navigate('ExposureHistoryScreen')}
           />
-          <Item
+          {/* <Item
             label={t('label.tested_positive_title')}
             description={t('label.tested_positive_subtitle')}
             onPress={() => navigation.navigate('ExportScreen')}
             last
-          />
-        </Section> */}
+          /> */}
+        </Section>
 
         <Section>
           <GoogleMapsImport navigation={navigation} />
