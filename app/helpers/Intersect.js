@@ -350,6 +350,7 @@ export function getEmptyLocationBins(
  * Notify the user that they are possibly at risk
  */
 function notifyUserOfRisk() {
+  return; // Turn off annoying notifications
   PushNotification.localNotification({
     title: languages.t('label.push_at_risk_title'),
     message: languages.t('label.push_at_risk_message'),

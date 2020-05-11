@@ -375,10 +375,15 @@ class LocationTracking extends Component {
           </Typography>
         );
       case StateEnum.AT_RISK:
-      case StateEnum.COVID_POSITIVE:
         return (
           <Typography style={styles.mainTextAbove}>
             {languages.t('label.home_at_risk_header')}
+          </Typography>
+        );
+      case StateEnum.COVID_POSITIVE:
+        return (
+          <Typography style={styles.mainTextAbove}>
+            {languages.t('label.home_positive_header')}
           </Typography>
         );
       case StateEnum.UNKNOWN:
@@ -401,8 +406,9 @@ class LocationTracking extends Component {
       case StateEnum.NO_CONTACT:
         return languages.t('label.home_no_contact_subtext');
       case StateEnum.AT_RISK:
-      case StateEnum.COVID_POSITIVE:
         return languages.t('label.home_at_risk_subtext');
+      case StateEnum.COVID_POSITIVE:
+        return languages.t('label.home_positive_subtext');
       case StateEnum.UNKNOWN:
         return languages.t('label.home_unknown_subtext');
       case StateEnum.SETTING_OFF:
@@ -414,8 +420,9 @@ class LocationTracking extends Component {
       case StateEnum.NO_CONTACT:
         return null;
       case StateEnum.AT_RISK:
-      case StateEnum.COVID_POSITIVE:
         return languages.t('label.home_at_risk_subsubtext');
+      case StateEnum.COVID_POSITIVE:
+        return languages.t('label.home_positive_subsubtext');
       case StateEnum.UNKNOWN:
         return null;
       case StateEnum.SETTING_OFF:
@@ -555,7 +562,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: '100%',
-    paddingHorizontal: '12%',
+    paddingHorizontal: '6%',
     paddingBottom: 12,
   },
   contentAbovePulse: {
@@ -606,7 +613,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   subheaderText: {
-    marginBottom: 24,
+    marginBottom: 10,
     textAlign: 'center',
     lineHeight: 24.5,
     color: Colors.WHITE,
