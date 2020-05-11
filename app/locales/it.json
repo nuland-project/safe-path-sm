@@ -46,6 +46,8 @@
     "home_setting_off_subtext": "Non possiamo darti informazioni sull'esposizione al virus se non attivi la localizzazione.",
     "home_unknown_header": "Sconosciuto",
     "home_unknown_subtext": "Non è possibile sapere se sei stato esposto se non permetti alla app di accedere alla tua posizione",
+    "home_required_verification": "Verifica richiesta",
+    "home_required_verification_instructions": "Vai alle impostazioni per verificare il tuo account",
     "import_step_1": "1. Fai Login nel tuo account Google e scarica lo storico delle tue posizioni",
     "import_step_2": "2. Dopo il download, apri di nuovo questa schermata. I dati saranno importati automaticamente",
     "import_title": "Importa posizioni",
@@ -72,6 +74,10 @@
     "launch_screen4_subheader": "Se risulti positivo, solo tu puoi scegliere se condividerli o meno",
     "launch_set_up_phone": "Imposta il mio dispositivo",
     "leave_contacts_title": "Modulo Contatti",
+    "failure_title": "Spiacenti",
+    "leave_contacts_alert_failure_text": "L'utente con questo telefono è già registrato",
+    "leave_contacts_alert_success_title": "I dati sono stati inviati",
+    "success": "Successo",
     "legal_page_title": "Legale",
     "loading_public_data": "Caricando i dati…",
     "location_disabled_message": "COVID Safe Paths ha bisogno dei servizi di localizzazione",
@@ -102,6 +108,10 @@
     "team_para": "Il nostro team è composto da un consorzio di epidemiologi, ingegneri, data scientist, esperti di privacy digitale, professori e ricercatori dalle più importanti istituzioni, incluse: MIT, Harvard, The Mayo Clinic, TripleBlind, EyeNetra, Ernst & Young e Link Ventures",
     "terms_of_use": "Termini per l'utilizzo",
     "tested_positive_subtitle": "I tuoi dati personali possono essere trasferiti alle autorità sanitarie, salvati o condivisi in altra maniera",
-    "tested_positive_title": "Condividi lo storico delle posizioni"
+    "tested_positive_title": "Condividi lo storico delle posizioni",
+    "verification_disclaymer": "Verifica il tuo account:",
+    "verification_alert_success": "Verifica superata",
+    "verification_alert_failure": "Verifica fallita",
+    "verification_completed": "Verifica completata"
   }
 }

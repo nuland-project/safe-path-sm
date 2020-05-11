@@ -56,9 +56,12 @@ class Verification extends React.Component {
           console.log(data);
           if ('customToken' in data) {
             const { customToken, uuid } = data;
-            // TO DO add localization
-            Alert.alert('Verification passed', 'Success', [{ text: 'OK' }]);
 
+            Alert.alert(
+              languages.t('label.verification_alert_success'),
+              languages.t('label.success'),
+              [{ text: 'OK' }],
+            );
             // Set global state in redux and async storage
             this.props.dispatch(applicationActions.setPhone(phone));
             this.props.dispatch(applicationActions.setToken(customToken));
@@ -88,8 +91,11 @@ class Verification extends React.Component {
                 console.log(error);
               });
           } else {
-            // TO DO add localization
-            Alert.alert('Oops', 'Verification failed', [{ text: 'OK' }]);
+            Alert.alert(
+              languages.t('label.failure_title'),
+              languages.t('label.verification_alert_failure'),
+              [{ text: 'OK' }],
+            );
           }
         })
         .catch(console.log);
@@ -147,7 +153,7 @@ class Verification extends React.Component {
       <>
         {isVerified ? (
           <Text style={styles.verificationDisclaymer}>
-            {'Verification completed '}
+            {languages.t('label.verification_completed')}
           </Text>
         ) : (
           this.getVerificationBox()

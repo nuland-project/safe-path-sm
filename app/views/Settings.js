@@ -109,7 +109,6 @@ export const SettingsScreen = ({ navigation }) => {
 
         <Section>
           <View style={{ marginTop: 15 }}>
-            {/* // TO DO add localization */}
             <Typography use='body1'>{'Choose your status: '}</Typography>
           </View>
 
@@ -118,10 +117,10 @@ export const SettingsScreen = ({ navigation }) => {
 
         <Section>
           <View style={{ marginTop: 15 }}>
-            {/* // TO DO add localization */}
-            <Typography use='body1'>{'Verify your account: '}</Typography>
+            <Typography use='body1'>
+              {t('label.verification_disclaymer')}
+            </Typography>
           </View>
-
           <Verification />
         </Section>
 

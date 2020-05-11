@@ -46,6 +46,8 @@
     "home_setting_off_subtext": "We can’t tell if you’re at risk unless you enable location history in the settings screen.",
     "home_unknown_header": "Unknown",
     "home_unknown_subtext": "We can’t tell if you’re at risk unless you enable the app to access your location.",
+    "home_required_verification": "Verification required",
+    "home_required_verification_instructions": "Go to settings to verify your account",
     "import_step_1": "Adding location data from Google will give you a head start on building your recent locations.",
     "import_step_2": "Before you can import, you must first 'Take out' your location data from Google.",
     "import_step_3": "Visit Google Takeout and export your Location History using following settings: \n1. Delivery method: \"Add to Drive\" \n2. Frequency: \"Export once\" \n3. File type & size: \".zip\" and \"1GB\" \n4. Google sends an email when the export is ready \n5. Return here to import locations. Import options: \n- Import from Google Drive \n- Download from browser, then import from local phone files. Make sure to be on WiFi network as files can be big.",
@@ -74,6 +76,10 @@
     "launch_screen4_subheader": "If you test positive, you alone can choose whether to share.",
     "launch_set_up_phone": "Set up my phone",
     "leave_contacts_title": "Contacts Form",
+    "failure_title": "Oops",
+    "leave_contacts_alert_failure_text": "User with this phone is already registered",
+    "leave_contacts_alert_success_title": "Data was sent",
+    "success": "Success",
     "legal_page_title": "Legal",
     "loading_public_data": "loading data...",
     "location_disabled_message": "COVID Safe Paths requires location services.",
@@ -110,7 +116,11 @@
     "logging_inactive": "Location Inactive",
     "language_change_alert_title": "App need to restart in order to use this language",
     "language_change_alert_proced": "Restart",
-    "language_change_alert_cancel": "Cancel"
+    "language_change_alert_cancel": "Cancel",
+    "verification_disclaymer": "Verify your account:",
+    "verification_alert_success": "Verification passed",
+    "verification_alert_failure": "Verification failed",
+    "verification_completed": "Verification completed"
   },
   "history": {
     "no_exposure": "No known",
