@@ -145,7 +145,7 @@ class LocationTracking extends Component {
     const { status } = this.props;
 
     // Don't change status (in component state) if it equals AT_RISK or COVID_POSITIVE
-    if (status == StateEnum.AT_RISK || status == StateEnum.COVID_POSITIVE) {
+    if (status == StateEnum.COVID_POSITIVE) {
       return;
     }
 

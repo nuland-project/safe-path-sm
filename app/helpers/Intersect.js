@@ -42,7 +42,8 @@ export function intersectSetIntoBins(
   concernTimeWindowMS = 1000 * 60 * CONCERN_TIME_WINDOW_MINUTES,
   defaultExposurePeriodMS = DEFAULT_EXPOSURE_PERIOD_MINUTES * 60 * 1000,
 ) {
-  //console.log('concernArray', concernArray);
+  console.log('concernArray', concernArray);
+  console.log('localArray', localArray);
   // useful for time calcs
   dayjs.extend(duration);
 
@@ -291,8 +292,9 @@ async function asyncCheckIntersect() {
       let responseJson = await retrieveUrlAsJson(
         authority_list[0]['San Marino COVID19 HA'][0].url,
       );
-      console.log('responseJson');
-      console.log(responseJson);
+      // console.log('responseJson');
+      // console.log(responseJson);
+
       // Update the news array with the info from the authority
       // name_news.push({
       //   name: responseJson.authority_name,
