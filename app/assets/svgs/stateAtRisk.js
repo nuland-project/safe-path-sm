@@ -1,4 +1,4 @@
-export default `<svg width="850" height="850" viewBox="0 0 850 850" fill="none" xmlns="http://www.w3.org/2000/svg">
+export default `<svg width="850" height="850" viewBox="0 0 850 850" fill="#FFC000" xmlns="http://www.w3.org/2000/svg">
 <circle opacity="0.2" cx="425" cy="425" r="85.5" stroke="white"/>
 <circle opacity="0.2" cx="425" cy="425" r="149.5" stroke="white"/>
 <circle opacity="0.2" cx="425" cy="425" r="217.5" stroke="white"/>
