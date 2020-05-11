@@ -90,7 +90,7 @@ class Entry extends Component {
         if (uuid) {
           this.props.dispatch(applicationActions.setUuid(uuid));
 
-          // Check status from firestore and update it
+          // Check status from firestore and subscribe on document changes
           firestore()
             .collection('patients')
             .doc(uuid)

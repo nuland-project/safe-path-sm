@@ -1,5 +1,6 @@
 import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import functions from '@react-native-firebase/functions';
 import React from 'react';
 import {
@@ -18,6 +19,7 @@ import Colors from '../constants/colors';
 import fontFamily from '../constants/fonts';
 import { USER_CUSTOM_TOKEN, USER_PHONE, USER_UUID } from '../constants/storage';
 import { SetStoreData } from '../helpers/General';
+import { convertWebStatusIntoAppStatus } from '../utils/general';
 
 const mapStateToProps = state => ({
   phone: state.application.phone,
@@ -57,6 +59,24 @@ class Verification extends React.Component {
             // TO DO add localization
             Alert.alert('Verification passed', 'Success', [{ text: 'OK' }]);
 
+            // Set global state in redux and async storage
+            this.props.dispatch(applicationActions.setPhone(phone));
+            this.props.dispatch(applicationActions.setToken(customToken));
+            this.props.dispatch(applicationActions.setUuid(uuid));
+            SetStoreData(USER_PHONE, phone);
+            SetStoreData(USER_CUSTOM_TOKEN, customToken);
+            SetStoreData(USER_UUID, uuid);
+
+            // Subscribe on document changes
+            firestore()
+              .collection('patients')
+              .doc(uuid)
+              .onSnapshot(doc => {
+                let { status } = doc.data();
+                status = convertWebStatusIntoAppStatus(status);
+                this.props.dispatch(applicationActions.setStatus(status));
+              });
+
             // Authenticate with Firebase
             firebase
               .auth()
@@ -67,14 +87,6 @@ class Verification extends React.Component {
               .catch(error => {
                 console.log(error);
               });
-
-            // Set global state in redux and async storage
-            this.props.dispatch(applicationActions.setPhone(phone));
-            this.props.dispatch(applicationActions.setToken(customToken));
-            this.props.dispatch(applicationActions.setUuid(uuid));
-            SetStoreData(USER_PHONE, phone);
-            SetStoreData(USER_CUSTOM_TOKEN, customToken);
-            SetStoreData(USER_UUID, uuid);
           } else {
             // TO DO add localization
             Alert.alert('Oops', 'Verification failed', [{ text: 'OK' }]);
