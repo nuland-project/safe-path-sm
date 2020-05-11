@@ -72,14 +72,18 @@ class LeaveContacts extends Component {
       cldFn({ name, surname, phone, status })
         .then(({ data }) => {
           if (data.status === 'denied') {
-            // TO DO add localization
-            Alert.alert('Oops', 'User with this phone is already registered', [
-              { text: 'OK' },
-            ]);
+            Alert.alert(
+              languages.t('label.failure_title'),
+              languages.t('label.leave_contacts_alert_failure_text'),
+              [{ text: 'OK' }],
+            );
             return;
           }
-          // TO DO add localization
-          Alert.alert('Data was sent', 'Success', [{ text: 'OK' }]);
+          Alert.alert(
+            languages.t('label.leave_contacts_alert_success_title'),
+            languages.t('label.success'),
+            [{ text: 'OK' }],
+          );
 
           // Update store if it's needed
           const oldPhone = this.props.phone;

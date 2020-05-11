@@ -447,10 +447,9 @@ class LocationTracking extends Component {
         if (isVerified) {
           this.props.navigation.navigate('ExportScreen');
         } else {
-          // TO DO add localization
           Alert.alert(
-            'Verification required',
-            'Go to settings to verify your account',
+            languages.t('label.home_required_verification'),
+            languages.t('label.home_required_verification_instructions'),
             [{ text: 'OK' }],
           );
         }
