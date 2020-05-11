@@ -20,7 +20,7 @@ import {
   supportedDeviceLanguageOrEnglish,
 } from '../locales/languages';
 import LocationServices from '../services/LocationService';
-import CovidStatePicker from './CovidStatePicker';
+// import CovidStatePicker from './CovidStatePicker';
 import { GoogleMapsImport } from './Settings/GoogleMapsImport';
 import { SettingsItem as Item } from './Settings/SettingsItem';
 import Verification from './Verification';
