@@ -21,7 +21,7 @@ import { convertWebStatusIntoAppStatus } from './utils/general';
 import AboutScreen from './views/About';
 import ChooseProviderScreen from './views/ChooseProvider';
 import { ExportScreen } from './views/Export';
-import { ExposureHistoryScreen } from './views/ExposureHistory/ExposureHistory';
+import ExposureHistoryScreen from './views/ExposureHistory/ExposureHistory';
 import ImportScreen from './views/Import';
 import LeaveContacts from './views/LeaveContacts';
 import LicencesScreen from './views/Licenses';
