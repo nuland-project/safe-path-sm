@@ -11,7 +11,7 @@ import { CROSSED_PATHS } from '../../constants/storage';
 import { Theme, charcoal, defaultTheme } from '../../constants/themes';
 import { GetStoreData } from '../../helpers/General';
 import languages from '../../locales/languages';
-import { DetailedHistory } from './DetailedHistory';
+import DetailedHistory from './DetailedHistory';
 
 const NO_HISTORY = [];
 
