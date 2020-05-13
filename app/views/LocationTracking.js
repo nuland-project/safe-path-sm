@@ -330,8 +330,6 @@ class LocationTracking extends Component {
         onPress={() => {
           this.props.navigation.navigate('SettingsScreen');
         }}>
-        {/* Is there is a reason there's this imageless image tag here? Can we delete it? */}
-        <Image resizeMode={'contain'} />
         <SvgXml
           style={styles.stateIcon}
           xml={SettingsGear}
@@ -341,6 +339,16 @@ class LocationTracking extends Component {
       </TouchableOpacity>
     );
   }
+
+  getRefreshBtn = () => {
+    return (
+      <TouchableOpacity
+        onPress={this.checkIfUserAtRisk}
+        style={styles.refreshContainer}>
+        <SvgXml fill={'#FFFFFF'} xml={RefreshIcon} width={32} height={32} />
+      </TouchableOpacity>
+    );
+  };
 
   getPulseIfNeeded() {
     if (this.props.status == StateEnum.NO_CONTACT) {
@@ -509,11 +517,14 @@ class LocationTracking extends Component {
             <Typography style={styles.subheaderText}>
               {this.getSubText()}
             </Typography>
-            {this.getCTAIfNeeded()}
+            <View style={{ position: 'absolute', bottom: -20 }}>
+              {this.getCTAIfNeeded()}
+            </View>
           </View>
         </View>
 
-        <View
+        {/* SORT OF FOOTER WITH REFRESH BTN AND LINK TO LEMONADE PROJECT */}
+        {/* <View
           style={{
             flexDirection: 'row',
             justifyContent: 'center',
@@ -534,7 +545,8 @@ class LocationTracking extends Component {
             style={styles.refreshContainer}>
             <SvgXml fill={'#FFFFFF'} xml={RefreshIcon} width={32} height={32} />
           </TouchableOpacity>
-        </View>
+        </View> */}
+        {this.getRefreshBtn()}
         {this.getSettings()}
       </ImageBackground>
     );
@@ -562,29 +574,36 @@ const styles = StyleSheet.create({
     right: 0,
     height: '100%',
     paddingHorizontal: '6%',
-    paddingBottom: 12,
+    //paddingBottom: 12,
   },
   contentAbovePulse: {
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
-    paddingBottom: PULSE_GAP / 2,
+    paddingBottom: 0, //PULSE_GAP / 2,    // old padding value
   },
   contentBelowPulse: {
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingTop: PULSE_GAP,
+    paddingTop: 80, // PULSE_GAP - old value
   },
   settingsContainer: {
     position: 'absolute',
     top: 0,
-    marginTop: '14%',
+    marginTop: '10%',
     marginRight: '5%',
     alignSelf: 'flex-end',
   },
+  refreshContainer: {
+    position: 'absolute',
+    top: 0,
+    marginTop: '10%',
+    marginLeft: '5%',
+    alignSelf: 'flex-start',
+  },
   buttonContainer: {
-    top: 24,
+    top: 5,
   },
   pulseContainer: {
     position: 'absolute',
@@ -598,7 +617,7 @@ const styles = StyleSheet.create({
   mainTextAbove: {
     textAlign: 'center',
     lineHeight: 34,
-    marginBottom: 24,
+    //marginBottom: 24,
     color: Colors.WHITE,
     fontSize: 28,
     fontFamily: fontFamily.primaryMedium,
@@ -625,7 +644,7 @@ const styles = StyleSheet.create({
     color: Colors.WHITE,
     fontSize: 16,
     fontFamily: fontFamily.primaryLight,
-    marginBottom: 24,
+    marginBottom: 8,
   },
   mayoInfoRow: {
     width: '80%',
@@ -643,15 +662,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.4)',
     padding: 10,
     borderRadius: 5,
-  },
-  refreshContainer: {
-    height: 50,
-    width: 50,
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    borderRadius: 5,
-    alignSelf: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });
 
