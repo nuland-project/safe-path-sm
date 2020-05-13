@@ -577,7 +577,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingTop: PULSE_GAP,
+    paddingTop: 80, // PULSE_GAP - old value
   },
   settingsContainer: {
     position: 'absolute',
