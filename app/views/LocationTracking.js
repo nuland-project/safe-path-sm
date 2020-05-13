@@ -509,11 +509,14 @@ class LocationTracking extends Component {
             <Typography style={styles.subheaderText}>
               {this.getSubText()}
             </Typography>
-            {this.getCTAIfNeeded()}
+            <View style={{ position: 'absolute', bottom: -20 }}>
+              {this.getCTAIfNeeded()}
+            </View>
           </View>
         </View>
 
-        <View
+        {/* SORT OF FOOTER WITH REFRESH BTN AND LINK TO LEMONADE PROJECT */}
+        {/* <View
           style={{
             flexDirection: 'row',
             justifyContent: 'center',
@@ -534,7 +537,7 @@ class LocationTracking extends Component {
             style={styles.refreshContainer}>
             <SvgXml fill={'#FFFFFF'} xml={RefreshIcon} width={32} height={32} />
           </TouchableOpacity>
-        </View>
+        </View> */}
         {this.getSettings()}
       </ImageBackground>
     );
@@ -562,13 +565,13 @@ const styles = StyleSheet.create({
     right: 0,
     height: '100%',
     paddingHorizontal: '6%',
-    paddingBottom: 12,
+    //paddingBottom: 12,
   },
   contentAbovePulse: {
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
-    paddingBottom: PULSE_GAP / 2,
+    paddingBottom: 0, //PULSE_GAP / 2,    // old padding value
   },
   contentBelowPulse: {
     flex: 1,
@@ -584,7 +587,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   buttonContainer: {
-    top: 24,
+    top: 5,
   },
   pulseContainer: {
     position: 'absolute',
@@ -598,7 +601,7 @@ const styles = StyleSheet.create({
   mainTextAbove: {
     textAlign: 'center',
     lineHeight: 34,
-    marginBottom: 24,
+    //marginBottom: 24,
     color: Colors.WHITE,
     fontSize: 28,
     fontFamily: fontFamily.primaryMedium,
@@ -625,7 +628,7 @@ const styles = StyleSheet.create({
     color: Colors.WHITE,
     fontSize: 16,
     fontFamily: fontFamily.primaryLight,
-    marginBottom: 24,
+    marginBottom: 8,
   },
   mayoInfoRow: {
     width: '80%',
