@@ -330,8 +330,6 @@ class LocationTracking extends Component {
         onPress={() => {
           this.props.navigation.navigate('SettingsScreen');
         }}>
-        {/* Is there is a reason there's this imageless image tag here? Can we delete it? */}
-        <Image resizeMode={'contain'} />
         <SvgXml
           style={styles.stateIcon}
           xml={SettingsGear}
@@ -341,6 +339,16 @@ class LocationTracking extends Component {
       </TouchableOpacity>
     );
   }
+
+  getRefreshBtn = () => {
+    return (
+      <TouchableOpacity
+        onPress={this.checkIfUserAtRisk}
+        style={styles.refreshContainer}>
+        <SvgXml fill={'#FFFFFF'} xml={RefreshIcon} width={32} height={32} />
+      </TouchableOpacity>
+    );
+  };
 
   getPulseIfNeeded() {
     if (this.props.status == StateEnum.NO_CONTACT) {
@@ -538,6 +546,7 @@ class LocationTracking extends Component {
             <SvgXml fill={'#FFFFFF'} xml={RefreshIcon} width={32} height={32} />
           </TouchableOpacity>
         </View> */}
+        {this.getRefreshBtn()}
         {this.getSettings()}
       </ImageBackground>
     );
@@ -582,9 +591,16 @@ const styles = StyleSheet.create({
   settingsContainer: {
     position: 'absolute',
     top: 0,
-    marginTop: '14%',
+    marginTop: '10%',
     marginRight: '5%',
     alignSelf: 'flex-end',
+  },
+  refreshContainer: {
+    position: 'absolute',
+    top: 0,
+    marginTop: '10%',
+    marginLeft: '5%',
+    alignSelf: 'flex-start',
   },
   buttonContainer: {
     top: 5,
@@ -646,15 +662,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.4)',
     padding: 10,
     borderRadius: 5,
-  },
-  refreshContainer: {
-    height: 50,
-    width: 50,
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    borderRadius: 5,
-    alignSelf: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });
 
