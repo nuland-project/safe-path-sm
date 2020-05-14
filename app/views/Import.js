@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   Dimensions,
   Linking,
+  ScrollView,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -62,53 +63,55 @@ const ImportScreen = props => {
   }
 
   return (
-    <NavigationBarWrapper
-      title={languages.t('label.import_title')}
-      onBackPress={goBack}>
-      <View style={styles.main}>
-        <View style={styles.subHeaderTitle}>
-          <Typography style={styles.sectionDescription}>
-            {languages.t('label.import_step_1')}
-          </Typography>
-          <Typography style={styles.sectionDescription}>
-            {languages.t('label.import_step_2')}
-          </Typography>
-          <Typography style={styles.sectionDescription}>
-            {languages.t('label.import_step_3')}
-          </Typography>
-          <TouchableOpacity
-            testID='google-takeout-link'
-            onPress={() =>
-              Linking.openURL(
-                'https://takeout.google.com/settings/takeout/custom/location_history',
-              )
-            }
-            style={styles.buttonTouchable}>
-            <Typography style={styles.buttonText}>
-              {languages.t('label.import_takeout').toUpperCase()}
+    <ScrollView>
+      <NavigationBarWrapper
+        title={languages.t('label.import_title')}
+        onBackPress={goBack}>
+        <View style={styles.main}>
+          <View style={styles.subHeaderTitle}>
+            <Typography style={styles.sectionDescription}>
+              {languages.t('label.import_step_1')}
             </Typography>
-          </TouchableOpacity>
-          <TouchableOpacity
-            testID='google-takeout-import-btn'
-            onPress={importPickFile}
-            style={styles.buttonTouchable}>
-            <Typography style={styles.buttonText}>
-              {languages.t('label.import_title').toUpperCase()}
+            <Typography style={styles.sectionDescription}>
+              {languages.t('label.import_step_2')}
             </Typography>
-          </TouchableOpacity>
+            <Typography style={styles.sectionDescription}>
+              {languages.t('label.import_step_3')}
+            </Typography>
+            <TouchableOpacity
+              testID='google-takeout-link'
+              onPress={() =>
+                Linking.openURL(
+                  'https://takeout.google.com/settings/takeout/custom/location_history',
+                )
+              }
+              style={styles.buttonTouchable}>
+              <Typography style={styles.buttonText}>
+                {languages.t('label.import_takeout').toUpperCase()}
+              </Typography>
+            </TouchableOpacity>
+            <TouchableOpacity
+              testID='google-takeout-import-btn'
+              onPress={importPickFile}
+              style={[styles.buttonTouchable, { marginBottom: 20 }]}>
+              <Typography style={styles.buttonText}>
+                {languages.t('label.import_title').toUpperCase()}
+              </Typography>
+            </TouchableOpacity>
 
-          {importResults.label ? (
-            <Typography
-              style={{
-                ...styles.importResults,
-                ...(importResults?.error ? styles.importResultsError : {}),
-              }}>
-              {languages.t(importResults.label)}
-            </Typography>
-          ) : null}
+            {importResults.label ? (
+              <Typography
+                style={{
+                  ...styles.importResults,
+                  ...(importResults?.error ? styles.importResultsError : {}),
+                }}>
+                {languages.t(importResults.label)}
+              </Typography>
+            ) : null}
+          </View>
         </View>
-      </View>
-    </NavigationBarWrapper>
+      </NavigationBarWrapper>
+    </ScrollView>
   );
 };
 
