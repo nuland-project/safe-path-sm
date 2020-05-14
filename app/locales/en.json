@@ -1,12 +1,17 @@
 {
   "history": {
+    "timeline": "Timeline",
     "no_exposure": "No exposure",
     "possible_exposure": "Possible exposure",
     "possible_exposure_para": "It is possible you were in contact with or close to someone who tested positive for COVID-19",
-    "what_does_this_mean": "What does this mean?",
-    "what_does_this_mean_para": "Based on your GPS history, it is possible that you may have been in contact with or close to somebody who was diagnosed with COVID-19. This does not mean you are infected but that you might be.\n\nFor further information on what you should do you can refer to the Mayo Clinic’s website.",
-    "what_if_no_symptoms": "What if I’m not showing symptoms?",
-    "what_if_no_symptoms_para": "If you have no symptoms but still would like to be tested you can go to your nearest testing site.\n\nIndividuals who don't exhibit symptoms can sometimes still carry the infection and infect others. Being careful about social distancing and coming in contact with large groups or at risk individuals (the elderly, those with significant other medical issues) is important to manage both your risk and the risk to others."
+    "calendar_title_no_contacts": "No exposure found",
+    "calendar_information_no_contacts": "Based on the available data, you have not encountered potentially COVID-positive subjects. Remember to regularly update your data and fill in the surveys about your health.\n\nKeep your attention high, practice social distancing, wear gloves and mask in public and remember not to touch your eyes, mouth and nose with unwashed hands.\n\nAll this is important not only for you, but also for others. Let's hold on together.",
+    "what_does_this_mean": "What does it mean?",
+    "what_does_this_mean_para": "You may have come into contact with a COVID positive person or the health authority, after a series of checks, has decided to raise your level of protection and attention.\n\nPress “RECEIVE A CONSULTATION” to send your data to the Health Authority. A specialized operator will, if necessary, contact you to explain what to do. In fact, priority will be given according to the highest level of risk.\n\nAlso, remember to keep your health data up to date.",
+    "what_if_no_symptoms": "What if I don't have any symptoms?",
+    "what_if_no_symptoms_para": "Remember that even people who have no symptoms can, in some circumstances, be contagious. Keep your attention high and practice social distancing, avoid coming into contact with groups of people or with high-risk people (the elderly or people with other diseases), it is important not only for you, but also for others. Let's hold on together.",
+    "you_have_been_diagnosed": "You have been diagnosed COVID Positive.",
+    "strictly_follow_the_instructions": "Please, follow the instructions received from the doctor carefully. Remember to constantly monitor your health and report through this application. ISS doctors are always careful to protect you and monitor your health.\n\nIf you notice serious complications, do not hesitate to call the hospital.\n\nRemember to keep the attention level high, practice social distancing, do not leave the place where you are spending your quarantine and as a COVID positive patient, please avoid coming into contact with any other person, unless expressly allowed by the doctor. This disease is highly infectious.\n\nAll this is important not only for you, but also for others. Let's hold on together."
   },
   "label": {
     "about_title": "About",
@@ -121,17 +126,5 @@
     "verification_alert_success": "Verification passed",
     "verification_alert_failure": "Verification failed",
     "verification_completed": "Verification completed"
-  },
-  "history": {
-    "no_exposure": "No known",
-    "possible_exposure_para": "It is possible you were in contact with or close to someone who tested positive for COVID-19",
-    "possible_exposure": "Possible",
-    "timeline": "Timeline",
-    "what_does_this_mean_para": "Based on your GPS history, it is possible that you may have been in contact with or close to somebody who was diagnosed with COVID-19. This does not mean you are infected but that you might be.\n\nFor further information on what you should do you can refer to the Mayo Clinic’s website.",
-    "what_does_this_mean": "What does this mean?",
-    "what_if_no_symptoms_para": "If you have no symptoms but still would like to be tested you can go to your nearest testing site.\n\nIndividuals who don't exhibit symptoms can sometimes still carry the infection and infect others. Being careful about social distancing and coming in contact with large groups or at risk individuals (the elderly, those with significant other medical issues) is important to manage both your risk and the risk to others.",
-    "what_if_no_symptoms": "What if I’m not showing symptoms?",
-    "you_have_been_diagnosed": "You have been diagnosed with COVID Positive.",
-    "strictly_follow_the_instructions": "You have been diagnosed with COVID Positive.\n\nStrictly follow the instructions received from the doctor. Remember to constantly monitor your health and report it through this application. ISS doctors are always careful to protect you and monitor your health.\n\nIf you notice serious complications, don't hesitate to call the hospital.\n\nRemember to keep your attention high, practice social distancing, do not leave the place where you are spending your stay and as a positive COVID avoid coming into contact with any other person unless it has been expressly allowed by the doctor. This disease is highly infectious.\n\nAll this is important not only for you, but also for others. Let's help each other."
   }
 }

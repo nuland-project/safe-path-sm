@@ -644,7 +644,7 @@ const styles = StyleSheet.create({
     color: Colors.WHITE,
     fontSize: 16,
     fontFamily: fontFamily.primaryLight,
-    marginBottom: 8,
+    marginBottom: 20,
   },
   mayoInfoRow: {
     width: '80%',

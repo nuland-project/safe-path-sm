@@ -70,7 +70,6 @@ export const ExposureCalendarView = ({ history, weeks }) => {
 };
 
 const LegendRow = styled.View`
-  flex-direction: row;
   justify-content: center;
   margin-top: 16px;
 `;
