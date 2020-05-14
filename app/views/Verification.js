@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-color-literals */
 import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -119,6 +120,7 @@ class Verification extends React.Component {
           editable={!disablePhone}
           style={styles.input}
           placeholder={languages.t('label.phone')}
+          placeholderTextColor='#555555'
           keyboardType={'number-pad'}
           value={phone}
           onChangeText={v => this.setState({ phone: v })}
@@ -127,6 +129,7 @@ class Verification extends React.Component {
         <TextInput
           style={styles.input}
           placeholder={languages.t('label.pin_code')}
+          placeholderTextColor='#555555'
           keyboardType={'number-pad'}
           maxLength={5}
           value={pin}
@@ -173,6 +176,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.VIOLET,
     lineHeight: 19,
     fontSize: 15,
+    color: '#000',
     letterSpacing: 0,
     fontFamily: fontFamily.primaryRegular,
     paddingHorizontal: 10,

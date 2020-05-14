@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-color-literals */
 import firebase from '@react-native-firebase/app';
 import functions from '@react-native-firebase/functions';
 /* eslint-disable react-native/no-raw-text */
@@ -116,6 +117,7 @@ class LeaveContacts extends Component {
           <TextInput
             style={styles.input}
             placeholder={languages.t('label.phone')}
+            placeholderTextColor='#555555'
             keyboardType={'number-pad'}
             value={phone}
             onChangeText={v => this.setState({ phone: v })}
@@ -124,6 +126,7 @@ class LeaveContacts extends Component {
           <TextInput
             style={styles.input}
             placeholder={languages.t('label.name')}
+            placeholderTextColor='#555555'
             value={name}
             onChangeText={v => this.setState({ name: v })}
           />
@@ -131,6 +134,7 @@ class LeaveContacts extends Component {
           <TextInput
             style={styles.input}
             placeholder={languages.t('label.surname')}
+            placeholderTextColor='#555555'
             value={surname}
             onChangeText={v => this.setState({ surname: v })}
           />
@@ -162,6 +166,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     borderColor: Colors.VIOLET,
+    color: '#000',
     fontSize: 18,
     fontFamily: fontFamily.primaryRegular,
     paddingHorizontal: 10,
