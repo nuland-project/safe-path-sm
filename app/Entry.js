@@ -10,13 +10,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { applicationActions } from './actions';
+import { StateEnum } from './constants/enums';
 import {
   COVID_STATUS,
+  LOCATION_DATA,
   USER_CUSTOM_TOKEN,
   USER_PHONE,
   USER_UUID,
 } from './constants/storage';
-import { GetStoreData } from './helpers/General';
+import { GetStoreData, SetStoreData } from './helpers/General';
 import { convertWebStatusIntoAppStatus } from './utils/general';
 import AboutScreen from './views/About';
 import ChooseProviderScreen from './views/ChooseProvider';
@@ -45,6 +47,7 @@ class Entry extends Component {
   }
 
   componentDidMount = async () => {
+    const currentStatus = StateEnum.NO_CONTACT;
     GetStoreData('ONBOARDING_DONE')
       .then(onboardingDone => {
         console.log(onboardingDone);
@@ -57,8 +60,10 @@ class Entry extends Component {
     // Check desease status and set if it's known
     try {
       GetStoreData(COVID_STATUS, true).then(status => {
-        if (status !== null)
+        if (status !== null) {
+          currentStatus = status;
           this.props.dispatch(applicationActions.setStatus(status));
+        }
       });
     } catch (err) {
       console.log(err);
@@ -98,6 +103,14 @@ class Entry extends Component {
               let { status } = doc.data();
               status = convertWebStatusIntoAppStatus(status);
               this.props.dispatch(applicationActions.setStatus(status));
+
+              // If status of patients was changed from not green to green then reset locationArray
+              if (
+                currentStatus !== StateEnum.NO_CONTACT &&
+                status === StateEnum.NO_CONTACT
+              ) {
+                SetStoreData(LOCATION_DATA, []);
+              }
             });
         }
       });
