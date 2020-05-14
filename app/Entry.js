@@ -47,7 +47,7 @@ class Entry extends Component {
   }
 
   componentDidMount = async () => {
-    const currentStatus = StateEnum.NO_CONTACT;
+    // OnBoarding process
     GetStoreData('ONBOARDING_DONE')
       .then(onboardingDone => {
         console.log(onboardingDone);
@@ -59,70 +59,71 @@ class Entry extends Component {
 
     // Check desease status and set if it's known
     try {
-      GetStoreData(COVID_STATUS, true).then(status => {
-        if (status !== null) {
-          currentStatus = status;
-          this.props.dispatch(applicationActions.setStatus(status));
-        }
-      });
-    } catch (err) {
-      console.log(err);
-    }
-    // Check token and uuid
-    try {
-      GetStoreData(USER_CUSTOM_TOKEN, true).then(customToken => {
-        if (customToken) {
-          this.props.dispatch(applicationActions.setToken(customToken));
-
-          // Try to Authenticate the user with Firebase
-          firebase
-            .auth()
-            .signInWithCustomToken(customToken)
-            .then(res => {
-              console.log('Sign in successfull: ', res);
-            })
-            .catch(error => {
-              console.log(error);
-            });
-        }
-      });
+      const status = await GetStoreData(COVID_STATUS, true);
+      if (status !== null) {
+        this.props.dispatch(applicationActions.setStatus(status));
+      }
     } catch (err) {
       console.log(err);
     }
 
+    // Check user uuid
     try {
-      GetStoreData(USER_UUID, true).then(uuid => {
-        if (uuid) {
-          this.props.dispatch(applicationActions.setUuid(uuid));
+      const uuid = await GetStoreData(USER_UUID, true);
+      if (uuid) {
+        this.props.dispatch(applicationActions.setUuid(uuid));
 
-          // Check status from firestore and subscribe on document changes
-          firestore()
-            .collection('patients')
-            .doc(uuid)
-            .onSnapshot(doc => {
-              let { status } = doc.data();
-              status = convertWebStatusIntoAppStatus(status);
-              this.props.dispatch(applicationActions.setStatus(status));
+        // Check status from firestore and subscribe on document changes
+        firestore()
+          .collection('patients')
+          .doc(uuid)
+          .onSnapshot(async doc => {
+            let { status } = doc.data();
+            status = convertWebStatusIntoAppStatus(status);
+            this.props.dispatch(applicationActions.setStatus(status));
 
-              // If status of patients was changed from not green to green then reset locationArray
-              if (
-                currentStatus !== StateEnum.NO_CONTACT &&
-                status === StateEnum.NO_CONTACT
-              ) {
-                SetStoreData(LOCATION_DATA, []);
-              }
-            });
-        }
-      });
+            // If status of patients was changed from not green to green then reset locationArray
+            const oldStatus = await GetStoreData(COVID_STATUS, true);
+            if (
+              oldStatus !== StateEnum.NO_CONTACT &&
+              status === StateEnum.NO_CONTACT
+            ) {
+              await SetStoreData(LOCATION_DATA, []);
+            }
+            await SetStoreData(COVID_STATUS, status);
+          });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+
+    // Check token
+    try {
+      const customToken = await GetStoreData(USER_CUSTOM_TOKEN, true);
+      if (customToken) {
+        this.props.dispatch(applicationActions.setToken(customToken));
+
+        // Try to Authenticate the user with Firebase
+        firebase
+          .auth()
+          .signInWithCustomToken(customToken)
+          .then(res => {
+            console.log('Sign in successfull: ', res);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
     } catch (err) {
       console.log(err);
     }
 
     // Check phone number
     try {
-      GetStoreData(USER_PHONE, true).then(phone => {
-        if (phone) this.props.dispatch(applicationActions.setPhone(phone));
-      });
+      const phone = GetStoreData(USER_PHONE, true);
+      if (phone) {
+        this.props.dispatch(applicationActions.setPhone(phone));
+      }
     } catch (err) {
       console.log(err);
     }
