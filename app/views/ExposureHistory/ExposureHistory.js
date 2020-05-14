@@ -3,19 +3,25 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import React, { useEffect, useState } from 'react';
 import { BackHandler, ScrollView } from 'react-native';
+import { connect } from 'react-redux';
 
 import NavigationBarWrapper from '../../components/NavigationBarWrapper';
 import { Typography } from '../../components/Typography';
+import { StateEnum } from '../../constants/enums';
 import { MAX_EXPOSURE_WINDOW } from '../../constants/history';
 import { CROSSED_PATHS } from '../../constants/storage';
 import { Theme, charcoal, defaultTheme } from '../../constants/themes';
 import { GetStoreData } from '../../helpers/General';
 import languages from '../../locales/languages';
-import { DetailedHistory } from './DetailedHistory';
+import DetailedHistory from './DetailedHistory';
 
 const NO_HISTORY = [];
 
-export const ExposureHistoryScreen = ({ navigation }) => {
+const mapStateToProps = state => ({
+  diseaseStatus: state.application.status,
+});
+
+const ExposureHistoryScreen = ({ navigation, diseaseStatus }) => {
   const [history, setHistory] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -49,7 +55,8 @@ export const ExposureHistoryScreen = ({ navigation }) => {
   };
 
   const hasExposure =
-    history?.length && history.some(h => h.exposureMinutes > 0);
+    diseaseStatus === StateEnum.AT_RISK ||
+    diseaseStatus === StateEnum.COVID_POSITIVE;
 
   const themeBackground = hasExposure
     ? charcoal.background
@@ -82,6 +89,8 @@ export const ExposureHistoryScreen = ({ navigation }) => {
     </Theme>
   );
 };
+
+export default connect(mapStateToProps)(ExposureHistoryScreen);
 
 /**
  * Convert the daily "bins" payload to an array of daily minutes of exposure.
