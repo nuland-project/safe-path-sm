@@ -120,6 +120,7 @@ class Verification extends React.Component {
           editable={!disablePhone}
           style={styles.input}
           placeholder={languages.t('label.phone')}
+          placeholderTextColor='#555555'
           keyboardType={'number-pad'}
           value={phone}
           onChangeText={v => this.setState({ phone: v })}
@@ -128,6 +129,7 @@ class Verification extends React.Component {
         <TextInput
           style={styles.input}
           placeholder={languages.t('label.pin_code')}
+          placeholderTextColor='#555555'
           keyboardType={'number-pad'}
           maxLength={5}
           value={pin}

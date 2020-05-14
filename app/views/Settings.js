@@ -126,6 +126,16 @@ export const SettingsScreen = ({ navigation }) => {
         </Section>
 
         <Section>
+          <View style={{ marginTop: 15 }}>
+            <Item
+              label={'Sintomi'}
+              description={'Per cortesia indica quali sintomi presenti'}
+              onPress={() => navigation.navigate('Symptoms')}
+            />
+          </View>
+        </Section>
+
+        <Section>
           {/* <Item
             label={t('label.choose_provider_title')}
             description={t('label.choose_provider_subtitle')}
