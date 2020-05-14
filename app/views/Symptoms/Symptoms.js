@@ -62,7 +62,28 @@ class Symptoms extends React.Component {
           .collection('patients')
           .doc(id)
           .collection('symptomps')
-          .add(this.state);
+          .get()
+          .then(querySnapshot => {
+            if (querySnapshot.empty) {
+              console.log('empty symptomps');
+              firestore()
+                .collection('patients')
+                .doc(id)
+                .collection('symptomps')
+                .add(this.state);
+
+              return;
+            }
+            querySnapshot.forEach(queryDocumentSnapshot => {
+              this.setState({ symptomps: queryDocumentSnapshot.data() });
+              firestore()
+                .collection('patients')
+                .doc(id)
+                .collection('symptomps')
+                .doc(queryDocumentSnapshot.id)
+                .update(this.state);
+            });
+          });
         Alert.alert('Symptomps added');
       })
       .catch(() => Alert.alert('You are not verified'));
