@@ -4,6 +4,7 @@
  * v1 - Unencrypted, simpleminded (minimal optimization).
  */
 
+import storage from '@react-native-firebase/storage';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import PushNotification from 'react-native-push-notification';
@@ -282,17 +283,25 @@ async function asyncCheckIntersect() {
   //console.log({ locationArray });
 
   // get the health authorities
-  let authority_list = await HCAService.getAuthoritiesList();
-  if (authority_list) {
+  //let authority_list = await HCAService.getAuthoritiesList();
+  // if (authority_list) {
+  //TO DO refactor that part
+  if (true) {
     // Parse the registered health authorities
     // authority_list = JSON.parse(authority_list);
     // console.log(authority_list);
 
     // for (const authority of authority_list) {
     try {
-      let responseJson = await retrieveUrlAsJson(
-        authority_list[0]['San Marino COVID19 HA'][0].url,
-      );
+      // Old approach
+      // let responseJson = await retrieveUrlAsJson(
+      //   authority_list[0]['San Marino COVID19 HA'][0].url,
+      // );
+      const download_url = await storage()
+        .ref('public/infected.json')
+        .getDownloadURL();
+      const data = await fetch(download_url);
+      const responseJson = await data.json();
       // console.log('responseJson');
       // console.log(responseJson);
 
