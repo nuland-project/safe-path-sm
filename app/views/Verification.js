@@ -173,6 +173,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.VIOLET,
     lineHeight: 19,
     fontSize: 15,
+    color: '#000',
     letterSpacing: 0,
     fontFamily: fontFamily.primaryRegular,
     paddingHorizontal: 10,
