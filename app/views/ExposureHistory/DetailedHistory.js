@@ -37,10 +37,10 @@ const DetailedHistory = ({ history, status }) => {
       {status === StateEnum.NO_CONTACT && (
         <>
           <Typography use='headline3'>
-            {languages.t('label.home_no_contact_header')}
+            {languages.t('history.calendar_title_no_contacts')}
           </Typography>
           <Typography use='body3'>
-            {languages.t('label.home_no_contact_subtext')}
+            {languages.t('history.calendar_information_no_contacts')}
           </Typography>
           <Divider />
         </>
