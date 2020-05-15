@@ -121,7 +121,7 @@ class Entry extends Component {
 
     // Check phone number
     try {
-      const phone = GetStoreData(USER_PHONE, true);
+      const phone = await GetStoreData(USER_PHONE, true);
       if (phone) {
         this.props.dispatch(applicationActions.setPhone(phone));
       }
