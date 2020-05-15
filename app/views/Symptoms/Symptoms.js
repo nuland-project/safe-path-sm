@@ -58,33 +58,23 @@ class Symptoms extends React.Component {
   sendSymptoms = () => {
     GetStoreData(USER_UUID)
       .then(id => {
-        firestore()
+        const symptomsCollection = firestore()
           .collection('patients')
           .doc(id)
-          .collection('symptomps')
-          .get()
-          .then(querySnapshot => {
-            if (querySnapshot.empty) {
-              console.log('empty symptomps');
-              firestore()
-                .collection('patients')
-                .doc(id)
-                .collection('symptomps')
-                .add(this.state);
+          .collection('symptoms');
 
-              return;
-            }
-            querySnapshot.forEach(queryDocumentSnapshot => {
-              this.setState({ symptomps: queryDocumentSnapshot.data() });
-              firestore()
-                .collection('patients')
-                .doc(id)
-                .collection('symptomps')
-                .doc(queryDocumentSnapshot.id)
-                .update(this.state);
-            });
+        symptomsCollection.get().then(querySnapshot => {
+          if (querySnapshot.empty) {
+            console.log('empty symptoms');
+            symptomsCollection.add(this.state);
+            return;
+          }
+          querySnapshot.forEach(queryDocumentSnapshot => {
+            this.setState({ symptomps: queryDocumentSnapshot.data() });
+            symptomsCollection.doc(queryDocumentSnapshot.id).update(this.state);
           });
-        Alert.alert('Symptomps added');
+        });
+        Alert.alert('Symptoms added');
       })
       .catch(() => Alert.alert('You are not verified'));
   };

@@ -8,21 +8,22 @@ import { NativeModules, Platform } from 'react-native';
 
 import { LANG_OVERRIDE } from '../constants/storage';
 import { GetStoreData, SetStoreData } from '../helpers/General';
-import ar from './ar.json';
+// import ar from './ar.json';
 import en from './en.json';
-import es from './es.json';
-import fr from './fr.json';
-import ht from './ht.json';
-import id from './id.json';
+// import es from './es.json';
+// import fr from './fr.json';
+// import ht from './ht.json';
+// import id from './id.json';
 import it from './it.json';
-import ml from './ml.json';
-import nl from './nl.json';
-import pl from './pl.json';
-import ro from './ro.json';
-import ru from './ru.json';
-import sk from './sk.json';
-import vi from './vi.json';
-import zh_Hant from './zh-Hant.json';
+
+// import ml from './ml.json';
+// import nl from './nl.json';
+// import pl from './pl.json';
+// import ro from './ro.json';
+// import ru from './ru.json';
+// import sk from './sk.json';
+// import vi from './vi.json';
+// import zh_Hant from './zh-Hant.json';
 
 // Refer this for checking the codes and creating new folders https://developer.chrome.com/webstore/i18n
 

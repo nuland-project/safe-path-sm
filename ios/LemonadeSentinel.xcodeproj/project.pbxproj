@@ -780,7 +780,7 @@
 			baseConfigurationReference = 8CCD9343F663EA4FE613918C /* Pods-LemonadeSentinel.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 28;
+				CURRENT_PROJECT_VERSION = 29;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 35SZSWC6L3;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -861,7 +861,7 @@
 			baseConfigurationReference = 027BAC0488176346862CCC09 /* Pods-LemonadeSentinel.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 28;
+				CURRENT_PROJECT_VERSION = 29;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 35SZSWC6L3;
 				FRAMEWORK_SEARCH_PATHS = (
