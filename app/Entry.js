@@ -21,6 +21,7 @@ import {
 import { GetStoreData, SetStoreData } from './helpers/General';
 import { convertWebStatusIntoAppStatus } from './utils/general';
 import AboutScreen from './views/About';
+import Anamnesis from './views/Anamnesis/Anamnesis';
 import ChooseProviderScreen from './views/ChooseProvider';
 import { ExportScreen } from './views/Export';
 import ExposureHistoryScreen from './views/ExposureHistory/ExposureHistory';
@@ -232,6 +233,11 @@ class Entry extends Component {
           <Stack.Screen
             name='Symptoms'
             component={Symptoms}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name='Anamnesis'
+            component={Anamnesis}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

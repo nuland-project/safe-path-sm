@@ -1,3 +1,4 @@
+import firebase from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
 /* eslint-disable react-native/no-color-literals */
 import React from 'react';
@@ -6,6 +7,7 @@ import {
   BackHandler,
   ScrollView,
   Text,
+  TextInput,
   TouchableOpacity,
 } from 'react-native';
 
@@ -21,20 +23,65 @@ class Symptoms extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      breath: false,
-      cough: false,
-      smell: false,
-      nose: false,
-      headache: false,
-      muscle: false,
-      throat: false,
-      chest: false,
-      nausea: false,
-      confused: false,
-      exhaustion: false,
-      diarrhoea: false,
-      sneezing: false,
-      rash: false,
+      temperature: 0,
+      pressure: 0,
+      oxygen: 0,
+      breath: {
+        checked: false,
+        label: 'Fiato Corto (quando cammini, ti eserciti, in generale)',
+      },
+      cough: {
+        checked: false,
+        label: 'Tosse',
+      },
+      smell: {
+        checked: false,
+        label: 'Mancanza di olfatto',
+      },
+      nose: {
+        checked: false,
+        label: 'Naso che cola',
+      },
+      headache: {
+        checked: false,
+        label: 'Mal di testa',
+      },
+      muscle: {
+        checked: false,
+        label: 'Dolori muscolari',
+      },
+      throat: {
+        checked: false,
+        label: 'Mal di gola',
+      },
+      chest: {
+        checked: false,
+        label: 'Dolore al petto',
+      },
+      nausea: {
+        checked: false,
+        label: 'Nausea/Vomito',
+      },
+      confused: {
+        checked: false,
+        label: 'Ti senti- ti hanno detto che sembri confuso',
+      },
+      exhaustion: {
+        checked: false,
+        label: 'Senza energia',
+      },
+      diarrhoea: {
+        checked: false,
+        label: 'Diarrea',
+      },
+      sneezing: {
+        checked: false,
+        label: 'Sfoghi cutanei',
+      },
+      rash: {
+        checked: false,
+        label: 'Starnutisci',
+      },
     };
   }
 
@@ -52,109 +99,117 @@ class Symptoms extends React.Component {
   };
 
   handleChange = symptom => {
-    this.setState({ ...this.state, [symptom]: !this.state[symptom] });
+    this.setState({
+      ...this.state,
+      [symptom]: {
+        checked: !this.state[symptom].checked,
+        label: this.state[symptom].label,
+      },
+    });
   };
 
-  sendSymptoms = () => {
-    GetStoreData(USER_UUID)
-      .then(id => {
-        const symptomsCollection = firestore()
-          .collection('patients')
-          .doc(id)
-          .collection('symptoms');
+  sendSymptoms = async () => {
+    const uuid = await GetStoreData(USER_UUID);
+    const cldFn = await firebase
+      .app()
+      .functions('europe-west1')
+      .httpsCallable('addPatientSymptoms');
 
-        symptomsCollection.get().then(querySnapshot => {
-          if (querySnapshot.empty) {
-            console.log('empty symptoms');
-            symptomsCollection.add(this.state);
-            return;
-          }
-          querySnapshot.forEach(queryDocumentSnapshot => {
-            this.setState({ symptomps: queryDocumentSnapshot.data() });
-            symptomsCollection.doc(queryDocumentSnapshot.id).update(this.state);
-          });
-        });
-        Alert.alert('Symptoms added');
-      })
-      .catch(() => Alert.alert('You are not verified'));
+    let symptoms = {};
+    for (let key in this.state) {
+      if (key !== 'temperature' && key !== 'pressure' && key !== 'oxygen') {
+        symptoms[key] = this.state[key].checked;
+      }
+    }
+    symptoms.temperature = this.state.temperature;
+    symptoms.pressure = this.state.pressure;
+    symptoms.oxygen = this.state.oxygen;
+    cldFn({ uuid, symptoms });
+
+    Alert.alert('Symptoms added');
   };
 
   render() {
+    let symptoms = [];
+    for (let key in this.state) {
+      if (key !== 'temperature' && key !== 'pressure' && key !== 'oxygen') {
+        symptoms.push(key);
+      }
+    }
     return (
       <NavigationBarWrapper
         title={'Sintomi'}
         onBackPress={() => this.props.navigation.goBack()}>
         <ScrollView style={{ paddingHorizontal: 20 }}>
-          <Item
-            label={'Fiato Corto (quando cammini, ti eserciti, in generale)'}
-            icon={this.state.breath ? checkmarkIcon : xmarkIcon}
-            onPress={() => this.handleChange('breath')}
+          <TextInput
+            style={{
+              height: 40,
+              borderRadius: 5,
+              borderWidth: 1,
+              borderColor: Colors.VIOLET,
+              lineHeight: 19,
+              fontSize: 15,
+              color: '#000',
+              letterSpacing: 0,
+              paddingHorizontal: 10,
+              marginTop: 10,
+            }}
+            placeholder={'Temperatura'}
+            placeholderTextColor='#555555'
+            keyboardType={'number-pad'}
+            value={this.state.temperature}
+            onChangeText={v => this.setState({ temperature: v })}
           />
-          <Item
-            label={'Tosse'}
-            icon={this.state.cough ? checkmarkIcon : xmarkIcon}
-            onPress={() => this.handleChange('cough')}
+
+          <TextInput
+            style={{
+              height: 40,
+              borderRadius: 5,
+              borderWidth: 1,
+              borderColor: Colors.VIOLET,
+              lineHeight: 19,
+              fontSize: 15,
+              color: '#000',
+              letterSpacing: 0,
+              paddingHorizontal: 10,
+              marginTop: 10,
+            }}
+            placeholder={'Ossigeno'}
+            placeholderTextColor='#555555'
+            keyboardType={'number-pad'}
+            value={this.state.oxygen}
+            onChangeText={v => this.setState({ oxygen: v })}
           />
-          <Item
-            label={'Mancanza di olfatto'}
-            icon={this.state.smell ? checkmarkIcon : xmarkIcon}
-            onPress={() => this.handleChange('smell')}
+
+          <TextInput
+            style={{
+              height: 40,
+              borderRadius: 5,
+              borderWidth: 1,
+              borderColor: Colors.VIOLET,
+              lineHeight: 19,
+              fontSize: 15,
+              color: '#000',
+              letterSpacing: 0,
+              paddingHorizontal: 10,
+              marginTop: 10,
+            }}
+            placeholder={'Pressione'}
+            placeholderTextColor='#555555'
+            keyboardType={'number-pad'}
+            value={this.state.pressure}
+            onChangeText={v => this.setState({ pressure: v })}
           />
-          <Item
-            label={'Naso che cola'}
-            icon={this.state.nose ? checkmarkIcon : xmarkIcon}
-            onPress={() => this.handleChange('nose')}
-          />
-          <Item
-            label={'Mal di testa'}
-            icon={this.state.headache ? checkmarkIcon : xmarkIcon}
-            onPress={() => this.handleChange('headache')}
-          />
-          <Item
-            label={'Dolori muscolari'}
-            icon={this.state.muscle ? checkmarkIcon : xmarkIcon}
-            onPress={() => this.handleChange('muscle')}
-          />
-          <Item
-            label={'Mal di gola'}
-            icon={this.state.throat ? checkmarkIcon : xmarkIcon}
-            onPress={() => this.handleChange('throat')}
-          />
-          <Item
-            label={'Dolore al petto'}
-            icon={this.state.chest ? checkmarkIcon : xmarkIcon}
-            onPress={() => this.handleChange('chest')}
-          />
-          <Item
-            label={'Nausea/Vomito'}
-            icon={this.state.nausea ? checkmarkIcon : xmarkIcon}
-            onPress={() => this.handleChange('nausea')}
-          />
-          <Item
-            label={'Ti senti- ti hanno detto che sembri confuso'}
-            icon={this.state.confused ? checkmarkIcon : xmarkIcon}
-            onPress={() => this.handleChange('confused')}
-          />
-          <Item
-            label={'Senza energia'}
-            icon={this.state.exhaustion ? checkmarkIcon : xmarkIcon}
-            onPress={() => this.handleChange('exhaustion')}
-          />
-          <Item
-            label={'Diarrea'}
-            icon={this.state.diarrhoea ? checkmarkIcon : xmarkIcon}
-            onPress={() => this.handleChange('diarrhoea')}
-          />
-          <Item
-            label={'Sfoghi cutanei'}
-            icon={this.state.rash ? checkmarkIcon : xmarkIcon}
-            onPress={() => this.handleChange('rash')}
-          />
-          <Item
-            label={'Starnutisci'}
-            icon={this.state.sneezing ? checkmarkIcon : xmarkIcon}
-            onPress={() => this.handleChange('sneezing')}
-          />
+
+          {symptoms.map((symptom, ind) => (
+            <Item
+              key={ind}
+              label={this.state[symptom].label}
+              icon={this.state[symptom].checked ? checkmarkIcon : xmarkIcon}
+              onPress={() => this.handleChange(symptom)}
+            />
+          ))}
+
           <TouchableOpacity
             style={{
               height: 50,
