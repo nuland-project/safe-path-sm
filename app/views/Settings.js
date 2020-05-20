@@ -136,6 +136,16 @@ export const SettingsScreen = ({ navigation }) => {
         </Section>
 
         <Section>
+          <View>
+            <Item
+              label={'Anamnesi'}
+              description={'Per cortesia indica quali anamnesi'}
+              onPress={() => navigation.navigate('Anamnesis')}
+            />
+          </View>
+        </Section>
+
+        <Section>
           {/* <Item
             label={t('label.choose_provider_title')}
             description={t('label.choose_provider_subtitle')}
