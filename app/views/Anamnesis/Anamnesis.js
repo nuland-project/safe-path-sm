@@ -51,7 +51,7 @@ class Anemnesis extends React.Component {
       },
       immunocompromisedest: {
         checked: false,
-        label: 'Immunocompromessi',
+        label: 'Immunocompromesso',
       },
     };
   }
