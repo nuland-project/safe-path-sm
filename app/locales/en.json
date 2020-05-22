@@ -126,5 +126,11 @@
     "verification_alert_success": "Verification passed",
     "verification_alert_failure": "Verification failed",
     "verification_completed": "Verification completed"
+  },
+  "health": {
+    "symptoms_title": "Symptoms",
+    "symptoms_text": "Please indicate what symptoms are present",
+    "medical_history_title": "Medical history",
+    "medical_histiry_text": "Please indicate your past illnesses"
   }
 }

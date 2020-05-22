@@ -119,5 +119,11 @@
     "verification_alert_success": "Verifica superata",
     "verification_alert_failure": "Verifica fallita",
     "verification_completed": "Verifica completata"
+  },
+  "health": {
+    "symptoms_title": "Sintomi",
+    "symptoms_text": "Per cortesia indica quali sintomi presenti",
+    "medical_history_title": "Anamnesi",
+    "medical_history_text": "Per cortesia indica le tue malattie pregresse"
   }
 }
