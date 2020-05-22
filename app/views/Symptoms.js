@@ -155,7 +155,7 @@ class Symptoms extends React.Component {
               paddingHorizontal: 10,
               marginTop: 10,
             }}
-            placeholder={'Temperatura'}
+            placeholder={languages.t('health.temperature')}
             placeholderTextColor='#555555'
             keyboardType={'number-pad'}
             value={this.state.temperature}
@@ -175,7 +175,7 @@ class Symptoms extends React.Component {
               paddingHorizontal: 10,
               marginTop: 10,
             }}
-            placeholder={'Ossigeno'}
+            placeholder={languages.t('health.oxygen_level')}
             placeholderTextColor='#555555'
             keyboardType={'number-pad'}
             value={this.state.oxygen}
@@ -195,7 +195,7 @@ class Symptoms extends React.Component {
               paddingHorizontal: 10,
               marginTop: 10,
             }}
-            placeholder={'Pressione'}
+            placeholder={languages.t('health.blood_pressure')}
             placeholderTextColor='#555555'
             keyboardType={'number-pad'}
             value={this.state.pressure}
