@@ -9,13 +9,13 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import checkmarkIcon from '../../assets/svgs/checkmarkIcon';
-import xmarkIcon from '../../assets/svgs/xmarkIcon';
-import NavigationBarWrapper from '../../components/NavigationBarWrapper';
-import Colors from '../../constants/colors';
-import { USER_UUID } from '../../constants/storage';
-import { GetStoreData } from '../../helpers/General';
-import { SettingsItem as Item } from '../Settings/SettingsItem';
+import checkmarkIcon from '../assets/svgs/checkmarkIcon';
+import xmarkIcon from '../assets/svgs/xmarkIcon';
+import NavigationBarWrapper from '../components/NavigationBarWrapper';
+import Colors from '../constants/colors';
+import { USER_UUID } from '../constants/storage';
+import { GetStoreData } from '../helpers/General';
+import { SettingsItem as Item } from './Settings/SettingsItem';
 
 class Anemnesis extends React.Component {
   constructor(props) {

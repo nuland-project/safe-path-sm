@@ -131,6 +131,21 @@
     "symptoms_title": "Symptoms",
     "symptoms_text": "Please indicate what symptoms are present",
     "medical_history_title": "Medical history",
-    "medical_histiry_text": "Please indicate your past illnesses"
+    "medical_history_text": "Please indicate your past illnesses",
+    "send": "Send",
+    "short_of_breath": "Short of breath (walking, exercising, normally)",
+    "cough": "Cough",
+    "ability_to_smell": "Deterioration in your ability to smell",
+    "runny_nose": "Runny Nose",
+    "headache": "Headache",
+    "muscle_aches_and_pains": "Muscle Aches and Pains",
+    "sore_throat": "Sore Throat",
+    "chest_pain": "Chest Pain",
+    "nausea": "Nausea/Vomiting",
+    "confused": "Has anyone mentioned you appeared Confused",
+    "exhaustion": "Exhaustion",
+    "diarrhea": "Diarrhea",
+    "skin_rash": "Skin Rash",
+    "sneezing": "Sneezing"
   }
 }
