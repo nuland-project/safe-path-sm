@@ -423,6 +423,7 @@ class LocationTracking extends Component {
         return languages.t('label.home_setting_off_subtext');
     }
   }
+
   getSubSubText() {
     switch (this.props.status) {
       case StateEnum.NO_CONTACT:
