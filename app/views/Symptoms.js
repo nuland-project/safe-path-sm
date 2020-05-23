@@ -215,6 +215,7 @@ class Symptoms extends React.Component {
             style={{
               height: 50,
               marginBottom: 20,
+              marginTop: 20,
               paddingVertical: 10,
               justifyContent: 'center',
               alignItems: 'center',

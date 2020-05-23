@@ -149,6 +149,14 @@
     "exhaustion": "Exhaustion",
     "diarrhea": "Diarrhea",
     "skin_rash": "Skin Rash",
-    "sneezing": "Sneezing"
+    "sneezing": "Sneezing",
+    "heart_disease": "Heart disease",
+    "copd_disease": "Chronic obstructive pulmonary disease",
+    "asthma_disease": "Asthma",
+    "diabetes_disease": "Diabetes",
+    "hiv_disease": "HIV",
+    "transplant_disease": "Organ transplantation",
+    "overwheight_disease": "Overweight",
+    "immunocompromised_disease": "Immunocompromised"
   }
 }

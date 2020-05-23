@@ -15,6 +15,7 @@ import NavigationBarWrapper from '../components/NavigationBarWrapper';
 import Colors from '../constants/colors';
 import { USER_UUID } from '../constants/storage';
 import { GetStoreData } from '../helpers/General';
+import languages from '../locales/languages';
 import { SettingsItem as Item } from './Settings/SettingsItem';
 
 class Anemnesis extends React.Component {
@@ -23,35 +24,35 @@ class Anemnesis extends React.Component {
     this.state = {
       heart: {
         checked: false,
-        label: 'Cardiopatia',
+        label: languages.t('health.heart_disease'),
       },
       copd: {
         checked: false,
-        label: 'Broncopneumopatia cronica ostruttiva',
+        label: languages.t('health.copd_disease'),
       },
       asthma: {
         checked: false,
-        label: 'Asma',
+        label: languages.t('health.asthma_disease'),
       },
       diabetes: {
         checked: false,
-        label: 'Diabete',
+        label: languages.t('health.diabetes_disease'),
       },
       hiv: {
         checked: false,
-        label: 'HIV/AIDS',
+        label: languages.t('health.hiv_disease'),
       },
       transplant: {
         checked: false,
-        label: `Trapianto d'organo`,
+        label: languages.t('health.transplant_disease'),
       },
       overwheight: {
         checked: false,
-        label: 'Sovrappeso',
+        label: languages.t('health.overwheight_disease'),
       },
       immunocompromisedest: {
         checked: false,
-        label: 'Immunocompromesso',
+        label: languages.t('health.immunocompromised_disease'),
       },
     };
   }
@@ -102,7 +103,7 @@ class Anemnesis extends React.Component {
     }
     return (
       <NavigationBarWrapper
-        title={'Anamnesi'}
+        title={languages.t('health.medical_history_title')}
         onBackPress={() => this.props.navigation.goBack()}>
         <ScrollView style={{ paddingHorizontal: 20 }}>
           {anamnesis.map((disease, ind) => (
@@ -118,6 +119,7 @@ class Anemnesis extends React.Component {
             style={{
               height: 50,
               marginBottom: 20,
+              marginTop: 20,
               paddingVertical: 10,
               justifyContent: 'center',
               alignItems: 'center',
@@ -130,7 +132,7 @@ class Anemnesis extends React.Component {
                 fontSize: 18,
                 color: 'white',
               }}>
-              {'Invia'}
+              {languages.t('health.send')}
             </Text>
           </TouchableOpacity>
         </ScrollView>
