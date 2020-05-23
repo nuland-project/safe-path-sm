@@ -21,7 +21,7 @@ import {
 import { GetStoreData, SetStoreData } from './helpers/General';
 import { convertWebStatusIntoAppStatus } from './utils/general';
 import AboutScreen from './views/About';
-import Anamnesis from './views/Anamnesis/Anamnesis';
+import Anamnesis from './views/Anamnesis';
 import ChooseProviderScreen from './views/ChooseProvider';
 import { ExportScreen } from './views/Export';
 import ExposureHistoryScreen from './views/ExposureHistory/ExposureHistory';
@@ -36,7 +36,7 @@ import Onboarding3 from './views/onboarding/Onboarding3';
 import Onboarding4 from './views/onboarding/Onboarding4';
 import Onboarding5 from './views/onboarding/Onboarding5';
 import { SettingsScreen } from './views/Settings';
-import Symptoms from './views/Symptoms/Symptoms';
+import Symptoms from './views/Symptoms';
 
 const Stack = createStackNavigator();
 

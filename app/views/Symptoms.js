@@ -11,13 +11,14 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import checkmarkIcon from '../../assets/svgs/checkmarkIcon';
-import xmarkIcon from '../../assets/svgs/xmarkIcon';
-import NavigationBarWrapper from '../../components/NavigationBarWrapper';
-import Colors from '../../constants/colors';
-import { USER_UUID } from '../../constants/storage';
-import { GetStoreData } from '../../helpers/General';
-import { SettingsItem as Item } from '../Settings/SettingsItem';
+import checkmarkIcon from '../assets/svgs/checkmarkIcon';
+import xmarkIcon from '../assets/svgs/xmarkIcon';
+import NavigationBarWrapper from '../components/NavigationBarWrapper';
+import Colors from '../constants/colors';
+import { USER_UUID } from '../constants/storage';
+import { GetStoreData } from '../helpers/General';
+import languages from '../locales/languages';
+import { SettingsItem as Item } from './Settings/SettingsItem';
 
 class Symptoms extends React.Component {
   constructor(props) {
@@ -28,59 +29,59 @@ class Symptoms extends React.Component {
       oxygen: 0,
       breath: {
         checked: false,
-        label: 'Fiato Corto (quando cammini, ti eserciti, in generale)',
+        label: languages.t('health.short_of_breath'),
       },
       cough: {
         checked: false,
-        label: 'Tosse',
+        label: languages.t('health.cough'),
       },
       smell: {
         checked: false,
-        label: 'Mancanza di olfatto',
+        label: languages.t('health.ability_to_smell'),
       },
       nose: {
         checked: false,
-        label: 'Naso che cola',
+        label: languages.t('health.runny_nose'),
       },
       headache: {
         checked: false,
-        label: 'Mal di testa',
+        label: languages.t('health.headache'),
       },
       muscle: {
         checked: false,
-        label: 'Dolori muscolari',
+        label: languages.t('health.muscle_aches_and_pains'),
       },
       throat: {
         checked: false,
-        label: 'Mal di gola',
+        label: languages.t('health.sore_throat'),
       },
       chest: {
         checked: false,
-        label: 'Dolore al petto',
+        label: languages.t('health.chest_pain'),
       },
       nausea: {
         checked: false,
-        label: 'Nausea/Vomito',
+        label: languages.t('health.nausea'),
       },
       confused: {
         checked: false,
-        label: 'Ti senti- ti hanno detto che sembri confuso',
+        label: languages.t('health.confused'),
       },
       exhaustion: {
         checked: false,
-        label: 'Senza energia',
+        label: languages.t('health.exhaustion'),
       },
       diarrhoea: {
         checked: false,
-        label: 'Diarrea',
-      },
-      sneezing: {
-        checked: false,
-        label: 'Sfoghi cutanei',
+        label: languages.t('health.diarrhea'),
       },
       rash: {
         checked: false,
-        label: 'Starnutisci',
+        label: languages.t('health.skin_rash'),
+      },
+      sneezing: {
+        checked: false,
+        label: languages.t('health.sneezing'),
       },
     };
   }
@@ -138,7 +139,7 @@ class Symptoms extends React.Component {
     }
     return (
       <NavigationBarWrapper
-        title={'Sintomi'}
+        title={languages.t('health.symptoms_title')}
         onBackPress={() => this.props.navigation.goBack()}>
         <ScrollView style={{ paddingHorizontal: 20 }}>
           <TextInput
@@ -154,7 +155,7 @@ class Symptoms extends React.Component {
               paddingHorizontal: 10,
               marginTop: 10,
             }}
-            placeholder={'Temperatura'}
+            placeholder={languages.t('health.temperature')}
             placeholderTextColor='#555555'
             keyboardType={'number-pad'}
             value={this.state.temperature}
@@ -174,7 +175,7 @@ class Symptoms extends React.Component {
               paddingHorizontal: 10,
               marginTop: 10,
             }}
-            placeholder={'Ossigeno'}
+            placeholder={languages.t('health.oxygen_level')}
             placeholderTextColor='#555555'
             keyboardType={'number-pad'}
             value={this.state.oxygen}
@@ -194,7 +195,7 @@ class Symptoms extends React.Component {
               paddingHorizontal: 10,
               marginTop: 10,
             }}
-            placeholder={'Pressione'}
+            placeholder={languages.t('health.blood_pressure')}
             placeholderTextColor='#555555'
             keyboardType={'number-pad'}
             value={this.state.pressure}
@@ -214,6 +215,7 @@ class Symptoms extends React.Component {
             style={{
               height: 50,
               marginBottom: 20,
+              marginTop: 20,
               paddingVertical: 10,
               justifyContent: 'center',
               alignItems: 'center',
@@ -226,7 +228,7 @@ class Symptoms extends React.Component {
                 fontSize: 18,
                 color: 'white',
               }}>
-              {'Invia'}
+              {languages.t('health.send')}
             </Text>
           </TouchableOpacity>
         </ScrollView>
