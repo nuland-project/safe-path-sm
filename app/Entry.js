@@ -40,6 +40,8 @@ import Symptoms from './views/Symptoms/Symptoms';
 
 const Stack = createStackNavigator();
 
+console.disableYellowBox = true;
+
 class Entry extends Component {
   constructor(props) {
     super(props);
