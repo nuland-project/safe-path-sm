@@ -108,13 +108,13 @@ export const SettingsScreen = ({ navigation }) => {
         </Section>
 
         {/* // This block is used for development */}
-        {/* <Section>
+        <Section>
           <View style={{ marginTop: 15 }}>
             <Typography use='body1'>{'Choose your status: '}</Typography>
           </View>
 
           <CovidStatePicker />
-        </Section> */}
+        </Section>
 
         <Section>
           <View style={{ marginTop: 15 }}>

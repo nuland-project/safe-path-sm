@@ -29,6 +29,7 @@ import ImportScreen from './views/Import';
 import LeaveContacts from './views/LeaveContacts';
 import LicencesScreen from './views/Licenses';
 import LocationTracking from './views/LocationTracking';
+import LocationTrackingNew from './views/LocationTrackingNew';
 import NewsScreen from './views/News';
 import Onboarding1 from './views/onboarding/Onboarding1';
 import Onboarding2 from './views/onboarding/Onboarding2';
@@ -146,6 +147,7 @@ class Entry extends Component {
             <Stack.Screen
               name='InitialScreen'
               component={LocationTracking}
+              //component={LocationTrackingNew}
               options={{ headerShown: false }}
             />
           ) : (
