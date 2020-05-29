@@ -155,7 +155,7 @@ class Verification extends React.Component {
     return (
       <>
         {isVerified ? (
-          <Text style={styles.verificationDisclaymer}>
+          <Text style={styles.verificationAnnouncement}>
             {languages.t('label.verification_completed')}
           </Text>
         ) : (
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.primaryRegular,
     color: 'white',
   },
-  verificationDisclaymer: {
+  verificationAnnouncement: {
     color: '#29944e',
     fontSize: 18,
     fontFamily: fontFamily.primarySemiBold,

@@ -59,7 +59,7 @@ import { isPlatformAndroid, isPlatformiOS } from '../Util';
 const PROJECT_LEMONADE_URL = 'https://www.lemonade.one';
 
 // Dimension constants
-const TopMenuHeight = 80;
+const TopMenuHeight = 60;
 
 const StateIcon = ({ status, size }) => {
   let icon;
@@ -96,13 +96,6 @@ const mapStateToProps = state => ({
 class LocationTracking extends Component {
   constructor(props) {
     super(props);
-
-    if (isPlatformAndroid()) {
-      StatusBar.setBackgroundColor(Colors.TRANSPARENT);
-      StatusBar.setBarStyle('light-content');
-      StatusBar.setTranslucent(true);
-    }
-
     this.state = {
       appState: AppState.currentState,
       timer_intersect: null,
@@ -227,7 +220,8 @@ class LocationTracking extends Component {
     });
   };
 
-  navigateToSettings = () => this.props.navigation.navigate('SettingsScreen');
+  navigateToSettings = () =>
+    this.props.navigation.navigate('SettingsScreen', {});
 
   componentWillUnmount() {
     AppState.removeEventListener('change', this.handleAppStateChange);
@@ -279,10 +273,6 @@ class LocationTracking extends Component {
     });
   };
 
-  settings() {
-    this.props.navigation.navigate('SettingsScreen', {});
-  }
-
   // notifications() {
   //   this.props.navigation.navigate('NotificationScreen', {});
   // }
@@ -307,18 +297,19 @@ class LocationTracking extends Component {
   getTopMenu = () => {
     return (
       <View style={styles.topMenu}>
-        <TouchableOpacity onPress={this.navigateToSettings}>
-          <SvgXml xml={SettingsGear} width={32} height={32} />
-        </TouchableOpacity>
         <TouchableOpacity onPress={this.checkIfUserAtRisk}>
           <SvgXml fill={'#FFFFFF'} xml={RefreshIcon} width={32} height={32} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={this.navigateToSettings}>
+          <SvgXml xml={SettingsGear} width={32} height={32} />
         </TouchableOpacity>
       </View>
     );
   };
 
   getPulseIfNeeded() {
-    if (this.props.status == StateEnum.NO_CONTACT) {
+    //if (this.props.status == StateEnum.NO_CONTACT) {
+    if (true) {
       return (
         <View
           style={{
@@ -344,7 +335,6 @@ class LocationTracking extends Component {
     }
     return (
       <View style={styles.pulseContainer}>
-        <Text>Testdsfafasfsdafasfsadf</Text>
         <StateIcon size={height} status={this.props.status} />
       </View>
     );
@@ -400,6 +390,7 @@ class LocationTracking extends Component {
     }
   }
 
+  // Short text announcement under a title
   getSubSubText() {
     switch (this.props.status) {
       case StateEnum.NO_CONTACT:
@@ -415,6 +406,7 @@ class LocationTracking extends Component {
     }
   }
 
+  // Render button
   getCTAIfNeeded() {
     let buttonLabel;
     let buttonFunction;
@@ -447,7 +439,7 @@ class LocationTracking extends Component {
     } else if (status === StateEnum.SETTING_OFF) {
       buttonLabel = languages.t('label.home_enable_location');
       buttonFunction = () => {
-        this.settings();
+        this.navigateToSettings();
       };
     }
     return (
@@ -464,9 +456,10 @@ class LocationTracking extends Component {
     );
   }
 
-  getMoreInformationPressed() {
-    Linking.openURL(PROJECT_LEMONADE_URL);
-  }
+  // Open link to lenonade project (not used now)
+  // getMoreInformationPressed() {
+  //   Linking.openURL(PROJECT_LEMONADE_URL);
+  // }
 
   render() {
     const { status } = this.props;
@@ -521,7 +514,7 @@ const styles = StyleSheet.create({
     height: TopMenuHeight,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingTop: 35,
+    paddingTop: 18,
     paddingHorizontal: '5%',
   },
   mainContainer: {

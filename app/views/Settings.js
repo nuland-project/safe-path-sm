@@ -119,7 +119,7 @@ export const SettingsScreen = ({ navigation }) => {
         <Section>
           <View style={{ marginTop: 15 }}>
             <Typography use='body1'>
-              {t('label.verification_disclaymer')}
+              {t('label.verification_announcement')}
             </Typography>
           </View>
           <Verification />
