@@ -14,6 +14,7 @@ import BackgroundOverlayImage from './../../assets/images/launchScreenBackground
 import languages, {
   LOCALE_LIST,
   getUserLocaleOverride,
+  setLocale,
   setUserLocaleOverride,
   supportedDeviceLanguageOrEnglish,
 } from './../../locales/languages';
@@ -30,15 +31,17 @@ class Onboarding extends Component {
     super(props);
 
     this.state = {
-      locale: supportedDeviceLanguageOrEnglish(),
+      locale: 'it', // To set Italian by default
+      //locale: supportedDeviceLanguageOrEnglish(),
     };
   }
 
-  componentDidMount() {
-    getUserLocaleOverride(locale => {
-      this.setState({ locale });
-    });
-  }
+  componentDidMount = async () => {
+    // To set Italian by default I commented code below
+    // getUserLocaleOverride(locale => {
+    //   this.setState({ locale });
+    // });
+  };
 
   onLocaleChange = async locale => {
     if (locale) {
@@ -63,7 +66,8 @@ class Onboarding extends Component {
             translucent
           />
           <View style={styles.mainContainer}>
-            <View
+            {/* LANG PICKER */}
+            {/* <View
               style={{
                 paddingTop: 60,
                 position: 'absolute',
@@ -84,7 +88,7 @@ class Onboarding extends Component {
                   </TouchableOpacity>
                 )}
               </NativePicker>
-            </View>
+            </View> */}
             <View style={styles.contentContainer}>
               <Typography style={styles.mainText}>
                 {languages.t('label.launch_screen1_header')}
