@@ -92,7 +92,8 @@ export const SettingsScreen = ({ navigation }) => {
             icon={isLogging ? checkmarkIcon : xmarkIcon}
             onPress={locationToggleButtonPressed}
           />
-          <NativePicker
+          {/* LANGUAGE PICKER */}
+          {/* <NativePicker
             items={LOCALE_LIST}
             value={userLocale}
             onValueChange={localeChanged}>
@@ -104,10 +105,10 @@ export const SettingsScreen = ({ navigation }) => {
                 onPress={openPicker}
               />
             )}
-          </NativePicker>
+          </NativePicker> */}
         </Section>
 
-        {/* // This block is used for development */}
+        {/* This block is used for development */}
         {/* <Section>
           <View style={{ marginTop: 15 }}>
             <Typography use='body1'>{'Choose your status: '}</Typography>
