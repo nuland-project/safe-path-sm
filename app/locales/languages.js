@@ -128,9 +128,11 @@ export function supportedDeviceLanguageOrEnglish() {
 }
 
 // detect and set device locale, must go after i18next.init()
-setLocale(supportedDeviceLanguageOrEnglish());
+//setLocale(supportedDeviceLanguageOrEnglish());
+setLocale('it'); // To set Italian by default
 
+// To set Italian by default I commented the row below
 // detect user override
-getUserLocaleOverride().then(locale => locale && setLocale(locale));
+//getUserLocaleOverride().then(locale => locale && setLocale(locale));
 
 export default i18next;

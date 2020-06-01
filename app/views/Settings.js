@@ -92,7 +92,8 @@ export const SettingsScreen = ({ navigation }) => {
             icon={isLogging ? checkmarkIcon : xmarkIcon}
             onPress={locationToggleButtonPressed}
           />
-          <NativePicker
+          {/* LANGUAGE PICKER */}
+          {/* <NativePicker
             items={LOCALE_LIST}
             value={userLocale}
             onValueChange={localeChanged}>
@@ -104,10 +105,10 @@ export const SettingsScreen = ({ navigation }) => {
                 onPress={openPicker}
               />
             )}
-          </NativePicker>
+          </NativePicker> */}
         </Section>
 
-        {/* // This block is used for development */}
+        {/* This block is used for development */}
         {/* <Section>
           <View style={{ marginTop: 15 }}>
             <Typography use='body1'>{'Choose your status: '}</Typography>
@@ -129,7 +130,7 @@ export const SettingsScreen = ({ navigation }) => {
           <View>
             <Item
               label={'Sintomi'}
-              description={'Per cortesia indica quali sintomi presenti'}
+              description={t('health.symptoms_text')}
               onPress={() => navigation.navigate('Symptoms')}
             />
           </View>
@@ -139,7 +140,7 @@ export const SettingsScreen = ({ navigation }) => {
           <View>
             <Item
               label={'Anamnesi'}
-              description={'Per cortesia indica quali anamnesi'}
+              description={t('health.medical_history_text')}
               onPress={() => navigation.navigate('Anamnesis')}
             />
           </View>
@@ -169,9 +170,9 @@ export const SettingsScreen = ({ navigation }) => {
           /> */}
         </Section>
 
-        <Section>
+        {/* <Section>
           <GoogleMapsImport navigation={navigation} />
-        </Section>
+        </Section> */}
 
         {/* <Section last>
           <Item
