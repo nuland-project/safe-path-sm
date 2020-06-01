@@ -86,6 +86,7 @@ const height = Dimensions.get('window').height;
 const mapStateToProps = state => ({
   status: state.application.status,
   isVerified: state.application.token !== '',
+  phoneIndicated: state.application.phone !== '',
 });
 
 class LocationTracking extends Component {
@@ -493,7 +494,7 @@ class LocationTracking extends Component {
   }
 
   render() {
-    const { status } = this.props;
+    const { status, phoneIndicated } = this.props;
     return (
       <ImageBackground
         source={this.getBackground()}
@@ -519,7 +520,7 @@ class LocationTracking extends Component {
               {this.getSubText()}
             </Typography>
             <View style={{ position: 'absolute', bottom: -20 }}>
-              {this.getCTAIfNeeded()}
+              {!phoneIndicated && this.getCTAIfNeeded()}
             </View>
           </View>
         </View>
