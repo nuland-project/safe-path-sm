@@ -26,11 +26,11 @@ const NavigationBarWrapper = ({ children, title, onBackPress }) => {
 
   return (
     <>
-      <StatusBar
+      {/* <StatusBar
         barStyle='light-content'
         backgroundColor={barColor}
         translucent={isPlatformiOS()}
-      />
+      /> */}
       <TopContainer />
       <BottomContainer>
         <Header>

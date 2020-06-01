@@ -55,9 +55,6 @@ import BackgroundTaskServices from '../services/BackgroundTaskService';
 import LocationServices from '../services/LocationService';
 import { isPlatformAndroid, isPlatformiOS } from '../Util';
 
-//const MAYO_COVID_URL = 'https://www.mayoclinic.org/coronavirus-covid-19';
-const PROJECT_LEMONADE_URL = 'https://www.lemonade.one';
-
 // Dimension constants
 const TopMenuHeight = 60;
 
@@ -273,19 +270,6 @@ class LocationTracking extends Component {
     });
   };
 
-  // notifications() {
-  //   this.props.navigation.navigate('NotificationScreen', {});
-  // }
-
-  // setOptOut = () => {
-  //   LocationServices.stop(this.props.navigation);
-  //   // Turn of bluetooth for v1
-  //   //BroadcastingServices.stop(this.props.navigation);
-  //   this.setState({
-  //     isLogging: false,
-  //   });
-  // };
-
   getBackground() {
     const { status } = this.props;
     if (status === StateEnum.AT_RISK || status === StateEnum.COVID_POSITIVE) {
@@ -340,41 +324,23 @@ class LocationTracking extends Component {
     );
   }
 
+  // Return title text
   getMainText() {
     switch (this.props.status) {
       case StateEnum.NO_CONTACT:
-        return (
-          <Typography style={styles.mainTextBelow}>
-            {languages.t('label.home_no_contact_header')}
-          </Typography>
-        );
+        return languages.t('label.home_no_contact_header');
       case StateEnum.AT_RISK:
-        return (
-          <Typography style={styles.mainTextAbove}>
-            {languages.t('label.home_at_risk_header')}
-          </Typography>
-        );
+        return languages.t('label.home_at_risk_header');
       case StateEnum.COVID_POSITIVE:
-        return (
-          <Typography style={styles.mainTextAbove}>
-            {languages.t('label.home_positive_header')}
-          </Typography>
-        );
+        return languages.t('label.home_positive_header');
       case StateEnum.UNKNOWN:
-        return (
-          <Typography style={styles.mainTextBelow}>
-            {languages.t('label.home_unknown_header')}
-          </Typography>
-        );
+        return languages.t('label.home_unknown_header');
       case StateEnum.SETTING_OFF:
-        return (
-          <Text style={styles.mainTextBelow}>
-            {languages.t('label.home_setting_off_header')}
-          </Text>
-        );
+        return languages.t('label.home_setting_off_header');
     }
   }
 
+  // Text under status icon
   getSubText() {
     switch (this.props.status) {
       case StateEnum.NO_CONTACT:
@@ -390,7 +356,7 @@ class LocationTracking extends Component {
     }
   }
 
-  // Short text announcement under a title
+  // Short text announcement under a title, but above the status icon
   getSubSubText() {
     switch (this.props.status) {
       case StateEnum.NO_CONTACT:
@@ -456,11 +422,6 @@ class LocationTracking extends Component {
     );
   }
 
-  // Open link to lenonade project (not used now)
-  // getMoreInformationPressed() {
-  //   Linking.openURL(PROJECT_LEMONADE_URL);
-  // }
-
   render() {
     const { status } = this.props;
     return (
@@ -477,23 +438,26 @@ class LocationTracking extends Component {
             {this.getTopMenu()}
           </View>
 
-          {/* <View style={styles.mainContainer}> */}
-          {/* <View style={styles.contentAbovePulse}>
-              {(status === StateEnum.AT_RISK ||
-                status === StateEnum.COVID_POSITIVE) &&
-                this.getMainText()}
-              <Typography style={styles.subsubheaderText}>
-                {this.getSubSubText()}
+          {/* TEXT ABOVE THE STATUS ICON */}
+          <View style={styles.contentAbovePulse}>
+            {(status === StateEnum.AT_RISK ||
+              status === StateEnum.COVID_POSITIVE) && (
+              <Typography style={styles.mainText}>
+                {this.getMainText()}
               </Typography>
+            )}
+            <Typography style={styles.subsubheaderText}>
+              {this.getSubSubText()}
+            </Typography>
+          </View>
+          <View style={styles.contentBelowPulse}>
+            <Typography style={styles.subheaderText}>
+              {this.getSubText()}
+            </Typography>
+            <View style={{ position: 'absolute', bottom: -20 }}>
+              {this.getCTAIfNeeded()}
             </View>
-            <View style={styles.contentBelowPulse}>
-              <Typography style={styles.subheaderText}>
-                {this.getSubText()}
-              </Typography>
-              <View style={{ position: 'absolute', bottom: -20 }}>
-                {this.getCTAIfNeeded()}
-              </View>
-            </View> */}
+          </View>
         </ImageBackground>
       </ScrollView>
     );
@@ -508,7 +472,6 @@ const styles = StyleSheet.create({
     height: '100%',
     resizeMode: 'cover',
     flex: 1,
-    //justifyContent: 'flex-end',
   },
   topMenu: {
     height: TopMenuHeight,
@@ -516,19 +479,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingTop: 18,
     paddingHorizontal: '5%',
-  },
-  mainContainer: {
-    position: 'absolute',
-    // resizeMode: 'contain',
-    // aligns the center of the main container with center of pulse
-    // so that two `flex: 1` views will be have a reasonable chance at natural
-    // flex flow for above and below the pulse.
-    top: '-10%',
-    left: 0,
-    right: 0,
-    height: '100%',
-    paddingHorizontal: '6%',
-    //paddingBottom: 12,
   },
   contentAbovePulse: {
     flex: 1,
@@ -555,21 +505,12 @@ const styles = StyleSheet.create({
     right: 0,
     alignItems: 'center',
   },
-  mainTextAbove: {
-    textAlign: 'center',
-    lineHeight: 34,
-    //marginBottom: 24,
-    color: Colors.WHITE,
-    fontSize: 28,
-    fontFamily: fontFamily.primaryMedium,
-  },
-  mainTextBelow: {
+  mainText: {
     textAlign: 'center',
     lineHeight: 34,
     color: Colors.WHITE,
     fontSize: 26,
     fontFamily: fontFamily.primaryMedium,
-    marginBottom: 24,
   },
   subheaderText: {
     marginBottom: 10,
