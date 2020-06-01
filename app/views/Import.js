@@ -63,10 +63,10 @@ const ImportScreen = props => {
   }
 
   return (
-    <ScrollView>
-      <NavigationBarWrapper
-        title={languages.t('label.import_title')}
-        onBackPress={goBack}>
+    <NavigationBarWrapper
+      title={languages.t('label.import_title')}
+      onBackPress={goBack}>
+      <ScrollView style={{ flex: 1 }}>
         <View style={styles.main}>
           <View style={styles.subHeaderTitle}>
             <Typography style={styles.sectionDescription}>
@@ -110,8 +110,8 @@ const ImportScreen = props => {
             ) : null}
           </View>
         </View>
-      </NavigationBarWrapper>
-    </ScrollView>
+      </ScrollView>
+    </NavigationBarWrapper>
   );
 };
 
@@ -130,7 +130,8 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   main: {
-    flex: 1,
+    //flex: 1,
+    height: '100%',
     flexDirection: 'column',
     textAlignVertical: 'top',
     paddingLeft: 20,
