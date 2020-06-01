@@ -129,7 +129,7 @@ export const SettingsScreen = ({ navigation }) => {
           <View>
             <Item
               label={'Sintomi'}
-              description={'Per cortesia indica quali sintomi presenti'}
+              description={t('health.symptoms_text')}
               onPress={() => navigation.navigate('Symptoms')}
             />
           </View>
@@ -139,7 +139,7 @@ export const SettingsScreen = ({ navigation }) => {
           <View>
             <Item
               label={'Anamnesi'}
-              description={'Per cortesia indica quali anamnesi'}
+              description={t('health.medical_history_text')}
               onPress={() => navigation.navigate('Anamnesis')}
             />
           </View>

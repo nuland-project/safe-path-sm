@@ -129,9 +129,9 @@
   },
   "health": {
     "symptoms_title": "Symptoms",
-    "symptoms_text": "Please indicate what symptoms are present",
+    "symptoms_text": "Please indicate what symptoms you have",
     "medical_history_title": "Medical history",
-    "medical_history_text": "Please indicate your past illnesses",
+    "medical_history_text": "Please indicate your medical history",
     "send": "Send",
     "temperature": "Temperature",
     "oxygen_level": "Oxygen level",
