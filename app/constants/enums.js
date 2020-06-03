@@ -7,4 +7,5 @@ export const StateEnum = {
   NO_CONTACT: '2',
   SETTING_OFF: '3',
   COVID_POSITIVE: '4',
+  YELLOW_STATUS: '5',
 };

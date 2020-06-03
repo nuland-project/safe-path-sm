@@ -11,6 +11,7 @@ import { SetStoreData } from '../helpers/General';
 
 const statusSet = [
   { value: StateEnum.NO_CONTACT, label: 'No contacts' },
+  { value: StateEnum.YELLOW_STATUS, label: 'Yellow status' },
   { value: StateEnum.AT_RISK, label: 'At risk' },
   { value: StateEnum.COVID_POSITIVE, label: 'COVID-19 positive' },
 ];
