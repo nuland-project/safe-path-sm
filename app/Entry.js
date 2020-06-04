@@ -8,6 +8,7 @@ import {
 } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { Alert } from 'react-native';
+import PushNotification from 'react-native-push-notification';
 import { connect } from 'react-redux';
 
 import { applicationActions } from './actions';
@@ -136,10 +137,13 @@ class Entry extends Component {
     try {
       // Load announcements which were already shown and get last one
       let announcementsShown = await GetStoreData(ANNOUNCEMENTS, false);
+      let onboardingDone = await GetStoreData('ONBOARDING_DONE');
       if (!announcementsShown) announcementsShown = [];
-      const lastAnnouncement = announcementsShown
+      const lastAnnouncement = announcementsShown.length
         ? announcementsShown.slice(-1)[0]
         : '';
+      console.log(announcementsShown);
+      console.log(lastAnnouncement);
 
       // Fetch last announcement from firestore and subscribe on collection changes
       firestore()
@@ -151,13 +155,16 @@ class Entry extends Component {
             const announcement = announcements.docs[0];
 
             // Show last news if it wasn't shown before and if onboardingDone = true
-            if (
-              announcement.id === lastAnnouncement ||
-              this.state.initialRouteName !== true
-            )
-              return;
-            const { title, message } = announcement.data().message;
-            Alert.alert(title, message, [{ text: 'OK' }]);
+            console.log(announcement.id);
+            if (announcement.id === lastAnnouncement) return;
+            console.log('CHECK1');
+            console.log(onboardingDone);
+            if (onboardingDone) {
+              console.log('CHECK2');
+              const { title, message } = announcement.data().message;
+              Alert.alert(title, message, [{ text: 'OK' }]);
+            }
+            console.log('CHECK3');
 
             // Save announcement ID in AsyncStorage
             await SetStoreData(ANNOUNCEMENTS, [
