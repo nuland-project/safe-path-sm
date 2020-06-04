@@ -59,7 +59,7 @@ class Entry extends Component {
       })
       .catch(error => console.log(error));
 
-    // Check desease status and set if it's known
+    // Check disease status and set if it's known
     try {
       const status = await GetStoreData(COVID_STATUS, true);
       if (status !== null) {
@@ -126,6 +126,26 @@ class Entry extends Component {
       if (phone) {
         this.props.dispatch(applicationActions.setPhone(phone));
       }
+    } catch (err) {
+      console.log(err);
+    }
+
+    // Subscribe to announcements collection
+    try {
+      //const lastNotificationShown = await GetStoreData(USER_UUID, true);
+
+      // Fetch last announcement from firestore and subscribe on collection changes
+      firestore()
+        .collection('announcements')
+        .orderBy('timestamp', 'desc')
+        .limit(1)
+        .onSnapshot(
+          announcements => {
+            console.log(announcements.size);
+            console.log(announcements.docs);
+          },
+          err => console.log(err),
+        );
     } catch (err) {
       console.log(err);
     }
