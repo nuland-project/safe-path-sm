@@ -7,6 +7,7 @@ import {
   createStackNavigator,
 } from '@react-navigation/stack';
 import React, { Component } from 'react';
+import PushNotification from 'react-native-push-notification';
 import { connect } from 'react-redux';
 
 import { applicationActions } from './actions';
@@ -141,8 +142,12 @@ class Entry extends Component {
         .limit(1)
         .onSnapshot(
           announcements => {
-            console.log(announcements.size);
-            console.log(announcements.docs);
+            const announcement = announcements.docs[0].data();
+            const { title, message } = announcement.message;
+            PushNotification.localNotification({
+              title,
+              message,
+            });
           },
           err => console.log(err),
         );
