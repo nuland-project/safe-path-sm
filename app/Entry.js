@@ -7,7 +7,7 @@ import {
   createStackNavigator,
 } from '@react-navigation/stack';
 import React, { Component } from 'react';
-import { Alert } from 'react-native';
+import { Alert, AppState } from 'react-native';
 import PushNotification from 'react-native-push-notification';
 import { connect } from 'react-redux';
 
@@ -135,16 +135,6 @@ class Entry extends Component {
 
     // Subscribe to announcements collection
     try {
-      // Load announcements which were already shown and get last one
-      let announcementsShown = await GetStoreData(ANNOUNCEMENTS, false);
-      let onboardingDone = await GetStoreData('ONBOARDING_DONE');
-      if (!announcementsShown) announcementsShown = [];
-      const lastAnnouncement = announcementsShown.length
-        ? announcementsShown.slice(-1)[0]
-        : '';
-      console.log(announcementsShown);
-      console.log(lastAnnouncement);
-
       // Fetch last announcement from firestore and subscribe on collection changes
       firestore()
         .collection('announcements')
@@ -154,18 +144,40 @@ class Entry extends Component {
           async announcements => {
             const announcement = announcements.docs[0];
 
-            // Show last news if it wasn't shown before and if onboardingDone = true
+            // Load announcements which were already shown and get last one
+            let announcementsShown = await GetStoreData(ANNOUNCEMENTS, false);
+            if (!announcementsShown) announcementsShown = [];
+            const lastAnnouncement = announcementsShown.length
+              ? announcementsShown.slice(-1)[0]
+              : '';
+            console.log(announcementsShown);
+            console.log(lastAnnouncement);
+
+            // Show last news if it wasn't shown before and if announcementsShown is not empty
+            if (announcementsShown.length == 0) {
+              console.log('CHECK1');
+              // Save announcement ID in AsyncStorage and return
+              await SetStoreData(ANNOUNCEMENTS, [announcement.id]);
+              return;
+            }
             console.log(announcement.id);
             if (announcement.id === lastAnnouncement) return;
-            console.log('CHECK1');
-            console.log(onboardingDone);
-            if (onboardingDone) {
-              console.log('CHECK2');
-              const { title, message } = announcement.data().message;
-              Alert.alert(title, message, [{ text: 'OK' }]);
-            }
-            console.log('CHECK3');
+            console.log('CHECK2');
 
+            // In background show push notification and alert if appState is active
+            const { title, message } = announcement.data().message;
+            if (AppState.currentState === 'active') {
+              console.log('CHECK3: ', AppState.currentState);
+              Alert.alert(title, message, [{ text: 'OK' }]);
+            } else {
+              console.log('CHECK4: ', AppState.currentState);
+              PushNotification.localNotification({
+                title,
+                message,
+              });
+            }
+
+            console.log('CHECK');
             // Save announcement ID in AsyncStorage
             await SetStoreData(ANNOUNCEMENTS, [
               ...announcementsShown,
