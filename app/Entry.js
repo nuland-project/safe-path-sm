@@ -7,12 +7,13 @@ import {
   createStackNavigator,
 } from '@react-navigation/stack';
 import React, { Component } from 'react';
-import PushNotification from 'react-native-push-notification';
+import { Alert } from 'react-native';
 import { connect } from 'react-redux';
 
 import { applicationActions } from './actions';
 import { StateEnum } from './constants/enums';
 import {
+  ANNOUNCEMENTS,
   COVID_STATUS,
   LOCATION_DATA,
   USER_CUSTOM_TOKEN,
@@ -133,7 +134,12 @@ class Entry extends Component {
 
     // Subscribe to announcements collection
     try {
-      //const lastNotificationShown = await GetStoreData(USER_UUID, true);
+      // Load announcements which were already shown and get last one
+      let announcementsShown = await GetStoreData(ANNOUNCEMENTS, false);
+      if (!announcementsShown) announcementsShown = [];
+      const lastAnnouncement = announcementsShown
+        ? announcementsShown.slice(-1)[0]
+        : '';
 
       // Fetch last announcement from firestore and subscribe on collection changes
       firestore()
@@ -141,13 +147,23 @@ class Entry extends Component {
         .orderBy('timestamp', 'desc')
         .limit(1)
         .onSnapshot(
-          announcements => {
-            const announcement = announcements.docs[0].data();
-            const { title, message } = announcement.message;
-            PushNotification.localNotification({
-              title,
-              message,
-            });
+          async announcements => {
+            const announcement = announcements.docs[0];
+
+            // Show last news if it wasn't shown before and if onboardingDone = true
+            if (
+              announcement.id === lastAnnouncement ||
+              this.state.initialRouteName !== true
+            )
+              return;
+            const { title, message } = announcement.data().message;
+            Alert.alert(title, message, [{ text: 'OK' }]);
+
+            // Save announcement ID in AsyncStorage
+            await SetStoreData(ANNOUNCEMENTS, [
+              ...announcementsShown,
+              announcement.id,
+            ]);
           },
           err => console.log(err),
         );

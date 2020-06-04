@@ -12,3 +12,4 @@ export const COVID_STATUS = 'COVID_STATUS';
 export const USER_PHONE = 'USER_PHONE';
 export const USER_CUSTOM_TOKEN = 'USER_CUSTOM_TOKEN';
 export const USER_UUID = 'USER_UUID';
+export const ANNOUNCEMENTS = 'ANNOUNCEMENTS';
