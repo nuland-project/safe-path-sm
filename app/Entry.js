@@ -78,7 +78,7 @@ class Entry extends Component {
         this.props.dispatch(applicationActions.setUuid(uuid));
 
         // Check status from firestore and subscribe on document changes
-        firestore()
+        this.subscriberPatients = firestore()
           .collection('patients')
           .doc(uuid)
           .onSnapshot(async doc => {
@@ -135,7 +135,7 @@ class Entry extends Component {
     // Subscribe to announcements collection
     try {
       // Fetch last announcement from firestore and subscribe on collection changes
-      firestore()
+      this.subscriberAnnouncements = firestore()
         .collection('announcements')
         .orderBy('timestamp', 'desc')
         .limit(1)
@@ -175,6 +175,12 @@ class Entry extends Component {
       console.log(err);
     }
   };
+
+  componentWillUnmount() {
+    if (this.subscriberPatients != undefined) this.subscriberPatients();
+    if (this.subscriberAnnouncements != undefined)
+      this.subscriberAnnouncements();
+  }
 
   render() {
     return (
