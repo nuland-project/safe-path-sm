@@ -82,7 +82,7 @@ const ExposureHistoryScreen = ({ navigation, diseaseStatus }) => {
               {languages.t('label.loading_public_data')}
             </Typography>
           ) : (
-            <DetailedHistory history={history} />
+            <DetailedHistory history={history} navigation={navigation} />
           )}
         </ScrollView>
       </NavigationBarWrapper>

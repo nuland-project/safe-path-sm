@@ -110,7 +110,7 @@ export const ExportScreen = ({ navigation }) => {
   // }
 
   // Try to save location data in cloud storage
-  saveInCloudStorage = async () => {
+  const saveInCloudStorage = async () => {
     try {
       let locationData = await new LocationData().getLocationData();
       let nowUTC = new Date().toISOString();
@@ -167,7 +167,7 @@ export const ExportScreen = ({ navigation }) => {
 
               <TouchableOpacity
                 style={styles.exportButton}
-                onPress={this.saveInCloudStorage}>
+                onPress={saveInCloudStorage}>
                 <Typography style={styles.exportButtonText}>
                   {t('label.share_location_data')}
                 </Typography>

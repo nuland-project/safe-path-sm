@@ -124,6 +124,8 @@
     "verification_completed": "Verifica completata"
   },
   "health": {
+    "surveys_title": "Informazioni sull’avvenuto contatto",
+    "surveys_subtitle": "Rispondi alle seguenti domande affinchè un operatore sanitario ti possa contattare il prima possibile",
     "symptoms_title": "Sintomi",
     "symptoms_text": "Per cortesia indica quali sintomi presenti",
     "medical_history_title": "Anamnesi",
@@ -131,7 +133,8 @@
     "send": "Invia",
     "temperature": "Temperatura",
     "oxygen_level": "Ossigeno",
-    "blood_pressure": "Pressione",
+    "blood_pressureH": "Pressione arteriosa Sistolica (120)",
+    "blood_pressureL": "Pressione arteriosa Diastolica (80)",
     "short_of_breath": "Fiato Corto (quando cammini, ti eserciti, in generale)",
     "cough": "Tosse",
     "ability_to_smell": "Mancanza di olfatto",
