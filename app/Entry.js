@@ -1,5 +1,5 @@
 import firebase from '@react-native-firebase/app';
-import auth from '@react-native-firebase/auth';
+// import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { NavigationContainer } from '@react-navigation/native';
 import {
@@ -38,6 +38,7 @@ import Onboarding3 from './views/onboarding/Onboarding3';
 import Onboarding4 from './views/onboarding/Onboarding4';
 import Onboarding5 from './views/onboarding/Onboarding5';
 import { SettingsScreen } from './views/Settings';
+import Surveys from './views/Surveys';
 import Symptoms from './views/Symptoms';
 
 const Stack = createStackNavigator();
@@ -286,6 +287,11 @@ class Entry extends Component {
           <Stack.Screen
             name='Symptoms'
             component={Symptoms}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name='Surveys'
+            component={Surveys}
             options={{ headerShown: false }}
           />
           <Stack.Screen

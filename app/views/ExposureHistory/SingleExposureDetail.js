@@ -4,6 +4,7 @@ import duration from 'dayjs/plugin/duration';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import React from 'react';
+import { TouchableOpacity } from 'react-native';
 
 import languages from '../../locales/languages';
 import { CalendarDay } from './CalendarDay';
@@ -19,7 +20,7 @@ const MINUTE_IN_MS = 60 * 1000;
  *
  * @param {!import('../../constants/history').HistoryDay} props
  */
-export const SingleExposureDetail = ({ date, exposureMinutes }) => {
+export const SingleExposureDetail = ({ date, exposureMinutes, navigation }) => {
   const exposureTimeHumanized = dayjs
     .duration(exposureMinutes * MINUTE_IN_MS)
     .humanize();
@@ -35,13 +36,20 @@ export const SingleExposureDetail = ({ date, exposureMinutes }) => {
         exposureMinutes={exposureMinutes}
       />
       <DetailsBox>
-        <Heading>{languages.t('history.possible_exposure')}</Heading>
-        <SubheadingContainer>
-          <SubheadingText>{exposureTimeHumanized}</SubheadingText>
-          <Divider />
-          <SubheadingText>{dateHumanized}</SubheadingText>
-        </SubheadingContainer>
-        <BodyText>{languages.t('history.possible_exposure_para')}</BodyText>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate('Surveys', {
+              date,
+            })
+          }>
+          <Heading>{languages.t('history.possible_exposure')}</Heading>
+          <SubheadingContainer>
+            <SubheadingText>{exposureTimeHumanized}</SubheadingText>
+            <Divider />
+            <SubheadingText>{dateHumanized}</SubheadingText>
+          </SubheadingContainer>
+          <BodyText>{languages.t('history.possible_exposure_para')}</BodyText>
+        </TouchableOpacity>
       </DetailsBox>
     </Container>
   );

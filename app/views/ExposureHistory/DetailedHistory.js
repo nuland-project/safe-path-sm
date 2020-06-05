@@ -17,7 +17,7 @@ const mapStateToProps = state => ({
  *
  * @param {{history: !import('../../constants/history').History}} param0
  */
-const DetailedHistory = ({ history, status }) => {
+const DetailedHistory = ({ history, status, navigation }) => {
   const exposedDays = history.filter(day => day.exposureMinutes > 0);
   console.log(status);
   return (
@@ -31,6 +31,7 @@ const DetailedHistory = ({ history, status }) => {
           key={date.format()}
           date={date}
           exposureMinutes={exposureMinutes}
+          navigation={navigation}
         />
       ))}
 
