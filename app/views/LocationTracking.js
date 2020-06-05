@@ -37,6 +37,7 @@ import { applicationActions } from '../actions';
 import RefreshIcon from '../assets/svgs/refresh';
 import stateAtCovidPositive from '../assets/svgs/stateAtCovidPositive';
 import StateAtRisk from '../assets/svgs/stateAtRisk';
+import StateYellow from '../assets/svgs/stateYellow';
 import ButtonWrapper from '../components/ButtonWrapper';
 import { Typography } from '../components/Typography';
 import Colors from '../constants/colors';
@@ -75,6 +76,9 @@ const StateIcon = ({ status, size }) => {
     case StateEnum.SETTING_OFF:
       icon = StateUnknown;
       break;
+    case StateEnum.YELLOW_STATUS:
+      icon = StateYellow;
+      break;
   }
   return (
     <SvgXml xml={icon} width={size ? size : 80} height={size ? size : 80} />
@@ -86,6 +90,7 @@ const height = Dimensions.get('window').height;
 const mapStateToProps = state => ({
   status: state.application.status,
   isVerified: state.application.token !== '',
+  phoneIndicated: state.application.phone !== '',
 });
 
 class LocationTracking extends Component {
@@ -317,7 +322,11 @@ class LocationTracking extends Component {
 
   getBackground() {
     const { status } = this.props;
-    if (status === StateEnum.AT_RISK || status === StateEnum.COVID_POSITIVE) {
+    if (
+      status === StateEnum.AT_RISK ||
+      status === StateEnum.COVID_POSITIVE ||
+      status === StateEnum.YELLOW_STATUS
+    ) {
       return BackgroundImageAtRisk;
     }
     return BackgroundImage;
@@ -388,6 +397,12 @@ class LocationTracking extends Component {
             {languages.t('label.home_at_risk_header')}
           </Typography>
         );
+      case StateEnum.YELLOW_STATUS:
+        return (
+          <Typography style={styles.mainTextAbove}>
+            {languages.t('label.home_yellow_status_header')}
+          </Typography>
+        );
       case StateEnum.COVID_POSITIVE:
         return (
           <Typography style={styles.mainTextAbove}>
@@ -415,6 +430,8 @@ class LocationTracking extends Component {
         return languages.t('label.home_no_contact_subtext');
       case StateEnum.AT_RISK:
         return languages.t('label.home_at_risk_subtext');
+      case StateEnum.YELLOW_STATUS:
+        return languages.t('label.home_yellow_status_subtext');
       case StateEnum.COVID_POSITIVE:
         return languages.t('label.home_positive_subtext');
       case StateEnum.UNKNOWN:
@@ -430,6 +447,8 @@ class LocationTracking extends Component {
         return null;
       case StateEnum.AT_RISK:
         return languages.t('label.home_at_risk_subsubtext');
+      case StateEnum.YELLOW_STATUS:
+        return languages.t('label.home_yellow_status_subsubtext');
       case StateEnum.COVID_POSITIVE:
         return languages.t('label.home_positive_subsubtext');
       case StateEnum.UNKNOWN:
@@ -442,11 +461,18 @@ class LocationTracking extends Component {
   getCTAIfNeeded() {
     let buttonLabel;
     let buttonFunction;
-    const { status, isVerified } = this.props;
+    const { status, isVerified, phoneIndicated } = this.props;
     if (status === StateEnum.NO_CONTACT) {
       return;
     } else if (status === StateEnum.AT_RISK) {
+      if (phoneIndicated) return;
       buttonLabel = languages.t('label.leave_contact_details');
+      buttonFunction = () => {
+        this.props.navigation.navigate('LeaveContacts');
+      };
+    } else if (status === StateEnum.YELLOW_STATUS) {
+      if (phoneIndicated) return;
+      buttonLabel = 'GET A CONSULT';
       buttonFunction = () => {
         this.props.navigation.navigate('LeaveContacts');
       };
@@ -507,9 +533,7 @@ class LocationTracking extends Component {
 
         <View style={styles.mainContainer}>
           <View style={styles.contentAbovePulse}>
-            {(status === StateEnum.AT_RISK ||
-              status === StateEnum.COVID_POSITIVE) &&
-              this.getMainText()}
+            {status !== StateEnum.NO_CONTACT && this.getMainText()}
             <Typography style={styles.subsubheaderText}>
               {this.getSubSubText()}
             </Typography>
