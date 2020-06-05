@@ -41,6 +41,7 @@
     "home_yellow_status_subsubtext": "This does not mean you are infected",
     "home_positive_subsubtext": "Niente panico!",
     "home_at_risk_subtext": "Potresti essere entrato in contatto con una persona positiva al COVID. Premi “OTTIENI UN CONSULTO” per inviare i tuoi dati all’Autorità Sanitaria affinchè un operatore specializzato ti possa contattare al più presto",
+    "home_at_risk_subtext_alt": "Il tuo account è stato verificato. Non dimenticarti di inviare periodicamente il tuo stato di salute alle autorità sanitarie per metterle in condizione di monitorare il tuo stato di salute e agire tempestivamente per tutelarti",
     "home_yellow_status_subtext": "You may have been in contact with a person likely to have been exposed to COVID-19, or your health status deteriorated. Press “GET A CONSULT” to share your data with the Health Authority and a specialized operator will contact you as soon as possibile",
     "home_positive_subtext": "Non dimenticarti di inviare periodicamente i tuoi dati alle autorità sanitarie per metterle in condizione di monitorare il tuo stato di salute e agire tempestivamente per tutelarti",
     "home_enable_location": "Attiva la Localizzazione",
