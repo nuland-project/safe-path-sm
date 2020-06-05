@@ -461,15 +461,17 @@ class LocationTracking extends Component {
   getCTAIfNeeded() {
     let buttonLabel;
     let buttonFunction;
-    const { status, isVerified } = this.props;
+    const { status, isVerified, phoneIndicated } = this.props;
     if (status === StateEnum.NO_CONTACT) {
       return;
     } else if (status === StateEnum.AT_RISK) {
+      if (phoneIndicated) return;
       buttonLabel = languages.t('label.leave_contact_details');
       buttonFunction = () => {
         this.props.navigation.navigate('LeaveContacts');
       };
     } else if (status === StateEnum.YELLOW_STATUS) {
+      if (phoneIndicated) return;
       buttonLabel = 'GET A CONSULT';
       buttonFunction = () => {
         this.props.navigation.navigate('LeaveContacts');
@@ -517,7 +519,7 @@ class LocationTracking extends Component {
   }
 
   render() {
-    const { status, phoneIndicated } = this.props;
+    const { status } = this.props;
     return (
       <ImageBackground
         source={this.getBackground()}
@@ -541,7 +543,7 @@ class LocationTracking extends Component {
               {this.getSubText()}
             </Typography>
             <View style={{ position: 'absolute', bottom: -20 }}>
-              {!phoneIndicated && this.getCTAIfNeeded()}
+              {this.getCTAIfNeeded()}
             </View>
           </View>
         </View>

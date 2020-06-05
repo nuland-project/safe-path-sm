@@ -7,11 +7,13 @@ import {
   createStackNavigator,
 } from '@react-navigation/stack';
 import React, { Component } from 'react';
+import { Alert, AppState } from 'react-native';
 import { connect } from 'react-redux';
 
 import { applicationActions } from './actions';
 import { StateEnum } from './constants/enums';
 import {
+  ANNOUNCEMENTS,
   COVID_STATUS,
   LOCATION_DATA,
   USER_CUSTOM_TOKEN,
@@ -59,7 +61,7 @@ class Entry extends Component {
       })
       .catch(error => console.log(error));
 
-    // Check desease status and set if it's known
+    // Check disease status and set if it's known
     try {
       const status = await GetStoreData(COVID_STATUS, true);
       if (status !== null) {
@@ -126,6 +128,49 @@ class Entry extends Component {
       if (phone) {
         this.props.dispatch(applicationActions.setPhone(phone));
       }
+    } catch (err) {
+      console.log(err);
+    }
+
+    // Subscribe to announcements collection
+    try {
+      // Fetch last announcement from firestore and subscribe on collection changes
+      firestore()
+        .collection('announcements')
+        .orderBy('timestamp', 'desc')
+        .limit(1)
+        .onSnapshot(
+          async announcements => {
+            const announcement = announcements.docs[0];
+
+            // Load announcements which were already shown and get last one
+            let announcementsShown = await GetStoreData(ANNOUNCEMENTS, false);
+            if (!announcementsShown) announcementsShown = [];
+            const lastAnnouncement = announcementsShown.length
+              ? announcementsShown.slice(-1)[0]
+              : '';
+
+            // Show last news if it wasn't shown before and if announcementsShown is not empty
+            if (announcementsShown.length == 0) {
+              // Save announcement ID in AsyncStorage and return
+              await SetStoreData(ANNOUNCEMENTS, [announcement.id]);
+              return;
+            }
+            if (announcement.id === lastAnnouncement) return;
+
+            // Show alert with announcement if appState is active
+            if (AppState.currentState === 'active') {
+              const { title, message } = announcement.data().message;
+              Alert.alert(title, message, [{ text: 'OK' }]);
+              // Save announcement ID in AsyncStorage
+              await SetStoreData(ANNOUNCEMENTS, [
+                ...announcementsShown,
+                announcement.id,
+              ]);
+            }
+          },
+          err => console.log(err),
+        );
     } catch (err) {
       console.log(err);
     }
