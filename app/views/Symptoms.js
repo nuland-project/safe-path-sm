@@ -1,5 +1,5 @@
 import firebase from '@react-native-firebase/app';
-import firestore from '@react-native-firebase/firestore';
+// import firestore from '@react-native-firebase/firestore';
 /* eslint-disable react-native/no-color-literals */
 import React from 'react';
 import {
@@ -25,7 +25,8 @@ class Symptoms extends React.Component {
     super(props);
     this.state = {
       temperature: 0,
-      pressure: 0,
+      pressureH: 0,
+      pressureL: 0,
       oxygen: 0,
       breath: {
         checked: false,
@@ -118,22 +119,38 @@ class Symptoms extends React.Component {
 
     let symptoms = {};
     for (let key in this.state) {
-      if (key !== 'temperature' && key !== 'pressure' && key !== 'oxygen') {
+      if (
+        key !== 'temperature' &&
+        key !== 'pressureH' &&
+        key !== 'pressureL' &&
+        key !== 'oxygen'
+      ) {
         symptoms[key] = this.state[key].checked;
       }
     }
     symptoms.temperature = this.state.temperature;
-    symptoms.pressure = this.state.pressure;
+    symptoms.pressureH = this.state.pressureH;
+    symptoms.pressureL = this.state.pressureL;
     symptoms.oxygen = this.state.oxygen;
     cldFn({ uuid, symptoms });
 
-    Alert.alert('Symptoms added');
+    Alert.alert(
+      'Risposta inviata',
+      'Grazie',
+      [{ text: 'OK', onPress: () => this.props.navigation.goBack() }],
+      { cancelable: false },
+    );
   };
 
   render() {
     let symptoms = [];
     for (let key in this.state) {
-      if (key !== 'temperature' && key !== 'pressure' && key !== 'oxygen') {
+      if (
+        key !== 'temperature' &&
+        key !== 'pressureH' &&
+        key !== 'pressureL' &&
+        key !== 'oxygen'
+      ) {
         symptoms.push(key);
       }
     }
@@ -195,11 +212,31 @@ class Symptoms extends React.Component {
               paddingHorizontal: 10,
               marginTop: 10,
             }}
-            placeholder={languages.t('health.blood_pressure')}
+            placeholder={languages.t('health.blood_pressureH')}
             placeholderTextColor='#555555'
             keyboardType={'number-pad'}
-            value={this.state.pressure}
-            onChangeText={v => this.setState({ pressure: v })}
+            value={this.state.pressureH}
+            onChangeText={v => this.setState({ pressureH: v })}
+          />
+
+          <TextInput
+            style={{
+              height: 40,
+              borderRadius: 5,
+              borderWidth: 1,
+              borderColor: Colors.VIOLET,
+              lineHeight: 19,
+              fontSize: 15,
+              color: '#000',
+              letterSpacing: 0,
+              paddingHorizontal: 10,
+              marginTop: 10,
+            }}
+            placeholder={languages.t('health.blood_pressureL')}
+            placeholderTextColor='#555555'
+            keyboardType={'number-pad'}
+            value={this.state.pressureL}
+            onChangeText={v => this.setState({ pressureL: v })}
           />
 
           {symptoms.map((symptom, ind) => (
