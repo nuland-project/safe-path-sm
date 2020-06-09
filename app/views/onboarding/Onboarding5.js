@@ -279,7 +279,7 @@ class Onboarding extends Component {
               title={this.getButtonText()}
               onPress={this.buttonPressed.bind(this)}
               buttonColor={Colors.VIOLET}
-              bgColor={'grey'}
+              bgColor={'white'}
             />
           </View>
         </View>

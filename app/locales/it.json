@@ -127,6 +127,7 @@
   "health": {
     "surveys_title": "Informazioni sull’avvenuto contatto",
     "surveys_subtitle": "Rispondi alle seguenti domande affinchè un operatore sanitario ti possa contattare il prima possibile",
+    "survey_signal": "Segnalare",
     "symptoms_title": "Sintomi",
     "symptoms_text": "Per cortesia indica quali sintomi presenti",
     "medical_history_title": "Anamnesi",

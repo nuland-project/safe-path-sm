@@ -4,8 +4,8 @@ import duration from 'dayjs/plugin/duration';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
 
+import ButtonWrapper from '../../components/ButtonWrapper';
 import languages from '../../locales/languages';
 import { CalendarDay } from './CalendarDay';
 
@@ -36,20 +36,27 @@ export const SingleExposureDetail = ({ date, exposureMinutes, navigation }) => {
         exposureMinutes={exposureMinutes}
       />
       <DetailsBox>
-        <TouchableOpacity
+        <Heading>{languages.t('history.possible_exposure')}</Heading>
+        <SubheadingContainer>
+          <SubheadingText>{exposureTimeHumanized}</SubheadingText>
+          <Divider />
+          <SubheadingText>{dateHumanized}</SubheadingText>
+        </SubheadingContainer>
+        <BodyText>{languages.t('history.possible_exposure_para')}</BodyText>
+        <ButtonWrapper
+          title={languages.t('health.survey_signal')}
           onPress={() =>
             navigation.navigate('Surveys', {
               date,
             })
-          }>
-          <Heading>{languages.t('history.possible_exposure')}</Heading>
-          <SubheadingContainer>
-            <SubheadingText>{exposureTimeHumanized}</SubheadingText>
-            <Divider />
-            <SubheadingText>{dateHumanized}</SubheadingText>
-          </SubheadingContainer>
-          <BodyText>{languages.t('history.possible_exposure_para')}</BodyText>
-        </TouchableOpacity>
+          }
+          buttonWidth={200}
+          // buttonColor={Colors.VIOLET}
+          bgColor={'transparent'}
+          borderWidth={1}
+          borderColor={'black'}
+          marginTop={10}
+        />
       </DetailsBox>
     </Container>
   );
@@ -95,6 +102,7 @@ const BodyText = styled.Text`
   color: ${({ theme }) => theme.textSecondaryOnBackground};
   font-size: 14px;
   line-height: 20px;
+  margin-bottom: 15px;
 `;
 
 const SubheadingText = styled(BodyText)`
